@@ -13,7 +13,6 @@ const AddExpensesForm = () => {
   const [expenses, setExpenses] = useState([]);
 
   const handleChange = (evt) => {
-    // easy way to take any input name and assign its value to the initialState as long as they use the same key (e.g. <input name="amount"/> => singleExpense.amount)
     const { name, value } = evt.target;
     setSingleExpense({
       ...singleExpense,
@@ -23,7 +22,6 @@ const AddExpensesForm = () => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-
     const newExpenses = [...expenses, { ...singleExpense, id: uuid() }];
     setExpenses(newExpenses);
     setSingleExpense(initialState);
