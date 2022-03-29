@@ -2,33 +2,23 @@ import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 const AddExpensesForm = () => {
-  const initialState = {
-    id: '',
-    name: '',
-    date: '',
-    amount: '',
-  };
+  const [name, setName] = useState('');
+  const [date, setDate] = useState('');
+  const [amount, setAmount] = useState('');
 
-  const [singleExpense, setSingleExpense] = useState(initialState);
   const [expenses, setExpenses] = useState([]);
-
-  const handleChange = (evt) => {
-    const { name, value } = evt.target;
-    setSingleExpense({
-      ...singleExpense,
-      [name]: value,
-    });
-  };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    const newExpenses = [...expenses, { ...singleExpense, id: uuid() }];
-    setExpenses(newExpenses);
-    setSingleExpense(initialState);
+
+    setExpenses([...expenses, { id: uuid(), name, date, amount }]);
+    setName('');
+    setDate('');
+    setAmount('');
   };
 
   return (
-    <div className="container-md">
+    <section className="row my-4">
       <div className="text-center">
         <h2 className="display-2">Add some Expenses</h2>
       </div>
@@ -41,9 +31,8 @@ const AddExpensesForm = () => {
               id="name"
               name="name"
               required
-              onChange={handleChange}
-              value={singleExpense.name}
-              aria-label="Expense Name"
+              onChange={(evt) => setName(evt.target.value)}
+              value={name}
               placeholder="Expense Name"
             />
             <label htmlFor="amount">Expense Name</label>
@@ -57,9 +46,9 @@ const AddExpensesForm = () => {
               id="date"
               name="date"
               required
-              onChange={handleChange}
-              value={singleExpense.date}
-              aria-label="Expense date"
+              onChange={(evt) => setDate(evt.target.value)}
+              value={date}
+              placeholder="Expense Date"
             />
             <label htmlFor="date">Expense Date</label>
           </div>
@@ -73,9 +62,8 @@ const AddExpensesForm = () => {
             required
             min="0.01"
             step="0.01"
-            onChange={handleChange}
-            value={singleExpense.amount}
-            aria-label="Euro amount (with comma and two decimal places)"
+            onChange={(evt) => setAmount(evt.target.value)}
+            value={amount}
             placeholder="Euro amount (with comma and two decimal places)"
           />
           <label htmlFor="amount">Expense amount in €</label>
@@ -84,7 +72,7 @@ const AddExpensesForm = () => {
           add
         </button>
       </form>
-    </div>
+    </section>
   );
 };
 

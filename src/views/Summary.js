@@ -1,8 +1,18 @@
+import { useState } from 'react';
+
 import AddExpensesForm from '../components/AddExpensesForm';
 
 const Summary = () => {
+  const dummyTotBudget = 7777;
+  const dummyTotExpenses = 4444;
+  const dummyTotSavings = 3333;
+
+  const [totBudget, setTotBudget] = useState(dummyTotBudget);
+  const [totExpenses, setTotExpenses] = useState(dummyTotExpenses);
+  const [totSavings, setTotSavings] = useState(dummyTotSavings);
+
   return (
-    <main className="container-md">
+    <div className="container-md">
       <header className="row text-center my-5">
         <h1 className="display-1 text-primary">Mat's Budget</h1>
       </header>
@@ -12,19 +22,22 @@ const Summary = () => {
         </div>
         <div className="">
           <h3 className="fw-light">
-            Your monthly budget is <span className="text-primary">€7777</span>
+            Your monthly budget is
+            <span className="text-primary">{` ${totBudget}€`}</span>
           </h3>
           <h3 className="fw-light">
-            You have spent <span className="text-danger">€3333</span>
+            You have spent
+            <span className="text-danger">{` ${totExpenses}€`}</span>
           </h3>
           <h3 className="fw-light">
-            This leaves you with <span className="text-success">€4444</span>{' '}
-            until <span>31.03.22</span>
+            This leaves you with
+            <span className="text-success">{` ${totSavings}€`}</span> until
+            <span>{' 31.03.22'}</span>
           </h3>
         </div>
       </section>
       <AddExpensesForm />
-    </main>
+    </div>
   );
 };
 
