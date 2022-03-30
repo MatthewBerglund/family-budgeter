@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
 const AddExpensesForm = () => {
-  const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [amount, setAmount] = useState('');
 
@@ -11,8 +11,8 @@ const AddExpensesForm = () => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    setExpenses([...expenses, { id: uuid(), name, date, amount }]);
-    setName('');
+    setExpenses([...expenses, { id: uuid(), title, date, amount }]);
+    setTitle('');
     setDate('');
     setAmount('');
   };
@@ -31,8 +31,8 @@ const AddExpensesForm = () => {
               id="name"
               name="name"
               required
-              onChange={(evt) => setName(evt.target.value)}
-              value={name}
+              onChange={(evt) => setTitle(evt.target.value)}
+              value={title}
               placeholder="Expense Name"
             />
             <label htmlFor="amount">Expense Name</label>
