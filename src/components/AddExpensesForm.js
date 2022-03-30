@@ -18,9 +18,9 @@ const AddExpensesForm = () => {
   };
 
   return (
-    <section className="row my-4">
+    <section className="my-4">
       <div className="text-center">
-        <h2 className="display-2">Add some Expenses</h2>
+        <h2>Add some Expenses</h2>
       </div>
       <form className="row g-2" onSubmit={handleSubmit}>
         <div className="col-md">
