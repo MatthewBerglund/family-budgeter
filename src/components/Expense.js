@@ -1,10 +1,10 @@
-const Expense = () => {
+const Expense = ({ title, date, amount }) => {
   return (
     <li>
       <h5 className="d-flex justify-content-between align-items-center">
-        <span>22.03.22</span>
-        <span>Tacos</span>
-        <span>- €13.00</span>
+        <span>{date}</span>
+        <span>{title}</span>
+        <span>- {amount}</span>
         <button className="btn btn-danger mx-5">Delete</button>
       </h5>
     </li >
