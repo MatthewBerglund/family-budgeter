@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { v4 as uuid } from 'uuid';
 
 const AddExpensesForm = ({ addExpense }) => {
   const [title, setTitle] = useState('');
@@ -8,7 +7,7 @@ const AddExpensesForm = ({ addExpense }) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    addExpense(title, date, amount, uuid());
+    addExpense(title, date, amount);
     setTitle('');
     setDate('');
     setAmount('');
