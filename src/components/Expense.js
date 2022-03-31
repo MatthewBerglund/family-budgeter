@@ -1,17 +1,25 @@
 const Expense = ({ expense, removeExpense }) => {
   return (
-    <li>
-      <h5 className="d-flex justify-content-between align-items-center">
-        <span>{expense.date}</span>
-        <span>{expense.title}</span>
-        <span>- €{expense.amount}</span>
-        <button
-          className="btn btn-danger mx-5"
-          onClick={() => removeExpense(expense.id)}
-        >
-          Delete
-        </button>
-      </h5>
+    <li className="container list-group-item">
+      <div className="row">
+        <div className="col">
+          <span className="fs-5">{expense.date}</span>
+        </div>
+        <div className="col-6">
+          <span className="fs-5">{expense.title}</span>
+        </div>
+        <div className="col text-end">
+          <span className="fs-5">- €{expense.amount}</span>
+        </div>
+        <div className="col text-end">
+          <button
+            className="btn btn-danger"
+            onClick={() => removeExpense(expense.id)}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
     </li >
   );
 }
