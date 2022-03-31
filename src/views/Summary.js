@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-import AddExpensesForm from '../components/AddExpensesForm';
-
 const Summary = () => {
   const dummyTotBudget = 7777;
   const dummyTotExpenses = 4444;
