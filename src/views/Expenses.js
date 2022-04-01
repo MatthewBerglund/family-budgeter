@@ -6,24 +6,35 @@ import ExpensesList from '../components/ExpensesList';
 const Expenses = () => {
   const [expenses, setExpenses] = useState([]);
 
-  // Run on initial render only (dependency list is empty)
+  // Run on initial render only
   useEffect(() => {
-    // Function definition pulled inside `useEffect` in order to keep dependency list empty
-    const fetchExpenses = async () => {
-      const token = process.env.REACT_APP_MOSTASH_API_KEY;
-      const url = `http://pi.motine.de:12305/items.json?stash=${token}&kind=expense`;
-      const response = await fetch(url);
-      const data = await response.json();
-      setExpenses(data);
-    };
-
-    fetchExpenses().catch(error => {
-      console.log(error);
-    });
+    const token = process.env.REACT_APP_MOSTASH_API_KEY;
+    const url = `http://pi.motine.de:12305/items.json?stash=${token}&kind=expense`;
+    fetch(url)
+      .then(response => response.json())
+      .then(data => setExpenses(data))
+      .catch(error => console.log('error', error));
   }, []);
 
-  const addExpense = (title, date, amount) => {
-    setExpenses([...expenses, { id: uuid(), title, date, amount }]);
+  const addExpense = (expenseObj) => {
+    // const headers = new Headers();
+    // headers.append("Content-Type", "application/json");
+    // headers.append("Stash", process.env.REACT_APP_MOSTASH_API_KEY);
+
+    // const requestOptions = {
+    //   method: 'POST',
+    //   headers,
+    //   body: JSON.stringify(expenseObj),
+    //   redirect: 'follow'
+    // };
+
+    // fetch("http://pi.motine.de:12305/items.json?kind=expense", requestOptions)
+    //   .then(response => response.json())
+    //   .then(data => console.log(data))
+    //   .catch(error => console.log('error', error));
+
+    expenseObj.id = uuid();
+    setExpenses([...expenses, expenseObj]);
   }
 
   const removeExpense = (id) => {

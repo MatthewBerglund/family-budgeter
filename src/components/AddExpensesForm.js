@@ -7,7 +7,8 @@ const AddExpensesForm = ({ addExpense }) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    addExpense(title, date, amount);
+    const expense = { title, date, amount };
+    addExpense(expense);
     setTitle('');
     setDate('');
     setAmount('');
