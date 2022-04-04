@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { v4 as uuid } from 'uuid';
 import AddExpensesForm from '../components/AddExpensesForm';
 import ExpensesList from '../components/ExpensesList';
 
@@ -8,36 +7,38 @@ const Expenses = () => {
 
   // Run on initial render only
   useEffect(() => {
+    // Fetch expense items
     const token = process.env.REACT_APP_MOSTASH_API_KEY;
     const url = `http://pi.motine.de:12305/items.json?stash=${token}&kind=expense`;
     fetch(url)
       .then(response => response.json())
-      .then(data => setExpenses(data))
+      .then(expenseData => setExpenses(expenseData))
       .catch(error => console.log('error', error));
   }, []);
 
   const addExpense = (expenseObj) => {
-    // const headers = new Headers();
-    // headers.append("Content-Type", "application/json");
-    // headers.append("Stash", process.env.REACT_APP_MOSTASH_API_KEY);
+    const token = process.env.REACT_APP_MOSTASH_API_KEY;
+    const url = `http://pi.motine.de:12305/items.json?stash=${token}&kind=expense`;
 
-    // const requestOptions = {
-    //   method: 'POST',
-    //   headers,
-    //   body: JSON.stringify(expenseObj),
-    //   redirect: 'follow'
-    // };
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify(expenseObj)
+    };
 
-    // fetch("http://pi.motine.de:12305/items.json?kind=expense", requestOptions)
-    //   .then(response => response.json())
-    //   .then(data => console.log(data))
-    //   .catch(error => console.log('error', error));
-
-    expenseObj.id = uuid();
-    setExpenses([...expenses, expenseObj]);
+    fetch(url, requestOptions)
+      .then(response => response.json())
+      .then(postedExpense => setExpenses([...expenses, postedExpense]))
+      .catch(error => console.log('error', error));
   }
 
   const removeExpense = (id) => {
+    const token = process.env.REACT_APP_MOSTASH_API_KEY;
+    const url = `http://pi.motine.de:12305/items/${id}.json&stash=${token}`;
+    const requestOptions = { method: 'DELETE' };
+
+    // Send DELETE request to mostash using expense id
+    fetch(url, requestOptions);
+    // (Fake) Then: remove the expense with the same id from state
     const indexToRemove = expenses.findIndex(expense => expense.id === id);
     const expensesCopy = [...expenses];
     expensesCopy.splice(indexToRemove, 1);
