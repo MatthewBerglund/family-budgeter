@@ -2,14 +2,21 @@ import { useEffect, useState } from 'react';
 import AddExpensesForm from '../components/AddExpensesForm';
 import ExpensesList from '../components/ExpensesList';
 
+// fetch details
+const token = process.env.REACT_APP_MOSTASH_API_KEY;
+const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
+const headers = {
+  'Stash': token,
+  'Content-Type': 'application/json'
+};
+
 const Expenses = () => {
   const [expenses, setExpenses] = useState([]);
 
   // Run on initial render only
   useEffect(() => {
     // Fetch expense items
-    const token = process.env.REACT_APP_MOSTASH_API_KEY;
-    fetch(`http://pi.motine.de:12305/items.json?stash=${token}&kind=expense`)
+    fetch(`${baseURL}/items.json?stash=${token}&kind=expense`)
       .then(response => response.json())
       .then(expenseData => setExpenses(expenseData));
   }, []);
@@ -17,28 +24,19 @@ const Expenses = () => {
   const addExpense = (newExpense) => {
     const requestOptions = {
       method: 'POST',
-      headers: {
-        'Stash': process.env.REACT_APP_MOSTASH_API_KEY,
-        'Content-Type': 'application/json'
-      },
+      headers,
       body: JSON.stringify(newExpense)
     };
 
-    fetch('http://pi.motine.de:12305/items.json?kind=expense', requestOptions)
+    fetch(`${baseURL}/items.json?kind=expense`, requestOptions)
       .then(response => response.json())
       .then(newExpenseData => setExpenses([...expenses, newExpenseData]));
   }
 
   const removeExpense = (id) => {
-    const requestOptions = {
-      method: 'DELETE',
-      headers: {
-        'Stash': process.env.REACT_APP_MOSTASH_API_KEY,
-        'Content-Type': 'application/json'
-      }
-    };
+    const requestOptions = { method: 'DELETE', headers };
 
-    fetch(`http://pi.motine.de:12305/items/${id}.json`, requestOptions)
+    fetch(`${baseURL}/items/${id}.json`, requestOptions)
       .then(() => {
         // Remove expense item from state
         const indexToRemove = expenses.findIndex(expense => expense.id === id);
