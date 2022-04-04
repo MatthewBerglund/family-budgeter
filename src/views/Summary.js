@@ -5,9 +5,9 @@ const Summary = () => {
   const dummyTotExpenses = 4444;
   const dummyTotSavings = 3333;
 
-  const [totBudget, setTotBudget] = useState(dummyTotBudget);
-  const [totExpenses, setTotExpenses] = useState(dummyTotExpenses);
-  const [totSavings, setTotSavings] = useState(dummyTotSavings);
+  const [totalBudget, setTotalBudget] = useState(dummyTotBudget);
+  const [totalExpenses, setTotalExpenses] = useState(dummyTotExpenses);
+  const [totalSavings, setTotalSavings] = useState(dummyTotSavings);
 
   return (
     <section className="row my-5">
