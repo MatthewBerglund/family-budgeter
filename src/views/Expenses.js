@@ -9,40 +9,43 @@ const Expenses = () => {
   useEffect(() => {
     // Fetch expense items
     const token = process.env.REACT_APP_MOSTASH_API_KEY;
-    const url = `http://pi.motine.de:12305/items.json?stash=${token}&kind=expense`;
-    fetch(url)
+    fetch(`http://pi.motine.de:12305/items.json?stash=${token}&kind=expense`)
       .then(response => response.json())
-      .then(expenseData => setExpenses(expenseData))
-      .catch(error => console.log('error', error));
+      .then(expenseData => setExpenses(expenseData));
   }, []);
 
-  const addExpense = (expenseObj) => {
-    const token = process.env.REACT_APP_MOSTASH_API_KEY;
-    const url = `http://pi.motine.de:12305/items.json?stash=${token}&kind=expense`;
-
+  const addExpense = (newExpense) => {
     const requestOptions = {
       method: 'POST',
-      body: JSON.stringify(expenseObj)
+      headers: {
+        'Stash': process.env.REACT_APP_MOSTASH_API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newExpense)
     };
 
-    fetch(url, requestOptions)
+    fetch('http://pi.motine.de:12305/items.json?kind=expense', requestOptions)
       .then(response => response.json())
-      .then(postedExpense => setExpenses([...expenses, postedExpense]))
-      .catch(error => console.log('error', error));
+      .then(newExpenseData => setExpenses([...expenses, newExpenseData]));
   }
 
   const removeExpense = (id) => {
-    const token = process.env.REACT_APP_MOSTASH_API_KEY;
-    const url = `http://pi.motine.de:12305/items/${id}.json&stash=${token}`;
-    const requestOptions = { method: 'DELETE' };
+    const requestOptions = {
+      method: 'DELETE',
+      headers: {
+        'Stash': process.env.REACT_APP_MOSTASH_API_KEY,
+        'Content-Type': 'application/json'
+      }
+    };
 
-    // Send DELETE request to mostash using expense id
-    fetch(url, requestOptions);
-    // (Fake) Then: remove the expense with the same id from state
-    const indexToRemove = expenses.findIndex(expense => expense.id === id);
-    const expensesCopy = [...expenses];
-    expensesCopy.splice(indexToRemove, 1);
-    setExpenses(expensesCopy);
+    fetch(`http://pi.motine.de:12305/items/${id}.json`, requestOptions)
+      .then(() => {
+        // Remove expense item from state
+        const indexToRemove = expenses.findIndex(expense => expense.id === id);
+        const expensesCopy = [...expenses];
+        expensesCopy.splice(indexToRemove, 1);
+        setExpenses(expensesCopy);
+      });
   }
 
   return (
