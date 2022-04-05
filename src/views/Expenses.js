@@ -16,10 +16,15 @@ const Expenses = () => {
   // Run on initial render only
   useEffect(() => {
     const fetchExpenses = async () => {
-      const url = `${baseURL}/items.json?stash=${token}&kind=expense`;
-      const response = await fetch(url);
-      const expenseData = await response.json();
-      setExpenses(expenseData);
+      const url = `${baseURL}/items.json`;
+
+      try {
+        const response = await fetch(url);
+        const expenseData = await response.json();
+        setExpenses(expenseData);
+      } catch {
+        alert('Error loading expenses. Please try again later.');
+      }
     }
 
     fetchExpenses();
