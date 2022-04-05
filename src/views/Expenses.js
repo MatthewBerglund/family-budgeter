@@ -39,10 +39,7 @@ const Expenses = () => {
     fetch(`${baseURL}/items/${id}.json`, requestOptions)
       .then(() => {
         // Remove expense item from state
-        const indexToRemove = expenses.findIndex(expense => expense.id === id);
-        const expensesCopy = [...expenses];
-        expensesCopy.splice(indexToRemove, 1);
-        setExpenses(expensesCopy);
+        setExpenses(expenses => expenses.filter(expense => expense.id !== id));
       });
   }
 
