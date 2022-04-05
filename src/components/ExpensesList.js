@@ -2,14 +2,13 @@ import Expense from "./Expense";
 
 const ExpensesList = ({ expenses, removeExpense }) => {
   const renderExpenses = () => {
-    const expenseItems = expenses.map(expense => (
+    return expenses.map(expense => (
       <Expense
         key={expense.id}
         {...expense}
         removeExpense={removeExpense}
       />
     ));
-    return expenseItems;
   }
 
   return (
