@@ -5,7 +5,7 @@ const ExpensesList = ({ expenses, removeExpense }) => {
     const expenseItems = expenses.map(expense => (
       <Expense
         key={expense.id}
-        expense={expense}
+        {...expense}
         removeExpense={removeExpense}
       />
     ));
