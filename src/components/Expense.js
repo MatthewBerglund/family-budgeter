@@ -2,14 +2,14 @@ const Expense = ({ expense, removeExpense }) => {
   return (
     <li className="container list-group-item">
       <div className="row align-items-center">
-        <div className="col">
-          <span className="fs-5">{expense.date}</span>
+        <div className="col fs-5">
+          {expense.date}
         </div>
-        <div className="col-6">
-          <span className="fs-5">{expense.title}</span>
+        <div className="col-6 fs-5">
+          {expense.title}
         </div>
-        <div className="col text-end">
-          <span className="fs-5">- €{expense.amount}</span>
+        <div className="col fs-5 text-end">
+          - €{expense.amount}
         </div>
         <div className="col text-end">
           <button
