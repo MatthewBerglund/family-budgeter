@@ -35,11 +35,10 @@ const Expenses = () => {
 
   const removeExpense = (id) => {
     const requestOptions = { method: 'DELETE', headers };
-
     fetch(`${baseURL}/items/${id}.json`, requestOptions)
       .then(() => {
         // Remove expense item from state
-        setExpenses(expenses => expenses.filter(expense => expense.id !== id));
+        setExpenses(expenses.filter(expense => expense.id !== id));
       });
   }
 
