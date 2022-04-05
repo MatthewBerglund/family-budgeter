@@ -47,13 +47,18 @@ const Expenses = () => {
     }
   }
 
-  const removeExpense = (id) => {
+  const removeExpense = async (id) => {
+    const url = `${baseURL}/items/${id}.json`;
     const requestOptions = { method: 'DELETE', headers };
-    fetch(`${baseURL}/items/${id}.json`, requestOptions)
-      .then(() => {
-        // Remove expense item from state
-        setExpenses(expenses.filter(expense => expense.id !== id));
-      });
+
+    try {
+      await fetch(url, requestOptions);
+    } catch {
+      alert('Error deleting expense. Please try again later.');
+    }
+
+    // Remove expense item from state
+    setExpenses(expenses.filter(expense => expense.id !== id));
   }
 
   return (
