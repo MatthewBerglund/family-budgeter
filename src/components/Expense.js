@@ -1,7 +1,7 @@
 const Expense = ({ expense, removeExpense }) => {
   return (
     <li className="container list-group-item">
-      <div className="row">
+      <div className="row align-items-center">
         <div className="col">
           <span className="fs-5">{expense.date}</span>
         </div>
