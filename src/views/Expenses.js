@@ -2,16 +2,14 @@ import { useEffect, useState } from 'react';
 import AddExpensesForm from '../components/AddExpensesForm';
 import ExpensesList from '../components/ExpensesList';
 
-// fetch details
-const token = process.env.REACT_APP_MOSTASH_API_KEY;
-const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
-const headers = {
-  'Stash': token,
-  'Content-Type': 'application/json'
-};
-
 const Expenses = () => {
   const [expenses, setExpenses] = useState([]);
+  const token = process.env.REACT_APP_MOSTASH_API_KEY;
+  const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
+  const headers = {
+    'Stash': token,
+    'Content-Type': 'application/json'
+  };
 
   // Run on initial render only
   useEffect(() => {
