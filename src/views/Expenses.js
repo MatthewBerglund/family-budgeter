@@ -16,7 +16,7 @@ const Expenses = () => {
   // Run on initial render only
   useEffect(() => {
     const fetchExpenses = async () => {
-      const url = `${baseURL}/items.json`;
+      const url = `${baseURL}/items.json?stash=${token}&kind=expense`;
 
       try {
         const response = await fetch(url);
@@ -30,16 +30,21 @@ const Expenses = () => {
     fetchExpenses();
   }, []);
 
-  const addExpense = (newExpense) => {
+  const addExpense = async (newExpense) => {
+    const url = `${baseURL}/items.json?kind=expense`;
     const requestOptions = {
       method: 'POST',
       headers,
       body: JSON.stringify(newExpense)
     };
 
-    fetch(`${baseURL}/items.json?kind=expense`, requestOptions)
-      .then(response => response.json())
-      .then(newExpenseData => setExpenses([...expenses, newExpenseData]));
+    try {
+      const response = await fetch(url, requestOptions);
+      const newExpenseData = await response.json();
+      setExpenses([...expenses, newExpenseData]);
+    } catch {
+      alert('Error adding expense. Please try again later.');
+    }
   }
 
   const removeExpense = (id) => {
