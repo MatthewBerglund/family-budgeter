@@ -1,26 +1,23 @@
 import { useState } from 'react';
-import { v4 as uuid } from 'uuid';
 
-const AddExpensesForm = () => {
+const AddExpensesForm = ({ addExpense }) => {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [amount, setAmount] = useState('');
 
-  const [expenses, setExpenses] = useState([]);
-
   const handleSubmit = (evt) => {
     evt.preventDefault();
-
-    setExpenses([...expenses, { id: uuid(), title, date, amount }]);
+    const expense = { title, date, amount };
+    addExpense(expense);
     setTitle('');
     setDate('');
     setAmount('');
   };
 
   return (
-    <section className="row my-4">
-      <div className="text-center">
-        <h2 className="display-2">Add some Expenses</h2>
+    <section className="my-4">
+      <div className="text-start">
+        <h2>Add some Expenses</h2>
       </div>
       <form className="row g-2" onSubmit={handleSubmit}>
         <div className="col-md">
