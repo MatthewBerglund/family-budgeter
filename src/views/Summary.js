@@ -14,21 +14,19 @@ const Summary = () => {
       <div className="text-center">
         <h2 className="display-2">Summary</h2>
       </div>
-      <div className="">
-        <h3 className="fw-light">
-          Your monthly budget is
-          <span className="text-primary">{` ${totalBudget}€`}</span>
-        </h3>
-        <h3 className="fw-light">
-          You have spent
-          <span className="text-danger">{` ${totalExpenses}€`}</span>
-        </h3>
-        <h3 className="fw-light">
-          This leaves you with
-          <span className="text-success">{` ${totalSavings}€`}</span> until
-          <span>{' 31.03.22'}</span>
-        </h3>
-      </div>
+      <h3 className="fw-light">
+        Your monthly budget is
+        <span className="text-primary">{` ${totalBudget}€`}</span>
+      </h3>
+      <h3 className="fw-light">
+        You have spent
+        <span className="text-danger">{` ${totalExpenses}€`}</span>
+      </h3>
+      <h3 className="fw-light">
+        This leaves you with
+        <span className="text-success">{` ${totalSavings}€`}</span> until
+        <span>{' 31.03.22'}</span>
+      </h3>
     </section>
   );
 };
