@@ -51,12 +51,11 @@ const Expenses = () => {
 
     try {
       await fetch(url, requestOptions);
+      // Remove expense item from state
+      setExpenses(expenses.filter(expense => expense.id !== id));
     } catch {
       alert('Error deleting expense. Please try again later.');
     }
-
-    // Remove expense item from state
-    setExpenses(expenses.filter(expense => expense.id !== id));
   }
 
   return (
