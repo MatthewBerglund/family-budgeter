@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getUKFormattedEuros, getUKFormattedDate } from '../components/helpers';
+import { getUKFormattedEuros, getUKFormattedDate } from '../helpers';
 
 const Summary = () => {
   const dummyTotBudget = 7777;

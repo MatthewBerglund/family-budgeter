@@ -1,4 +1,4 @@
-import { getUKFormattedEuros, getUKFormattedDate } from "./helpers";
+import { getUKFormattedEuros, getUKFormattedDate } from "../helpers";
 
 const Expense = ({ title, amount, date, id, removeExpense }) => {
   return (
