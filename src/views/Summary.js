@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getUKFormattedEuros } from '../components/helpers';
+import { getUKFormattedEuros, getUKFormattedDate } from '../components/helpers';
 
 const Summary = () => {
   const dummyTotBudget = 7777;
@@ -26,7 +26,7 @@ const Summary = () => {
       <h3 className="fw-light">
         This leaves you with
         <span className="text-success">{` ${getUKFormattedEuros(totalSavings)}`}</span> until
-        <span>{' 31.03.22'}</span>
+        <span>{` ${getUKFormattedDate('2022-04-30')}`}</span>
       </h3>
     </section>
   );
