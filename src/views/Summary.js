@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getUKFormattedEuros } from '../components/helpers';
 
 const Summary = () => {
   const dummyTotBudget = 7777;
@@ -16,15 +17,15 @@ const Summary = () => {
       </div>
       <h3 className="fw-light">
         Your monthly budget is
-        <span className="text-primary">{` ${totalBudget}€`}</span>
+        <span className="text-primary">{` ${getUKFormattedEuros(totalBudget)}`}</span>
       </h3>
       <h3 className="fw-light">
         You have spent
-        <span className="text-danger">{` ${totalExpenses}€`}</span>
+        <span className="text-danger">{` ${getUKFormattedEuros(totalExpenses)}`}</span>
       </h3>
       <h3 className="fw-light">
         This leaves you with
-        <span className="text-success">{` ${totalSavings}€`}</span> until
+        <span className="text-success">{` ${getUKFormattedEuros(totalSavings)}`}</span> until
         <span>{' 31.03.22'}</span>
       </h3>
     </section>

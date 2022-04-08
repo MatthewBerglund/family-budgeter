@@ -1,3 +1,5 @@
+import { getUKFormattedEuros } from "./helpers";
+
 const Expense = ({ title, amount, date, id, removeExpense }) => {
   return (
     <li className="container list-group-item">
@@ -9,7 +11,7 @@ const Expense = ({ title, amount, date, id, removeExpense }) => {
           {title}
         </div>
         <div className="col fs-5 text-end">
-          - €{amount}
+          - {getUKFormattedEuros(amount)}
         </div>
         <div className="col text-end">
           <button
