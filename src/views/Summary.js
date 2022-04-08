@@ -26,7 +26,7 @@ const Summary = () => {
       <h3 className="fw-light">
         This leaves you with
         <span className="text-success">{` ${getUKFormattedEuros(totalSavings)}`}</span> until
-        <span>{` ${getUKFormattedDate('2022-04-30')}`}</span>
+        <span>{' 30/04/2022'}</span>
       </h3>
     </section>
   );
