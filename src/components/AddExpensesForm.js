@@ -17,7 +17,7 @@ const AddExpensesForm = ({ addExpense }) => {
   return (
     <section className="my-4">
       <div className="text-start">
-        <h2>Add some Expenses</h2>
+        <h2>Add new expense</h2>
       </div>
       <form className="row g-2" onSubmit={handleSubmit}>
         <div className="col-md">
@@ -32,7 +32,7 @@ const AddExpensesForm = ({ addExpense }) => {
               value={title}
               placeholder="Expense Name"
             />
-            <label htmlFor="amount">Expense Name</label>
+            <label htmlFor="amount">Expense name</label>
           </div>
         </div>
         <div className="col-md">
@@ -47,7 +47,7 @@ const AddExpensesForm = ({ addExpense }) => {
               value={date}
               placeholder="Expense Date"
             />
-            <label htmlFor="date">Expense Date</label>
+            <label htmlFor="date">Expense date</label>
           </div>
         </div>
         <div className="form-floating mb-2">
@@ -66,7 +66,7 @@ const AddExpensesForm = ({ addExpense }) => {
           <label htmlFor="amount">Expense amount in €</label>
         </div>
         <button className="btn btn-primary" type="submit">
-          add
+          Add
         </button>
       </form>
     </section>
