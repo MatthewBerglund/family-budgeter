@@ -1,8 +1,8 @@
-// Takes a string representing an amount and returns a new
-// string representing the amount in euros for speakers of UK English
-export function getUKFormattedEuros(stringAmount) {
+// Takes an amount and returns a string representing
+// the amount in euros for speakers of UK English
+export function getUKFormattedEuros(amount) {
   const options = { style: 'currency', currency: 'EUR' };
-  return Intl.NumberFormat('en-GB', options).format(stringAmount);
+  return Intl.NumberFormat('en-GB', options).format(amount);
 }
 
 // Takes a date string in `YYYY-MM-DD` format and returns a new string
