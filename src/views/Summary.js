@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { getUKFormattedEuros, getUKFormattedDate } from '../helpers';
+import { getUKFormattedEuros } from '../utils/helpers';
 
-const Summary = () => {
+const Summary = ({ selectedMonth, filteredExpenses }) => {
   const dummyTotBudget = 7777;
   const dummyTotExpenses = 4444;
   const dummyTotSavings = 3333;
@@ -25,8 +25,12 @@ const Summary = () => {
       </h3>
       <h3 className="fw-light">
         This leaves you with
-        <span className="text-success">{` ${getUKFormattedEuros(totalSavings)}`}</span> until
-        <span>{' 30/04/2022'}</span>
+        <span className="text-success">{` ${getUKFormattedEuros(totalSavings)}`}</span>{' '}
+        <span>
+          {selectedMonth && selectedMonth !== 'the beginning of time'
+            ? `until the end of ${selectedMonth}`
+            : 'until the end of time'}
+        </span>
       </h3>
     </section>
   );
