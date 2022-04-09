@@ -61,6 +61,8 @@ function App() {
         expenses={expenses}
         setExpenses={setExpenses}
         filteredExpenses={filteredExpenses}
+        setSelectedMonth={setSelectedMonth}
+        currentMonth={currentMonth}
       />
     </main>
   );

@@ -5,7 +5,9 @@ const Expenses = ({
   selectedMonth,
   expenses,
   setExpenses,
-  filteredExpenses
+  filteredExpenses,
+  setSelectedMonth,
+  currentMonth
 }) => {
   const token = process.env.REACT_APP_MOSTASH_API_KEY;
   const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
@@ -39,6 +41,7 @@ const Expenses = ({
       await fetch(url, requestOptions);
       // Remove expense item from state
       setExpenses(expenses.filter((expense) => expense.id !== id));
+      if(filteredExpenses.length === 1) setSelectedMonth(currentMonth)
     } catch {
       alert('Error deleting expense. Please try again later.');
     }
