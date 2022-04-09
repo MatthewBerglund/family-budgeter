@@ -1,9 +1,13 @@
 import { getUniqueMonths } from '../utils/helpers';
 
-const MonthSelector = ({ expenses, selectedMonth, setSelectedMonth }) => {
+const MonthSelector = ({ 
+  expenses, 
+  selectedMonth, 
+  setSelectedMonth 
+}) => {
   const months = getUniqueMonths(expenses);
+
   return (
-    <form>
       <select
         className="form-select"
         aria-label="Select a month"
@@ -12,16 +16,12 @@ const MonthSelector = ({ expenses, selectedMonth, setSelectedMonth }) => {
           setSelectedMonth(evt.target.value);
         }}
       >
-        <option key="the beginning of time" value="the beginning of time">
-          the beginning of time
-        </option>
         {months.map((month, i) => (
           <option key={i} value={month}>
             {month}
           </option>
         ))}
       </select>
-    </form>
   );
 };
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getUKFormattedDate } from './utils/helpers';
+import { getUKFormattedDate, getCurrentMonth } from './utils/helpers';
 
 import Summary from './views/Summary';
 import Expenses from './views/Expenses';
@@ -8,11 +8,8 @@ import MonthSelector from './components/MonthSelector';
 function App() {
   const token = process.env.REACT_APP_MOSTASH_API_KEY;
   const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
+  const currentMonth = getCurrentMonth();
 
-  const currentMonth = getUKFormattedDate(Date.now(), {
-    year: '2-digit',
-    month: 'long',
-  });
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [expenses, setExpenses] = useState([]);
   const [filteredExpenses, setFilteredExpenses] = useState(expenses);
@@ -24,10 +21,10 @@ function App() {
       try {
         const response = await fetch(url);
         const expenseData = await response.json();
-        expenseData.sort(function (a, b) {
+        const sortedData = expenseData.sort(function (a, b) {
           return new Date(a.date) - new Date(b.date);
         });
-        setExpenses(expenseData);
+        setExpenses(sortedData);
       } catch {
         alert('Error loading expenses. Please try again later.');
       }
@@ -39,15 +36,12 @@ function App() {
   useEffect(() => {
     const expensesToRender = expenses.filter((expense) => {
       let formattedExpenseDate = getUKFormattedDate(new Date(expense.date), {
-        year: '2-digit',
+        year: 'numeric',
         month: 'long',
       });
       return selectedMonth === formattedExpenseDate;
     });
-
-    if (selectedMonth !== 'the beginning of time') {
-      setFilteredExpenses(expensesToRender);
-    } else setFilteredExpenses(expenses);
+    setFilteredExpenses(expensesToRender);
   }, [expenses, selectedMonth]);
 
   return (
@@ -61,7 +55,6 @@ function App() {
         setSelectedMonth={setSelectedMonth}
       />
       <Summary
-        filteredExpenses={filteredExpenses}
         selectedMonth={selectedMonth}
       />
       <Expenses

@@ -13,7 +13,7 @@ const ExpensesList = ({ expenses, removeExpense, filteredExpenses }) => {
         <h2>History</h2>
       </div>
       <ul className="list-group">
-        {expenses.length > 0 ? (
+        {expenses.length > 0 && filteredExpenses.length > 0 ? (
           renderExpenses()
         ) : (
           <p>You have no prior expenses</p>

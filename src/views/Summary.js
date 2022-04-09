@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { getUKFormattedEuros } from '../utils/helpers';
 
-const Summary = ({ selectedMonth, filteredExpenses }) => {
+const Summary = ({ selectedMonth }) => {
   const dummyTotBudget = 7777;
   const dummyTotExpenses = 4444;
   const dummyTotSavings = 3333;
@@ -27,9 +27,7 @@ const Summary = ({ selectedMonth, filteredExpenses }) => {
         This leaves you with
         <span className="text-success">{` ${getUKFormattedEuros(totalSavings)}`}</span>{' '}
         <span>
-          {selectedMonth && selectedMonth !== 'the beginning of time'
-            ? `until the end of ${selectedMonth}`
-            : 'until the end of time'}
+          {selectedMonth && `until the end of ${selectedMonth}`}
         </span>
       </h3>
     </section>
