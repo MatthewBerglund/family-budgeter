@@ -14,7 +14,7 @@ const ExpensesList = ({ expenses, removeExpense }) => {
   return (
     <section className="my-4">
       <div className="text-start">
-        <h2>Prior Expenses</h2>
+        <h2>History</h2>
       </div>
       <ul className="list-group">
         {expenses.length > 0 ? renderExpenses() : <p>You have no prior expenses</p>}
