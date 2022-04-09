@@ -32,6 +32,6 @@ const Summary = ({ selectedMonth }) => {
       </h3>
     </section>
   );
-};
+}
 
 export default Summary;

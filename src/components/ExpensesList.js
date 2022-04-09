@@ -5,7 +5,7 @@ const ExpensesList = ({ expenses, removeExpense, filteredExpenses }) => {
     return filteredExpenses.map((expense) => (
       <Expense key={expense.id} {...expense} removeExpense={removeExpense} />
     ));
-  };
+  }
 
   return (
     <section className="my-4">
@@ -21,6 +21,6 @@ const ExpensesList = ({ expenses, removeExpense, filteredExpenses }) => {
       </ul>
     </section>
   );
-};
+}
 
 export default ExpensesList;

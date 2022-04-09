@@ -5,7 +5,7 @@ const Expenses = ({
   selectedMonth,
   expenses,
   setExpenses,
-  filteredExpenses,
+  filteredExpenses
 }) => {
   const token = process.env.REACT_APP_MOSTASH_API_KEY;
   const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
@@ -58,6 +58,6 @@ const Expenses = ({
       />
     </section>
   );
-};
+}
 
 export default Expenses;

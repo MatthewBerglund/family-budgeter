@@ -71,6 +71,6 @@ const AddExpensesForm = ({ addExpense }) => {
       </form>
     </section>
   );
-};
+}
 
 export default AddExpensesForm;
