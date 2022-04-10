@@ -1,6 +1,6 @@
 import Expense from './Expense';
 
-const ExpensesList = ({ expenses, removeExpense, filteredExpenses }) => {
+const ExpensesList = ({ removeExpense, filteredExpenses }) => {
   const renderExpenses = () => {
     return filteredExpenses.map((expense) => (
       <Expense key={expense.id} {...expense} removeExpense={removeExpense} />
@@ -13,7 +13,7 @@ const ExpensesList = ({ expenses, removeExpense, filteredExpenses }) => {
         <h2>History</h2>
       </div>
       <ul className="list-group">
-        {expenses.length > 0 && filteredExpenses.length > 0 ? (
+        {filteredExpenses.length > 0 ? (
           renderExpenses()
         ) : (
           <p>You have no prior expenses</p>
