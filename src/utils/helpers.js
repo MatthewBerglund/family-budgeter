@@ -20,21 +20,22 @@ export function getCurrentMonth() {
 }
 
 export function getUniqueMonths(expenseArray) {
-  return expenseArray.reduce(
-    (uniqueMonths, expense) => {
-      let formattedExpenseDate = getUKFormattedDate(new Date(expense.date), {
-        year: 'numeric',
-        month: 'long',
-      });
+  const expenseDates = expenseArray.map(expense => new Date(expense.date));
+  expenseDates.push(Date.now());
+  expenseDates.sort((dateA, dateB) => {
+    return dateA - dateB;
+  });
 
-      if (
-        formattedExpenseDate &&
-        !uniqueMonths.includes(formattedExpenseDate)
-      ) {
-        uniqueMonths.push(formattedExpenseDate);
-      }
-      return uniqueMonths;
-    },
-    [getCurrentMonth()]
-  );
+  return expenseDates.reduce((uniqueMonths, date) => {
+    let formattedDate = getUKFormattedDate(date, {
+      year: 'numeric',
+      month: 'long',
+    });
+
+    if (formattedDate && !uniqueMonths.includes(formattedDate)) {
+      uniqueMonths.push(formattedDate);
+    }
+
+    return uniqueMonths;
+  }, []);
 }
