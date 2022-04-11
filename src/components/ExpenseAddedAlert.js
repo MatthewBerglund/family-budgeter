@@ -5,7 +5,7 @@ const ExpenseAddedAlert = ({ expenseAdded, setExpenseAdded }) => {
       style={{ zIndex: 1 }}
       className={`alert ${
         expenseAdded ? 'alert-success' : 'alert-danger'
-      } alert-dismissible position-fixed bottom-0 end-0`}
+      } alert-dismissible position-fixed top-0 end-0`}
     >
       <h4 className="alert-heading">
         {expenseAdded ? 'Expense added' : 'Expense not added'}

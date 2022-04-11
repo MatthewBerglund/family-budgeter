@@ -57,11 +57,10 @@ const Expenses = ({
 
     try {
       await fetch(url, requestOptions);
-      // Remove expense item from state
+      setLastDeleted({ ...expense });
       setExpenses(expenses.filter(expense => expense.id !== id));
       if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
       setExpenseDeleted(true);
-      setLastDeleted(expense);
     } catch {
       setExpenseDeleted(false);
     }
