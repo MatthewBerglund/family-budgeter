@@ -1,11 +1,16 @@
 import { useState } from 'react';
+import ExpenseAddedAlert from './ExpenseAddedAlert';
 
-const AddExpensesForm = ({ addExpense }) => {
+const AddExpensesForm = ({
+  addExpense,
+  addedSuccessfully,
+  setAddedSuccessfully,
+}) => {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [amount, setAmount] = useState('');
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = evt => {
     evt.preventDefault();
     const expense = { title, date, amount };
     addExpense(expense);
@@ -28,7 +33,7 @@ const AddExpensesForm = ({ addExpense }) => {
               id="name"
               name="name"
               required
-              onChange={(evt) => setTitle(evt.target.value)}
+              onChange={evt => setTitle(evt.target.value)}
               value={title}
               placeholder="Expense Name"
             />
@@ -43,7 +48,7 @@ const AddExpensesForm = ({ addExpense }) => {
               id="date"
               name="date"
               required
-              onChange={(evt) => setDate(evt.target.value)}
+              onChange={evt => setDate(evt.target.value)}
               value={date}
               placeholder="Expense Date"
             />
@@ -59,7 +64,7 @@ const AddExpensesForm = ({ addExpense }) => {
             required
             min="0.01"
             step="0.01"
-            onChange={(evt) => setAmount(evt.target.value)}
+            onChange={evt => setAmount(evt.target.value)}
             value={amount}
             placeholder="Euro amount (with comma and two decimal places)"
           />
@@ -69,8 +74,14 @@ const AddExpensesForm = ({ addExpense }) => {
           Add
         </button>
       </form>
+      {addedSuccessfully !== undefined ? (
+        <ExpenseAddedAlert
+          addedSuccessfully={addedSuccessfully}
+          setAddedSuccessfully={setAddedSuccessfully}
+        />
+      ) : null}
     </section>
   );
-}
+};
 
 export default AddExpensesForm;
