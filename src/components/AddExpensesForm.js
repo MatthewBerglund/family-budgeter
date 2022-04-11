@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import ExpenseAddedAlert from './ExpenseAddedAlert';
 
-const AddExpensesForm = ({
-  addExpense,
-  addedSuccessfully,
-  setAddedSuccessfully,
-}) => {
+const AddExpensesForm = ({ addExpense }) => {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [amount, setAmount] = useState('');
@@ -74,12 +70,6 @@ const AddExpensesForm = ({
           Add
         </button>
       </form>
-      {addedSuccessfully !== undefined ? (
-        <ExpenseAddedAlert
-          addedSuccessfully={addedSuccessfully}
-          setAddedSuccessfully={setAddedSuccessfully}
-        />
-      ) : null}
     </section>
   );
 };
