@@ -7,17 +7,14 @@ const ExpenseAddedAlert = ({ addedSuccessfully, setAddedSuccessfully }) => {
         addedSuccessfully ? 'alert-success' : 'alert-danger'
       } alert-dismissible position-fixed bottom-0 end-0`}
     >
-      {addedSuccessfully ? (
-        <>
-          <h4 className="alert-heading">Expenses added</h4>
-          <p>Your expense has been successfully added.</p>
-        </>
-      ) : (
-        <>
-          <h4 className="alert-heading">Expense not added</h4>
-          <p>Your expense could not be added. Please try again.</p>
-        </>
-      )}
+      <h4 className="alert-heading">
+        {addedSuccessfully ? 'Expense added' : 'Expense not added'}
+      </h4>
+      <p>
+        {addedSuccessfully
+          ? 'Your expense has been successfully added.'
+          : 'Your expense could not be added. Please try again.'}
+      </p>
       <button
         type="button"
         className="btn-close"
