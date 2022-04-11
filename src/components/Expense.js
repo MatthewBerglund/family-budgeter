@@ -8,13 +8,16 @@ const Expense = ({ title, amount, date, id, removeExpense }) => {
         <div className="col-6 fs-5">{title}</div>
         <div className="col fs-5 text-end">- {getUKFormattedEuros(amount)}</div>
         <div className="col text-end">
-          <button className="btn btn-danger" onClick={() => removeExpense(id)}>
+          <button
+            className="btn btn-danger"
+            onClick={() => removeExpense({ title, amount, date, id })}
+          >
             Delete
           </button>
         </div>
       </div>
     </li>
   );
-}
+};
 
 export default Expense;

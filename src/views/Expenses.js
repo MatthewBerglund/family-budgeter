@@ -1,16 +1,19 @@
 import AddExpensesForm from '../components/AddExpensesForm';
 import ExpensesList from '../components/ExpensesList';
+import ExpenseAddedAlert from '../components/ExpenseAddedAlert';
+import ExpenseDeletedAlert from '../components/ExpenseDeletedAlert';
 import { useState } from 'react';
 
 const Expenses = ({
-  selectedMonth,
   expenses,
   setExpenses,
   filteredExpenses,
   setSelectedMonth,
   currentMonth,
 }) => {
-  const [addedSuccessfully, setAddedSuccessfully] = useState();
+  const [expenseAdded, setExpenseAdded] = useState();
+  const [expenseDeleted, setExpenseDeleted] = useState();
+  const [lastDeleted, setLastDeleted] = useState({});
 
   const token = process.env.REACT_APP_MOSTASH_API_KEY;
   const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
@@ -27,49 +30,67 @@ const Expenses = ({
       body: JSON.stringify(newExpense),
     };
 
-    setAddedSuccessfully(undefined);
+    // Reset alerts in case user did not dismiss them
+    setExpenseAdded(undefined);
+    setExpenseDeleted(undefined);
 
     try {
       const response = await fetch(url, requestOptions);
       const newExpenseData = await response.json();
       setExpenses([...expenses, newExpenseData]);
-      setAddedSuccessfully(true);
+      setExpenseAdded(true);
     } catch {
-      setAddedSuccessfully(false);
+      setExpenseAdded(false);
     }
   };
 
-  const removeExpense = async id => {
+  const removeExpense = async expense => {
+    const { id } = expense;
     const url = `${baseURL}/items/${id}.json`;
     const requestOptions = { method: 'DELETE', headers };
+
+    // Reset alerts in case user did not dismiss them
+    setExpenseAdded(undefined);
+    setExpenseDeleted(undefined);
 
     try {
       await fetch(url, requestOptions);
       // Remove expense item from state
       setExpenses(expenses.filter(expense => expense.id !== id));
       if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
+      setExpenseDeleted(true);
+      setLastDeleted(expense);
     } catch {
-      alert('Error deleting expense. Please try again later.');
+      setExpenseDeleted(false);
     }
   };
 
   return (
-    <section className="row my-5">
-      <div className="text-center">
-        <h2 className="display-2">Expenses</h2>
-      </div>
-      <AddExpensesForm
-        addExpense={addExpense}
-        addedSuccessfully={addedSuccessfully}
-        setAddedSuccessfully={setAddedSuccessfully}
-      />
-      <ExpensesList
-        expenses={expenses}
-        removeExpense={removeExpense}
-        selectedMonth={selectedMonth}
-        filteredExpenses={filteredExpenses}
-      />
-    </section>
+    <>
+      <section className="row my-5">
+        <div className="text-center">
+          <h2 className="display-2">Expenses</h2>
+        </div>
+        <AddExpensesForm addExpense={addExpense} />
+        <ExpensesList
+          removeExpense={removeExpense}
+          filteredExpenses={filteredExpenses}
+        />
+      </section>
+      {expenseAdded === undefined ? null : (
+        <ExpenseAddedAlert
+          expenseAdded={expenseAdded}
+          setExpenseAdded={setExpenseAdded}
+        />
+      )}
+      {expenseDeleted === undefined ? null : (
+        <ExpenseDeletedAlert
+          expenseDeleted={expenseDeleted}
+          setExpenseDeleted={setExpenseDeleted}
+          {...lastDeleted}
+        />
+      )}
+    </>
   );
 };
 
