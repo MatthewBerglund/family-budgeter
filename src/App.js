@@ -5,9 +5,10 @@ import Summary from './views/Summary';
 import Expenses from './views/Expenses';
 import MonthSelector from './components/MonthSelector';
 
+const token = process.env.REACT_APP_MOSTASH_API_KEY;
+const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
+
 function App() {
-  const token = process.env.REACT_APP_MOSTASH_API_KEY;
-  const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
   const currentMonth = getCurrentMonth();
 
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
