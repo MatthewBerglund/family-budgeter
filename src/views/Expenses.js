@@ -7,7 +7,7 @@ const Expenses = ({
   setExpenses,
   filteredExpenses,
   setSelectedMonth,
-  currentMonth
+  currentMonth,
 }) => {
   const token = process.env.REACT_APP_MOSTASH_API_KEY;
   const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
@@ -16,7 +16,7 @@ const Expenses = ({
     'Content-Type': 'application/json',
   };
 
-  const addExpense = async (newExpense) => {
+  const addExpense = async newExpense => {
     const url = `${baseURL}/items.json?kind=expense`;
     const requestOptions = {
       method: 'POST',
@@ -33,15 +33,15 @@ const Expenses = ({
     }
   };
 
-  const removeExpense = async (id) => {
+  const removeExpense = async id => {
     const url = `${baseURL}/items/${id}.json`;
     const requestOptions = { method: 'DELETE', headers };
 
     try {
       await fetch(url, requestOptions);
       // Remove expense item from state
-      setExpenses(expenses.filter((expense) => expense.id !== id));
-      if(filteredExpenses.length === 1) setSelectedMonth(currentMonth)
+      setExpenses(expenses.filter(expense => expense.id !== id));
+      if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
     } catch {
       alert('Error deleting expense. Please try again later.');
     }
@@ -61,6 +61,6 @@ const Expenses = ({
       />
     </section>
   );
-}
+};
 
 export default Expenses;

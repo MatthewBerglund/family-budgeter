@@ -2,10 +2,10 @@ import Expense from './Expense';
 
 const ExpensesList = ({ removeExpense, filteredExpenses }) => {
   const renderExpenses = () => {
-    return filteredExpenses.map((expense) => (
+    return filteredExpenses.map(expense => (
       <Expense key={expense.id} {...expense} removeExpense={removeExpense} />
     ));
-  }
+  };
 
   return (
     <section className="my-4">
@@ -21,6 +21,6 @@ const ExpensesList = ({ removeExpense, filteredExpenses }) => {
       </ul>
     </section>
   );
-}
+};
 
 export default ExpensesList;

@@ -12,21 +12,26 @@ export function getUKFormattedDate(dateString, options) {
   return Intl.DateTimeFormat('en-GB', options).format(dateObj);
 }
 
-export function getCurrentMonth () {
+export function getCurrentMonth() {
   return getUKFormattedDate(Date.now(), { year: 'numeric', month: 'long' });
 }
 
 export function getUniqueMonths(expenseArray) {
-  return expenseArray.reduce((uniqueMonths, expense) => {
-    let formattedExpenseDate = getUKFormattedDate(new Date(expense.date), {
-      year: 'numeric',
-      month: 'long',
-    });
-    
-    if ( formattedExpenseDate && !uniqueMonths.includes(formattedExpenseDate)) {
-      uniqueMonths.push(formattedExpenseDate);
-    }
-    return uniqueMonths;
+  return expenseArray.reduce(
+    (uniqueMonths, expense) => {
+      let formattedExpenseDate = getUKFormattedDate(new Date(expense.date), {
+        year: 'numeric',
+        month: 'long',
+      });
 
-  }, [getCurrentMonth()]);
+      if (
+        formattedExpenseDate &&
+        !uniqueMonths.includes(formattedExpenseDate)
+      ) {
+        uniqueMonths.push(formattedExpenseDate);
+      }
+      return uniqueMonths;
+    },
+    [getCurrentMonth()]
+  );
 }

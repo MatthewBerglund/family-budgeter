@@ -15,6 +15,6 @@ const Expense = ({ title, amount, date, id, removeExpense }) => {
       </div>
     </li>
   );
-}
+};
 
 export default Expense;
