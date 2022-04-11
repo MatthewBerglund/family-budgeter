@@ -34,7 +34,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const expensesToRender = expenses.filter((expense) => {
+    const expensesToRender = expenses.filter(expense => {
       let formattedExpenseDate = getUKFormattedDate(new Date(expense.date), {
         year: 'numeric',
         month: 'long',
@@ -54,9 +54,7 @@ function App() {
         selectedMonth={selectedMonth}
         setSelectedMonth={setSelectedMonth}
       />
-      <Summary
-        selectedMonth={selectedMonth}
-      />
+      <Summary selectedMonth={selectedMonth} />
       <Expenses
         expenses={expenses}
         setExpenses={setExpenses}

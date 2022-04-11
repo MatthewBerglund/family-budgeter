@@ -17,21 +17,25 @@ const Summary = ({ selectedMonth }) => {
       </div>
       <h3 className="fw-light">
         Your monthly budget is
-        <span className="text-primary">{` ${getUKFormattedEuros(totalBudget)}`}</span>
+        <span className="text-primary">{` ${getUKFormattedEuros(
+          totalBudget
+        )}`}</span>
       </h3>
       <h3 className="fw-light">
         You have spent
-        <span className="text-danger">{` ${getUKFormattedEuros(totalExpenses)}`}</span>
+        <span className="text-danger">{` ${getUKFormattedEuros(
+          totalExpenses
+        )}`}</span>
       </h3>
       <h3 className="fw-light">
         This leaves you with
-        <span className="text-success">{` ${getUKFormattedEuros(totalSavings)}`}</span>{' '}
-        <span>
-          {selectedMonth && `until the end of ${selectedMonth}`}
-        </span>
+        <span className="text-success">{` ${getUKFormattedEuros(
+          totalSavings
+        )}`}</span>{' '}
+        <span>{selectedMonth && `until the end of ${selectedMonth}`}</span>
       </h3>
     </section>
   );
-}
+};
 
 export default Summary;
