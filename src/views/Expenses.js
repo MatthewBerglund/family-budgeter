@@ -11,6 +11,8 @@ const Expenses = ({
   setSelectedMonth,
   currentMonth,
 }) => {
+  // `expenseAdded` and `expenseDeleted` can be undefined, true or false
+  // alerts are hidden when these are undefined
   const [expenseAdded, setExpenseAdded] = useState();
   const [expenseDeleted, setExpenseDeleted] = useState();
   const [lastDeleted, setLastDeleted] = useState({});
