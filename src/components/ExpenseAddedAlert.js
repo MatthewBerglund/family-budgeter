@@ -8,7 +8,7 @@ const ExpenseAddedAlert = ({ expenseAdded, setExpenseAdded }) => {
       } alert-dismissible position-fixed top-0 end-0`}
     >
       <h4 className="alert-heading">
-        {expenseAdded ? 'Expense added' : 'Expense not added'}
+        {expenseAdded ? 'Expense added' : 'Error adding expense'}
       </h4>
       <p>
         {expenseAdded
