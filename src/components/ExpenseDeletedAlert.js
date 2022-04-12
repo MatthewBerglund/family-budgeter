@@ -10,7 +10,6 @@ const ExpenseDeletedAlert = ({
   return (
     <div
       role="alert"
-      style={{ zIndex: 1 }}
       className={`alert ${
         expenseDeleted ? 'alert-success' : 'alert-danger'
       } alert-dismissible position-fixed top-0 end-0`}
