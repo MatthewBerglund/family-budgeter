@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import ExpenseAddedAlert from './ExpenseAddedAlert';
 
 const AddExpensesForm = ({ addExpense }) => {
   const [title, setTitle] = useState('');
