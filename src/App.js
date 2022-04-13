@@ -46,24 +46,32 @@ function App() {
   }, [expenses, selectedMonth]);
 
   return (
-    <main className="container-md">
-      <header className="row text-center my-5">
-        <h1 className="display-1 text-primary">Matt's Budget</h1>
+    <>
+      <header className="navbar bg-dark bg-opacity-10 px-5">
+        <div className="container-md">
+          <div className="col">
+            <h1 className="display-1 text-dark">Matt's Budget</h1>
+          </div>
+          <div className="col-3">
+            <MonthSelector
+              expenses={expenses}
+              selectedMonth={selectedMonth}
+              setSelectedMonth={setSelectedMonth}
+            />
+          </div>
+        </div>
       </header>
-      <MonthSelector
-        expenses={expenses}
-        selectedMonth={selectedMonth}
-        setSelectedMonth={setSelectedMonth}
-      />
-      <Summary selectedMonth={selectedMonth} />
-      <Expenses
-        expenses={expenses}
-        setExpenses={setExpenses}
-        filteredExpenses={filteredExpenses}
-        setSelectedMonth={setSelectedMonth}
-        currentMonth={currentMonth}
-      />
-    </main>
+      <main className="container-md">
+        <Summary selectedMonth={selectedMonth} />
+        <Expenses
+          expenses={expenses}
+          setExpenses={setExpenses}
+          filteredExpenses={filteredExpenses}
+          setSelectedMonth={setSelectedMonth}
+          currentMonth={currentMonth}
+        />
+      </main>
+    </>
   );
 }
 
