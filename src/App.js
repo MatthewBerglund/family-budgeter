@@ -47,12 +47,12 @@ function App() {
 
   return (
     <>
-      <header className="navbar bg-dark bg-opacity-10 px-5">
-        <div className="container-md">
-          <div className="col">
+      <header className="navbar bg-dark bg-opacity-10">
+        <div className="container">
+          <div className="col-md-9">
             <h1 className="display-1 text-dark">Matt's Budget</h1>
           </div>
-          <div className="col-3">
+          <div className="col-md-3">
             <MonthSelector
               expenses={expenses}
               selectedMonth={selectedMonth}
@@ -61,15 +61,21 @@ function App() {
           </div>
         </div>
       </header>
-      <main className="container-md">
-        <Summary selectedMonth={selectedMonth} />
-        <AddExpenses
-          expenses={expenses}
-          setExpenses={setExpenses}
-          filteredExpenses={filteredExpenses}
-          setSelectedMonth={setSelectedMonth}
-          currentMonth={currentMonth}
-        />
+      <main className="container py-5">
+        <div className="row gy-5">
+          <section className="col-md-6">
+            <Summary selectedMonth={selectedMonth} />
+          </section>
+          <section className="col-md-6">
+            <AddExpenses
+              expenses={expenses}
+              setExpenses={setExpenses}
+              filteredExpenses={filteredExpenses}
+              setSelectedMonth={setSelectedMonth}
+              currentMonth={currentMonth}
+            />
+          </section>
+        </div>
       </main>
     </>
   );

@@ -4,7 +4,7 @@ import ExpenseAddedAlert from '../components/ExpenseAddedAlert';
 import ExpenseDeletedAlert from '../components/ExpenseDeletedAlert';
 import { useState } from 'react';
 
-const Expenses = ({
+const AddExpenses = ({
   expenses,
   setExpenses,
   filteredExpenses,
@@ -68,10 +68,7 @@ const Expenses = ({
 
   return (
     <>
-      <section className="row my-5">
-        <div className="text-center">
-          <h2 className="display-2">Expenses</h2>
-        </div>
+      <section>
         <AddExpensesForm addExpense={addExpense} />
         {/* <ExpensesList
           removeExpense={removeExpense}
@@ -95,4 +92,4 @@ const Expenses = ({
   );
 };
 
-export default Expenses;
+export default AddExpenses;
