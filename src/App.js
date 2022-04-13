@@ -62,11 +62,11 @@ function App() {
         </div>
       </header>
       <main className="container py-5">
-        <div className="row gy-5">
-          <section className="col-md-6">
+        <div className="row gy-5 gx-5">
+          <section className="col-md-5">
             <Summary selectedMonth={selectedMonth} />
           </section>
-          <section className="col-md-6">
+          <section className="col-md-7">
             <AddExpenses
               expenses={expenses}
               setExpenses={setExpenses}
