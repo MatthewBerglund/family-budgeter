@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getUKFormattedDate, getCurrentMonth } from './utils/helpers';
 
 import Summary from './views/Summary';
-import Expenses from './views/Expenses';
+import AddExpenses from './views/AddExpenses';
 import MonthSelector from './components/MonthSelector';
 
 const token = process.env.REACT_APP_MOSTASH_API_KEY;
@@ -63,7 +63,7 @@ function App() {
       </header>
       <main className="container-md">
         <Summary selectedMonth={selectedMonth} />
-        <Expenses
+        <AddExpenses
           expenses={expenses}
           setExpenses={setExpenses}
           filteredExpenses={filteredExpenses}

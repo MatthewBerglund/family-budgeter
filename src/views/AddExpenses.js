@@ -73,10 +73,10 @@ const Expenses = ({
           <h2 className="display-2">Expenses</h2>
         </div>
         <AddExpensesForm addExpense={addExpense} />
-        <ExpensesList
+        {/* <ExpensesList
           removeExpense={removeExpense}
           filteredExpenses={filteredExpenses}
-        />
+        /> */}
       </section>
       {expenseAdded === undefined ? null : (
         <ExpenseAddedAlert
