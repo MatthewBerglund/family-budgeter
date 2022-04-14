@@ -15,7 +15,7 @@ const ExpensesList = ({ removeExpense, filteredExpenses }) => {
           {filteredExpenses.length > 0 ? (
             renderExpenses()
           ) : (
-            <p>You have no prior expenses</p>
+            <p className="m-0">You have no prior expenses</p>
           )}
         </ul>
       </div>

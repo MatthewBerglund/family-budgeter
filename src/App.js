@@ -131,6 +131,8 @@ function App() {
               lastDeleted={lastDeleted}
             />
           </section>
+        </div>
+        <div className="row g-5 mt-1">
           <section className="col">
             <ExpenseHistory
               removeExpense={removeExpense}

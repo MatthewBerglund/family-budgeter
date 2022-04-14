@@ -12,7 +12,10 @@ function Summary({ selectedMonth }) {
 
   return (
     <div className="card h-100">
-      <h3 className="card-header">Summary for {selectedMonth}</h3>
+      <h3 className="card-header">
+        Summary for{' '}
+        <span className="text-primary fw-bold">{selectedMonth}</span>
+      </h3>
       <div className="card-body container d-flex flex-column justify-content-between">
         <h4 className="fw-light row">
           <span className="col">Starting budget:</span>
