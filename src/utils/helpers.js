@@ -1,8 +1,8 @@
-// Takes an amount and returns a string representing
+// Takes an amount in cents and returns a string representing
 // the amount in euros for speakers of UK English
-export function getUKFormattedEuros(amount) {
+export function getUKFormattedEuros(centAmount) {
   const options = { style: 'currency', currency: 'EUR' };
-  return Intl.NumberFormat('en-GB', options).format(amount);
+  return Intl.NumberFormat('en-GB', options).format(centAmount / 100);
 }
 
 // Takes a date string in `YYYY-MM-DD` format and returns a new string
@@ -38,4 +38,18 @@ export function getUniqueMonths(expenseArray) {
 
     return uniqueMonths;
   }, []);
+}
+
+// Takes a string representing a euro amount and returns an integer
+// representing the same amount in cents. Avoids math calculations
+// in order to prevent floating point errors.
+export function convertEurosToCents(amount) {
+  if (amount.includes('.')) {
+    if (amount.indexOf('.') === amount.length - 2) {
+      amount = amount + '0';
+    }
+    return parseFloat(amount.replace('.', ''));
+  } else {
+    return parseFloat(amount + '00');
+  }
 }

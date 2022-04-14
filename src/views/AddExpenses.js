@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { convertEurosToCents } from '../utils/helpers';
 
 const AddExpenses = ({ addExpense }) => {
   const [title, setTitle] = useState('');
@@ -7,7 +8,7 @@ const AddExpenses = ({ addExpense }) => {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    const expense = { title, date, amount };
+    const expense = { title, date, amount: convertEurosToCents(amount) };
     addExpense(expense);
     setTitle('');
     setDate('');

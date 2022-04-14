@@ -1,14 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getUKFormattedEuros } from '../utils/helpers';
 
-function Summary({ selectedMonth }) {
-  const dummyTotBudget = 7777;
-  const dummyTotExpenses = 4444;
-  const dummyTotSavings = 3333;
+function Summary({ selectedMonth, filteredExpenses }) {
+  const [totalBudget, setTotalBudget] = useState(7777 * 100);
+  const [totalExpenses, setTotalExpenses] = useState(0);
 
-  const [totalBudget, setTotalBudget] = useState(dummyTotBudget);
-  const [totalExpenses, setTotalExpenses] = useState(dummyTotExpenses);
-  const [totalSavings, setTotalSavings] = useState(dummyTotSavings);
+  useEffect(() => {
+    // Calculate total expenses
+    const expenseSum = filteredExpenses
+      .map(expense => expense.amount)
+      .reduce((sum, curr) => {
+        return sum + curr;
+      }, 0);
+    setTotalExpenses(expenseSum);
+  }, [filteredExpenses]);
 
   return (
     <div className="card h-100">
@@ -32,7 +37,7 @@ function Summary({ selectedMonth }) {
         <h4 className="fw-light row">
           <span className="col">Remaining budget:</span>
           <span className="text-warning fw-bold col">{` ${getUKFormattedEuros(
-            totalSavings
+            totalBudget - totalExpenses
           )}`}</span>{' '}
         </h4>
       </div>

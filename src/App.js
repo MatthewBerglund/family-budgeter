@@ -119,7 +119,10 @@ function App() {
       <main className="container py-5">
         <div className="row g-5">
           <section className="col-lg-6">
-            <Summary selectedMonth={selectedMonth} />
+            <Summary
+              selectedMonth={selectedMonth}
+              filteredExpenses={filteredExpenses}
+            />
           </section>
           <section className="col-lg-6">
             <AddExpenses
