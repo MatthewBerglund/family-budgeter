@@ -16,7 +16,7 @@ function BudgetOverview({ selectedMonth }) {
       <div className="card-body container d-flex flex-column justify-content-between">
         <h4 className="fw-light row">
           <span className="col">Starting budget:</span>
-          <span className="text-primary fw-bold col">{` ${getUKFormattedEuros(
+          <span className="text-success fw-bold col">{` ${getUKFormattedEuros(
             totalBudget
           )}`}</span>
         </h4>
@@ -28,7 +28,7 @@ function BudgetOverview({ selectedMonth }) {
         </h4>
         <h4 className="fw-light row">
           <span className="col">Remaining budget:</span>
-          <span className="text-success fw-bold col">{` ${getUKFormattedEuros(
+          <span className="text-warning fw-bold col">{` ${getUKFormattedEuros(
             totalSavings
           )}`}</span>{' '}
         </h4>
