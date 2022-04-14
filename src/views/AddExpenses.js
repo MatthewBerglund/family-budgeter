@@ -1,94 +1,75 @@
-import AddExpensesForm from '../components/AddExpensesForm';
-import ExpensesList from '../components/ExpensesList';
-import ExpenseAddedAlert from '../components/ExpenseAddedAlert';
-import ExpenseDeletedAlert from '../components/ExpenseDeletedAlert';
 import { useState } from 'react';
 
-const AddExpenses = ({
-  expenses,
-  setExpenses,
-  filteredExpenses,
-  setSelectedMonth,
-  currentMonth,
-}) => {
-  // `expenseAdded` and `expenseDeleted` can be undefined, true or false
-  // alerts are hidden when these are undefined
-  const [expenseAdded, setExpenseAdded] = useState();
-  const [expenseDeleted, setExpenseDeleted] = useState();
-  const [lastDeleted, setLastDeleted] = useState({});
+const AddExpenses = ({ addExpense }) => {
+  const [title, setTitle] = useState('');
+  const [date, setDate] = useState('');
+  const [amount, setAmount] = useState('');
 
-  const token = process.env.REACT_APP_MOSTASH_API_KEY;
-  const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
-  const headers = {
-    Stash: token,
-    'Content-Type': 'application/json',
-  };
-
-  const addExpense = async newExpense => {
-    const url = `${baseURL}/items.json?kind=expense`;
-    const requestOptions = {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(newExpense),
-    };
-
-    // Reset alerts in case user did not dismiss them
-    setExpenseAdded(undefined);
-    setExpenseDeleted(undefined);
-
-    try {
-      const response = await fetch(url, requestOptions);
-      const newExpenseData = await response.json();
-      setExpenses([...expenses, newExpenseData]);
-      setExpenseAdded(true);
-    } catch {
-      setExpenseAdded(false);
-    }
-  };
-
-  const removeExpense = async expense => {
-    const { id } = expense;
-    const url = `${baseURL}/items/${id}.json`;
-    const requestOptions = { method: 'DELETE', headers };
-
-    // Reset alerts in case user did not dismiss them
-    setExpenseAdded(undefined);
-    setExpenseDeleted(undefined);
-
-    try {
-      await fetch(url, requestOptions);
-      setLastDeleted({ ...expense });
-      setExpenses(expenses.filter(expense => expense.id !== id));
-      if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
-      setExpenseDeleted(true);
-    } catch {
-      setExpenseDeleted(false);
-    }
+  const handleSubmit = evt => {
+    evt.preventDefault();
+    const expense = { title, date, amount };
+    addExpense(expense);
+    setTitle('');
+    setDate('');
+    setAmount('');
   };
 
   return (
-    <>
-      <section>
-        <AddExpensesForm addExpense={addExpense} />
-        {/* <ExpensesList
-          removeExpense={removeExpense}
-          filteredExpenses={filteredExpenses}
-        /> */}
-      </section>
-      {expenseAdded === undefined ? null : (
-        <ExpenseAddedAlert
-          expenseAdded={expenseAdded}
-          setExpenseAdded={setExpenseAdded}
-        />
-      )}
-      {expenseDeleted === undefined ? null : (
-        <ExpenseDeletedAlert
-          expenseDeleted={expenseDeleted}
-          setExpenseDeleted={setExpenseDeleted}
-          {...lastDeleted}
-        />
-      )}
-    </>
+    <div className="card h-100">
+      <h3 className="card-header">Add expense</h3>
+      <div className="card-body">
+        <form className="row g-2" onSubmit={handleSubmit}>
+          <div className="col-lg-6">
+            <div className="form-floating">
+              <input
+                className="form-control"
+                type="text"
+                id="name"
+                name="name"
+                required
+                onChange={evt => setTitle(evt.target.value)}
+                value={title}
+                placeholder="Expense Name"
+              />
+              <label htmlFor="amount">Expense name</label>
+            </div>
+          </div>
+          <div className="col-lg-6">
+            <div className="form-floating">
+              <input
+                className="form-control"
+                type="date"
+                id="date"
+                name="date"
+                required
+                onChange={evt => setDate(evt.target.value)}
+                value={date}
+                placeholder="Expense Date"
+              />
+              <label htmlFor="date">Expense date</label>
+            </div>
+          </div>
+          <div className="form-floating mb-2">
+            <input
+              className="form-control"
+              type="number"
+              id="amount"
+              name="amount"
+              required
+              min="0.01"
+              step="0.01"
+              onChange={evt => setAmount(evt.target.value)}
+              value={amount}
+              placeholder="Euro amount (with comma and two decimal places)"
+            />
+            <label htmlFor="amount">Expense amount in €</label>
+          </div>
+          <button className="btn btn-primary" type="submit">
+            Add
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 
