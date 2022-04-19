@@ -23,22 +23,29 @@ function Summary({ selectedMonth, filteredExpenses }) {
       </h3>
       <div className="card-body container d-flex flex-column justify-content-between">
         <h4 className="fw-light row">
-          <span className="col">Starting budget:</span>
-          <span className="text-success fw-bold col">{` ${getUKFormattedEuros(
+          <span className="col-6 col-md-4 col-lg-6 col-xl-5">
+            Starting budget:
+          </span>
+          <span className="col-4 text-success fw-bold text-end">{` ${getUKFormattedEuros(
             totalBudget
           )}`}</span>
+          <div className="col-3"></div>
         </h4>
         <h4 className="fw-light row">
-          <span className="col">Money spent:</span>
-          <span className="text-danger fw-bold col">{` ${getUKFormattedEuros(
+          <span className="col-6 col-md-4 col-lg-6 col-xl-5">Money spent:</span>
+          <span className="col-4 text-danger fw-bold text-end">{` ${getUKFormattedEuros(
             totalExpenses
           )}`}</span>
+          <div className="col-3"></div>
         </h4>
         <h4 className="fw-light row">
-          <span className="col">Remaining budget:</span>
-          <span className="text-warning fw-bold col">{` ${getUKFormattedEuros(
+          <span className="col-6 col-md-4 col-lg-6 col-xl-5">
+            Remaining budget:
+          </span>
+          <span className="col-4 text-warning fw-bold text-end">{` ${getUKFormattedEuros(
             totalBudget - totalExpenses
-          )}`}</span>{' '}
+          )}`}</span>
+          <div className="col-3"></div>
         </h4>
       </div>
     </div>
