@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { getUKFormattedEuros } from '../utils/helpers';
 
-const Summary = ({ selectedMonth }) => {
+function Summary({ selectedMonth }) {
   const dummyTotBudget = 7777;
   const dummyTotExpenses = 4444;
   const dummyTotSavings = 3333;
@@ -11,31 +11,33 @@ const Summary = ({ selectedMonth }) => {
   const [totalSavings, setTotalSavings] = useState(dummyTotSavings);
 
   return (
-    <section className="row my-5">
-      <div className="text-center">
-        <h2 className="display-2">Summary</h2>
+    <div className="card h-100">
+      <h3 className="card-header">
+        Summary for{' '}
+        <span className="text-primary fw-bold">{selectedMonth}</span>
+      </h3>
+      <div className="card-body container d-flex flex-column justify-content-between">
+        <h4 className="fw-light row">
+          <span className="col">Starting budget:</span>
+          <span className="text-success fw-bold col">{` ${getUKFormattedEuros(
+            totalBudget
+          )}`}</span>
+        </h4>
+        <h4 className="fw-light row">
+          <span className="col">Money spent:</span>
+          <span className="text-danger fw-bold col">{` ${getUKFormattedEuros(
+            totalExpenses
+          )}`}</span>
+        </h4>
+        <h4 className="fw-light row">
+          <span className="col">Remaining budget:</span>
+          <span className="text-warning fw-bold col">{` ${getUKFormattedEuros(
+            totalSavings
+          )}`}</span>{' '}
+        </h4>
       </div>
-      <h3 className="fw-light">
-        Your monthly budget is
-        <span className="text-primary">{` ${getUKFormattedEuros(
-          totalBudget
-        )}`}</span>
-      </h3>
-      <h3 className="fw-light">
-        You have spent
-        <span className="text-danger">{` ${getUKFormattedEuros(
-          totalExpenses
-        )}`}</span>
-      </h3>
-      <h3 className="fw-light">
-        This leaves you with
-        <span className="text-success">{` ${getUKFormattedEuros(
-          totalSavings
-        )}`}</span>{' '}
-        <span>{selectedMonth && `until the end of ${selectedMonth}`}</span>
-      </h3>
-    </section>
+    </div>
   );
-};
+}
 
 export default Summary;
