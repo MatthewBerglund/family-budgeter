@@ -1,11 +1,9 @@
 import Expense from '../components/Expense';
 
 const ExpensesList = ({ removeExpense, filteredExpenses }) => {
-  const renderExpenses = () => {
-    return filteredExpenses.map(expense => (
-      <Expense key={expense.id} {...expense} removeExpense={removeExpense} />
-    ));
-  };
+  const sortedExpenses = filteredExpenses.sort((expenseA, expenseB) => {
+    return new Date(expenseB.date) - new Date(expenseA.date);
+  });
 
   return (
     <div className="card">
@@ -13,7 +11,13 @@ const ExpensesList = ({ removeExpense, filteredExpenses }) => {
       <div className="card-body">
         <ul className="list-group list-group-flush">
           {filteredExpenses.length > 0 ? (
-            renderExpenses()
+            sortedExpenses.map(expense => (
+              <Expense
+                key={expense.id}
+                {...expense}
+                removeExpense={removeExpense}
+              />
+            ))
           ) : (
             <p className="m-0">You have no prior expenses</p>
           )}
