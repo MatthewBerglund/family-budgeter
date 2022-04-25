@@ -18,22 +18,21 @@ function Summary({ selectedMonth, filteredExpenses }) {
   return (
     <div className="card h-100">
       <h3 className="card-header">
-        Summary for{' '}
-        <span className="text-primary fw-bold">{selectedMonth}</span>
+        Summary for <span className="fw-bold">{selectedMonth}</span>
       </h3>
       <div className="card-body container d-flex flex-column justify-content-between">
         <h4 className="fw-light row">
           <span className="col-6 col-md-4 col-lg-6 col-xl-5">
             Starting budget:
           </span>
-          <span className="col-4 text-success fw-bold text-end">{` ${getUKFormattedEuros(
+          <span className="col-4 fw-bold text-end">{` ${getUKFormattedEuros(
             totalBudget
           )}`}</span>
           <div className="col-3"></div>
         </h4>
         <h4 className="fw-light row">
           <span className="col-6 col-md-4 col-lg-6 col-xl-5">Money spent:</span>
-          <span className="col-4 text-danger fw-bold text-end">{` ${getUKFormattedEuros(
+          <span className="col-4 fw-bold text-end">{` ${getUKFormattedEuros(
             totalExpenses
           )}`}</span>
           <div className="col-3"></div>
