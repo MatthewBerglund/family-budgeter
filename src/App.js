@@ -35,10 +35,7 @@ function App() {
       try {
         const response = await fetch(url);
         const expenseData = await response.json();
-        const sortedData = expenseData.sort(function (a, b) {
-          return new Date(a.date) - new Date(b.date);
-        });
-        setExpenses(sortedData);
+        setExpenses(expenseData);
       } catch {
         alert('Error loading expenses. Please try again later.');
       }
