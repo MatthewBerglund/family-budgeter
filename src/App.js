@@ -117,6 +117,7 @@ function App() {
         <div className="row g-5">
           <section className="col-lg-6">
             <Summary
+              currentMonth={currentMonth}
               selectedMonth={selectedMonth}
               filteredExpenses={filteredExpenses}
             />
