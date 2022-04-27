@@ -102,7 +102,7 @@ function App() {
       <header className="navbar bg-dark bg-opacity-10">
         <div className="container">
           <div className="col-md-9">
-            <h1 className="display-1 text-dark">Matt's Budget</h1>
+            <h1 className="display-1 text-dark">Matt's budget</h1>
           </div>
           <div className="col-md-3">
             <MonthSelector
