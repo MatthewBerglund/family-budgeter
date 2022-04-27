@@ -6,18 +6,17 @@ function Summary({ currentMonth, selectedMonth, filteredExpenses }) {
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [spendingRateDeviation, setSpendingRateDeviation] = useState(0);
 
-  // Calculate total expenses
-  useEffect(() => {
+  const updateTotalExpenses = () => {
     const expenseSum = filteredExpenses
       .map(expense => expense.amount)
       .reduce((sum, curr) => {
         return sum + curr;
       }, 0);
     setTotalExpenses(expenseSum);
-  }, [filteredExpenses]);
+    console.log('Ran updateTotalExpenses');
+  };
 
-  // Calculate spending rate deviation
-  useEffect(() => {
+  const updateSpendingRateDeviation = () => {
     const date = new Date(selectedMonth);
 
     // Get last day of selected month
@@ -35,7 +34,12 @@ function Summary({ currentMonth, selectedMonth, filteredExpenses }) {
     const actualRate = totalExpenses / dayOfMonth;
     const deviation = (actualRate - targetRate) / targetRate;
     setSpendingRateDeviation(deviation);
-  }, [currentMonth, selectedMonth, totalBudget, totalExpenses]);
+  };
+
+  useEffect(() => {
+    updateTotalExpenses();
+    updateSpendingRateDeviation();
+  });
 
   return (
     <div className="card h-100">
