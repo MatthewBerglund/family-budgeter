@@ -65,7 +65,7 @@ function Summary({ currentMonth, selectedMonth, filteredExpenses }) {
           </span>
           <span
             className={`col-4 fw-bold text-end ${
-              spendingRateDeviation >= 0.15
+              spendingRateDeviation >= 0.1
                 ? 'text-danger'
                 : spendingRateDeviation > 0
                 ? 'text-warning'
