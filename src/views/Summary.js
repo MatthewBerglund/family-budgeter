@@ -13,7 +13,6 @@ function Summary({ currentMonth, selectedMonth, filteredExpenses }) {
         return sum + curr;
       }, 0);
     setTotalExpenses(expenseSum);
-    console.log('Ran updateTotalExpenses');
   };
 
   const updateSpendingRateDeviation = () => {
