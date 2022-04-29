@@ -9,7 +9,7 @@ const ExpensesList = ({ removeExpense, filteredExpenses }) => {
     <div className="card">
       <h3 className="card-header text-start">History</h3>
       <div className="card-body">
-        <ul className="list-group list-group-flush">
+        <ul className="list-group list-group-flush" data-cy="expenses">
           {filteredExpenses.length > 0 ? (
             sortedExpenses.map(expense => (
               <Expense

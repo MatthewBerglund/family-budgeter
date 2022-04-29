@@ -32,7 +32,7 @@ const AddExpenses = ({ addExpense }) => {
                 value={title}
                 placeholder="Expense Name"
               />
-              <label htmlFor="amount">Expense name</label>
+              <label htmlFor="name">Expense name</label>
             </div>
           </div>
           <div className="col-lg-6">
