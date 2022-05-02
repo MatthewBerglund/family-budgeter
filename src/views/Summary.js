@@ -53,7 +53,7 @@ function Summary({ currentMonth, selectedMonth, filteredExpenses }) {
           <span
             className="col-4 fw-bold text-end"
             data-cy="total-budget"
-          >{` ${getUKFormattedEuros(totalBudget)}`}</span>
+          >{`${getUKFormattedEuros(totalBudget)}`}</span>
           <div className="col-3"></div>
         </h4>
         <h4 className="fw-light row">
@@ -61,7 +61,7 @@ function Summary({ currentMonth, selectedMonth, filteredExpenses }) {
           <span
             className="col-4 fw-bold text-end"
             data-cy="total-expenses"
-          >{` ${getUKFormattedEuros(totalExpenses)}`}</span>
+          >{`${getUKFormattedEuros(totalExpenses)}`}</span>
           <div className="col-3"></div>
         </h4>
         <h4 className="fw-light row">
@@ -77,7 +77,7 @@ function Summary({ currentMonth, selectedMonth, filteredExpenses }) {
                 : 'text-success'
             }`}
             data-cy="remaining-budget"
-          >{` ${getUKFormattedEuros(totalBudget - totalExpenses)}`}</span>
+          >{`${getUKFormattedEuros(totalBudget - totalExpenses)}`}</span>
           <div className="col-3"></div>
         </h4>
       </div>
