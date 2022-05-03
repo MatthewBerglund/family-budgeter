@@ -1,5 +1,5 @@
 import { getUKFormattedDate, getUKFormattedEuros } from '../utils/helpers';
-import ConfirmModal from './ConfirmModal';
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 
 const Expense = ({ expense, removeExpense }) => {
   const { title, amount, date, id } = expense;
@@ -30,7 +30,7 @@ const Expense = ({ expense, removeExpense }) => {
           </div>
         </div>
       </li>
-      <ConfirmModal removeExpense={removeExpense} expense={expense} />
+      <ConfirmDeleteModal removeExpense={removeExpense} expense={expense} />
     </>
   );
 };

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { getUKFormattedDate, getUKFormattedEuros } from '../utils/helpers';
 import { Tooltip } from 'bootstrap';
 
-const ConfirmModal = ({ expense, removeExpense }) => {
+const ConfirmDeleteModal = ({ expense, removeExpense }) => {
   const { title, amount, date, id } = expense;
 
   // init bootstrap tooltips
@@ -75,4 +75,4 @@ const ConfirmModal = ({ expense, removeExpense }) => {
   );
 };
 
-export default ConfirmModal;
+export default ConfirmDeleteModal;
