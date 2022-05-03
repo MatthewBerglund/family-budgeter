@@ -72,6 +72,7 @@ function App() {
       const newExpenseData = await response.json();
       setExpenses([...expenses, newExpenseData]);
       setExpenseAdded(true);
+      setTimeout(() => setExpenseAdded(undefined), 5000);
     } catch {
       setExpenseAdded(false);
     }
@@ -92,6 +93,7 @@ function App() {
       setExpenses(expenses.filter(expense => expense.id !== id));
       if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
       setExpenseDeleted(true);
+      setTimeout(() => setExpenseDeleted(undefined), 5000);
     } catch {
       setExpenseDeleted(false);
     }

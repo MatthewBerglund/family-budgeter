@@ -12,7 +12,7 @@ const ExpenseDeletedAlert = ({
       role="alert"
       className={`alert ${
         expenseDeleted ? 'alert-success' : 'alert-danger'
-      } alert-dismissible position-fixed top-0 end-0`}
+      } alert-dismissible fade show position-fixed top-0 end-0`}
     >
       <h4 className="alert-heading">
         {expenseDeleted ? 'Expense deleted' : 'Error deleting expense'}
@@ -27,6 +27,8 @@ const ExpenseDeletedAlert = ({
       <button
         type="button"
         className="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
         onClick={() => setExpenseDeleted(undefined)}
       />
     </div>

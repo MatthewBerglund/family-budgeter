@@ -4,7 +4,7 @@ const ExpenseAddedAlert = ({ expenseAdded, setExpenseAdded }) => {
       role="alert"
       className={`alert ${
         expenseAdded ? 'alert-success' : 'alert-danger'
-      } alert-dismissible position-fixed top-0 end-0`}
+      } alert-dismissible fade show position-fixed top-0 end-0`}
     >
       <h4 className="alert-heading">
         {expenseAdded ? 'Expense added' : 'Error adding expense'}
@@ -17,6 +17,8 @@ const ExpenseAddedAlert = ({ expenseAdded, setExpenseAdded }) => {
       <button
         type="button"
         className="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
         onClick={() => setExpenseAdded(undefined)}
       />
     </div>
