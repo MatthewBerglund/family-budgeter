@@ -63,7 +63,7 @@ const ConfirmDeleteModal = ({ expense, removeExpense }) => {
               data-bs-toggle="tooltip"
               data-bs-placement="top"
               title="This will permanetly delete the expense"
-              onClick={() => removeExpense({ title, amount, date, id })}
+              onClick={() => removeExpense(expense)}
               data-bs-dismiss="modal"
             >
               Yes delete!!
