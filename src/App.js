@@ -127,11 +127,8 @@ function App() {
           <section className="col-lg-6">
             <AddExpenses
               addExpense={addExpense}
-              expenseAdded={expenseAdded}
-              setExpenseAdded={setExpenseAdded}
-              expenseDeleted={setExpenseDeleted}
-              setExpenseDeleted={setExpenseDeleted}
-              lastDeleted={lastDeleted}
+              selectedMonth={selectedMonth}
+              setSelectedMonth={setSelectedMonth}
             />
           </section>
         </div>
