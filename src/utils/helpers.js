@@ -1,6 +1,14 @@
 // Takes an amount in cents and returns a string representing
 // the amount in euros for speakers of UK English
 export function getUKFormattedEuros(centAmount) {
+  if (!Number.isInteger(centAmount)) {
+    throw new TypeError(`${centAmount} is not an integer`);
+  }
+
+  if (arguments.length > 1) {
+    throw new RangeError('Only one argument may be passed to the function.');
+  }
+
   const options = { style: 'currency', currency: 'EUR' };
   return Intl.NumberFormat('en-GB', options).format(centAmount / 100);
 }
