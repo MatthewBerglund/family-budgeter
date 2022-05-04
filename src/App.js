@@ -72,6 +72,7 @@ function App() {
       const newExpenseData = await response.json();
       setExpenses([...expenses, newExpenseData]);
       setExpenseAdded(true);
+      // close ExpenseAddedAlert after 5 seconds
       setTimeout(() => setExpenseAdded(undefined), 5000);
     } catch {
       setExpenseAdded(false);
@@ -93,6 +94,7 @@ function App() {
       setExpenses(expenses.filter(expense => expense.id !== id));
       if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
       setExpenseDeleted(true);
+      // close ExpenseDeletedAlert after 5 seconds
       setTimeout(() => setExpenseDeleted(undefined), 5000);
     } catch {
       setExpenseDeleted(false);
