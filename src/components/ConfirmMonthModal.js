@@ -17,7 +17,7 @@ const ConfirmMonthModal = ({
       }}
       id="confirmationHistoryView"
       tabIndex="-1"
-      aria-labelledby="Expense deletion confirmation modal"
+      aria-labelledby="Select month view modal"
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
