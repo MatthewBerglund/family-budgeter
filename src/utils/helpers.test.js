@@ -11,7 +11,11 @@ describe('getUKFormattedEuros', () => {
     function passString() {
       getUKFormattedEuros('any string');
     }
+    function passFloat() {
+      getUKFormattedEuros(1.1);
+    }
     expect(passString).toThrowError('any string is not an integer');
+    expect(passFloat).toThrowError('1.1 is not an integer');
   });
   it('should throw an error if passed more than one argument', () => {
     function passMoreThanOneArg() {
