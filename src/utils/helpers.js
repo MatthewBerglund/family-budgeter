@@ -27,7 +27,15 @@ export function getCurrentMonth() {
   return getUKFormattedDate(Date.now(), { year: 'numeric', month: 'long' });
 }
 
-export function getUniqueMonths(expenseArray) {
+export function getUniqueMonthsFromExpenses(expenseArray) {
+  if (!Array.isArray(expenseArray)) {
+    throw new TypeError(`${expenseArray} is not an array`);
+  }
+
+  if (arguments.length > 1) {
+    throw new RangeError('Only one argument may be passed to the function.');
+  }
+
   const expenseDates = expenseArray.map(expense => new Date(expense.date));
   expenseDates.push(Date.now());
   expenseDates.sort((dateA, dateB) => {
