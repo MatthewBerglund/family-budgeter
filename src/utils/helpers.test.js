@@ -20,6 +20,7 @@ describe('getUKFormattedEuros', () => {
     }
     expect(passZeroArgs).toThrowError('undefined is not an integer');
   });
+
   it('should throw an error if passed a value that is not an integer', () => {
     function passString() {
       getUKFormattedEuros('any string');
@@ -30,6 +31,7 @@ describe('getUKFormattedEuros', () => {
     expect(passString).toThrowError('any string is not an integer');
     expect(passFloat).toThrowError('1.1 is not an integer');
   });
+
   it('should throw an error if passed more than one argument', () => {
     function passMoreThanOneArg() {
       getUKFormattedEuros(100, 200);
@@ -38,31 +40,37 @@ describe('getUKFormattedEuros', () => {
       'Only one argument may be passed to the function.'
     );
   });
+
   test('if passed 0, it should return the string "€0.00"', () => {
     const amount = 0;
     const result = getUKFormattedEuros(amount);
     expect(result).toBe('€0.00');
   });
+
   test('if passed 1, it should return the string "€0.01"', () => {
     const amount = 1;
     const result = getUKFormattedEuros(amount);
     expect(result).toBe('€0.01');
   });
+
   test('if passed 12, it should return the string "€0.12"', () => {
     const amount = 12;
     const result = getUKFormattedEuros(amount);
     expect(result).toBe('€0.12');
   });
+
   test('if passed 123, it should return the string "€1.23"', () => {
     const amount = 123;
     const result = getUKFormattedEuros(amount);
     expect(result).toBe('€1.23');
   });
+
   test('if passed 1234, it should return the string "€12.34"', () => {
     const amount = 1234;
     const result = getUKFormattedEuros(amount);
     expect(result).toBe('€12.34');
   });
+
   test('if passed 12345, it should return the string "€123.45"', () => {
     const amount = 12345;
     const result = getUKFormattedEuros(amount);
@@ -84,6 +92,7 @@ describe('getCurrentMonth', () => {
 
     expect(actual).toBe(expected);
   });
+
   test('if the current date is 2024-02-29, it should return "February 2024"', () => {
     const date = '2024-02-29';
     global.Date.now = getDateNowStub(date);
@@ -93,6 +102,7 @@ describe('getCurrentMonth', () => {
 
     expect(actual).toBe(expected);
   });
+
   test('if the current date is 2050-12-31, it should return "December 2050"', () => {
     const date = '2050-12-31';
     global.Date.now = getDateNowStub(date);
@@ -115,6 +125,7 @@ describe('getUniqueMonths', () => {
     }
     expect(passZeroArgs).toThrowError('undefined is not an array');
   });
+
   it('should throw an error if passed a value that is not an array', () => {
     function passString() {
       getUniqueMonths('any string');
@@ -125,6 +136,7 @@ describe('getUniqueMonths', () => {
     expect(passString).toThrowError('any string is not an array');
     expect(passObject).toThrowError('[object Object] is not an array');
   });
+
   it('should throw an error if passed more than one argument', () => {
     function passMoreThanOneArg() {
       getUniqueMonths([], []);
@@ -133,11 +145,13 @@ describe('getUniqueMonths', () => {
       'Only one argument may be passed to the function.'
     );
   });
+
   it('should return a new array', () => {
     const inputArray = [];
     const outputArray = getUniqueMonths(inputArray);
     expect(outputArray).not.toBe(inputArray);
   });
+
   it('should return an array of strings in "Month YYYY" format', () => {
     global.Date.now = getDateNowStub('2022-04-01');
     const expenses = [
@@ -149,6 +163,7 @@ describe('getUniqueMonths', () => {
     const actual = getUniqueMonths(expenses);
     expect(actual).toStrictEqual(expected);
   });
+
   it('should always return the current month', () => {
     global.Date.now = getDateNowStub('2022-04-01');
     const expenses = [];
@@ -158,6 +173,7 @@ describe('getUniqueMonths', () => {
 
     expect(actual).toStrictEqual(expected);
   });
+
   it('should not return duplicate months', () => {
     global.Date.now = getDateNowStub('2022-04-01');
     const expenses = [
@@ -170,6 +186,7 @@ describe('getUniqueMonths', () => {
     const actual = getUniqueMonths(expenses);
     expect(actual).toStrictEqual(expected);
   });
+
   it('should return months sorted from least to most recent', () => {
     global.Date.now = getDateNowStub('2022-04-01');
     const expenses = [
