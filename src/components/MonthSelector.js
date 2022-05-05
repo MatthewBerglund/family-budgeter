@@ -1,7 +1,7 @@
-import { getUniqueMonths } from '../utils/helpers';
+import { getUniqueMonthsFromExpenses } from '../utils/helpers';
 
 const MonthSelector = ({ expenses, selectedMonth, setSelectedMonth }) => {
-  const months = getUniqueMonths(expenses);
+  const months = getUniqueMonthsFromExpenses(expenses);
 
   return (
     <select

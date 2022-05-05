@@ -1,7 +1,7 @@
 import {
   getUKFormattedEuros,
   getCurrentMonth,
-  getUniqueMonths,
+  getUniqueMonthsFromExpenses,
 } from './helpers';
 
 // Values and function for stubbing and resetting Date.now()
@@ -68,24 +68,24 @@ describe('getCurrentMonth', () => {
   });
 });
 
-describe('getUniqueMonths', () => {
+describe('getUniqueMonthsFromExpenses', () => {
   afterAll(() => {
     global.Date.now = realDateNow;
   });
 
   it('should throw an error if no argument is passed', () => {
     function passZeroArgs() {
-      getUniqueMonths();
+      getUniqueMonthsFromExpenses();
     }
     expect(passZeroArgs).toThrowError('undefined is not an array');
   });
 
   it('should throw an error if passed a value that is not an array', () => {
     function passString() {
-      getUniqueMonths('any string');
+      getUniqueMonthsFromExpenses('any string');
     }
     function passObject() {
-      getUniqueMonths({});
+      getUniqueMonthsFromExpenses({});
     }
     expect(passString).toThrowError('any string is not an array');
     expect(passObject).toThrowError('[object Object] is not an array');
@@ -93,7 +93,7 @@ describe('getUniqueMonths', () => {
 
   it('should throw an error if passed more than one argument', () => {
     function passMoreThanOneArg() {
-      getUniqueMonths([], []);
+      getUniqueMonthsFromExpenses([], []);
     }
     expect(passMoreThanOneArg).toThrowError(
       'Only one argument may be passed to the function.'
@@ -102,7 +102,7 @@ describe('getUniqueMonths', () => {
 
   it('should return a new array', () => {
     const inputArray = [];
-    const outputArray = getUniqueMonths(inputArray);
+    const outputArray = getUniqueMonthsFromExpenses(inputArray);
     expect(outputArray).not.toBe(inputArray);
   });
 
@@ -114,7 +114,7 @@ describe('getUniqueMonths', () => {
     ];
 
     const expected = ['April 2022', 'June 2022'];
-    const actual = getUniqueMonths(expenses);
+    const actual = getUniqueMonthsFromExpenses(expenses);
     expect(actual).toStrictEqual(expected);
   });
 
@@ -123,7 +123,7 @@ describe('getUniqueMonths', () => {
     const expenses = [];
 
     const expected = ['April 2022'];
-    const actual = getUniqueMonths(expenses);
+    const actual = getUniqueMonthsFromExpenses(expenses);
 
     expect(actual).toStrictEqual(expected);
   });
@@ -137,7 +137,7 @@ describe('getUniqueMonths', () => {
     ];
 
     const expected = ['April 2021', 'April 2022'];
-    const actual = getUniqueMonths(expenses);
+    const actual = getUniqueMonthsFromExpenses(expenses);
     expect(actual).toStrictEqual(expected);
   });
 
@@ -156,7 +156,7 @@ describe('getUniqueMonths', () => {
       'January 2022',
       'April 2022',
     ];
-    const actual = getUniqueMonths(expenses);
+    const actual = getUniqueMonthsFromExpenses(expenses);
     expect(actual).toStrictEqual(expected);
   });
 });
