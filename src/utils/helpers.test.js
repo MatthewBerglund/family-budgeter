@@ -1,4 +1,4 @@
-import { getUKFormattedEuros } from './helpers';
+import { getUKFormattedEuros, getCurrentMonth } from './helpers';
 
 describe('getUKFormattedEuros', () => {
   it('should throw an error if no argument is passed', () => {
@@ -54,5 +54,47 @@ describe('getUKFormattedEuros', () => {
     const amount = 12345;
     const result = getUKFormattedEuros(amount);
     expect(result).toBe('€123.45');
+  });
+});
+
+describe('getCurrentMonth', () => {
+  const realDateNow = Date.now.bind(global.Date);
+
+  function getDateNowStub(dateString) {
+    const today = new Date(dateString);
+    const dateNowStub = jest.fn(() => today.valueOf());
+    return dateNowStub;
+  }
+
+  afterEach(() => {
+    global.Date.now = realDateNow;
+  });
+
+  test('if the current date is 2022-06-01, it should return "June 2022"', () => {
+    const date = '2022-06-01';
+    global.Date.now = getDateNowStub(date);
+
+    const expected = 'June 2022';
+    const actual = getCurrentMonth();
+
+    expect(actual).toBe(expected);
+  });
+  test('if the current date is 2024-02-29, it should return "February 2024"', () => {
+    const date = '2024-02-29';
+    global.Date.now = getDateNowStub(date);
+
+    const expected = 'February 2024';
+    const actual = getCurrentMonth();
+
+    expect(actual).toBe(expected);
+  });
+  test('if the current date is 2050-12-31, it should return "December 2050"', () => {
+    const date = '2050-12-31';
+    global.Date.now = getDateNowStub(date);
+
+    const expected = 'December 2050';
+    const actual = getCurrentMonth();
+
+    expect(actual).toBe(expected);
   });
 });
