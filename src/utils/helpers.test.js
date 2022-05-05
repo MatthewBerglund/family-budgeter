@@ -52,38 +52,19 @@ describe('getUKFormattedEuros', () => {
 });
 
 describe('getCurrentMonth', () => {
-  afterEach(() => {
+  afterAll(() => {
     global.Date.now = realDateNow;
   });
 
-  test('if the current date is 2022-06-01, it should return "June 2022"', () => {
-    const date = '2022-06-01';
-    global.Date.now = getDateNowStub(date);
+  it('should return the current month in "Month YYYY" format', () => {
+    global.Date.now = getDateNowStub('2022-06-01');
+    expect(getCurrentMonth()).toBe('June 2022');
 
-    const expected = 'June 2022';
-    const actual = getCurrentMonth();
+    global.Date.now = getDateNowStub('2024-02-29');
+    expect(getCurrentMonth()).toBe('February 2024');
 
-    expect(actual).toBe(expected);
-  });
-
-  test('if the current date is 2024-02-29, it should return "February 2024"', () => {
-    const date = '2024-02-29';
-    global.Date.now = getDateNowStub(date);
-
-    const expected = 'February 2024';
-    const actual = getCurrentMonth();
-
-    expect(actual).toBe(expected);
-  });
-
-  test('if the current date is 2050-12-31, it should return "December 2050"', () => {
-    const date = '2050-12-31';
-    global.Date.now = getDateNowStub(date);
-
-    const expected = 'December 2050';
-    const actual = getCurrentMonth();
-
-    expect(actual).toBe(expected);
+    global.Date.now = getDateNowStub('2050-12-31');
+    expect(getCurrentMonth()).toBe('December 2050');
   });
 });
 
