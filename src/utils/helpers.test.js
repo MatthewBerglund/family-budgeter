@@ -41,40 +41,13 @@ describe('getUKFormattedEuros', () => {
     );
   });
 
-  test('if passed 0, it should return the string "€0.00"', () => {
-    const amount = 0;
-    const result = getUKFormattedEuros(amount);
-    expect(result).toBe('€0.00');
-  });
-
-  test('if passed 1, it should return the string "€0.01"', () => {
-    const amount = 1;
-    const result = getUKFormattedEuros(amount);
-    expect(result).toBe('€0.01');
-  });
-
-  test('if passed 12, it should return the string "€0.12"', () => {
-    const amount = 12;
-    const result = getUKFormattedEuros(amount);
-    expect(result).toBe('€0.12');
-  });
-
-  test('if passed 123, it should return the string "€1.23"', () => {
-    const amount = 123;
-    const result = getUKFormattedEuros(amount);
-    expect(result).toBe('€1.23');
-  });
-
-  test('if passed 1234, it should return the string "€12.34"', () => {
-    const amount = 1234;
-    const result = getUKFormattedEuros(amount);
-    expect(result).toBe('€12.34');
-  });
-
-  test('if passed 12345, it should return the string "€123.45"', () => {
-    const amount = 12345;
-    const result = getUKFormattedEuros(amount);
-    expect(result).toBe('€123.45');
+  it('should return a string representing a full euro amount in UK English', () => {
+    expect(getUKFormattedEuros(0)).toBe('€0.00');
+    expect(getUKFormattedEuros(1)).toBe('€0.01');
+    expect(getUKFormattedEuros(12)).toBe('€0.12');
+    expect(getUKFormattedEuros(123)).toBe('€1.23');
+    expect(getUKFormattedEuros(1234)).toBe('€12.34');
+    expect(getUKFormattedEuros(12345)).toBe('€123.45');
   });
 });
 
