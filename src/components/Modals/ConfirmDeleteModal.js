@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react';
 import {
   Modal,
   ModalHeader,
@@ -7,6 +8,20 @@ import {
 import { getUKFormattedDate, getUKFormattedEuros } from '../../utils/helpers';
 
 const ConfirmDeleteModal = ({ expense, setIsOpen, handleCallForAction }) => {
+  const callForAction = useRef(null);
+
+  // focus on call for action button on mount
+  // blur on unmount
+  useEffect(() => {
+    callForAction.current?.focus();
+
+    // the ref must be saved into a variable to accomodate react warning
+    const elementToClean = callForAction.current;
+    return () => {
+      elementToClean.blur();
+    };
+  }, []);
+
   const { title, amount, date, id } = expense;
 
   return (
@@ -42,6 +57,7 @@ const ConfirmDeleteModal = ({ expense, setIsOpen, handleCallForAction }) => {
         <button
           type="button"
           className="btn btn-danger"
+          ref={callForAction}
           onClick={() => handleCallForAction(id)}
         >
           Yes delete!!

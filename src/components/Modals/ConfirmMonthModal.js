@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react';
 import {
   Modal,
   ModalHeader,
@@ -6,6 +7,20 @@ import {
 } from './components/ModalComponents';
 
 const ConfirmMonthModal = ({ monthToShow, setIsOpen, handleCallForAction }) => {
+  const callForAction = useRef(null);
+
+  // focus on call for action button on mount
+  // blur on unmount
+  useEffect(() => {
+    callForAction.current?.focus();
+
+    // the ref must be saved into a variable to accomodate react warning
+    const elementToClean = callForAction.current;
+    return () => {
+      elementToClean.blur();
+    };
+  }, []);
+
   return (
     <Modal modalId="confirmationHistoryView">
       <ModalHeader setIsOpen={setIsOpen}>
@@ -29,6 +44,7 @@ const ConfirmMonthModal = ({ monthToShow, setIsOpen, handleCallForAction }) => {
         <button
           type="button"
           className="btn btn-primary"
+          ref={callForAction}
           onClick={handleCallForAction}
         >
           Open {monthToShow}
