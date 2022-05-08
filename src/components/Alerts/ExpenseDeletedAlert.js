@@ -1,4 +1,4 @@
-import { getUKFormattedEuros, getUKFormattedDate } from '../utils/helpers';
+import { getUKFormattedEuros, getUKFormattedDate } from '../../utils/helpers';
 
 const ExpenseDeletedAlert = ({
   expenseDeleted,
