@@ -63,6 +63,14 @@ function App() {
     setFilteredExpenses(expensesToRender);
   }, [expenses, selectedMonth]);
 
+  const closeExpenseAddedAlert = () => {
+    setTimeout(() => setExpenseAdded(undefined), 5000);
+  };
+
+  const closeExpenseDeleteAlert = () => {
+    setTimeout(() => setExpenseDeleted(undefined), 5000);
+  };
+
   const addExpense = async newExpense => {
     const url = `${baseURL}/items.json?kind=expense`;
     const requestOptions = {
@@ -91,8 +99,7 @@ function App() {
       setExpenses([...expenses, newExpense]);
       setExpenseAdded(true);
 
-      // close ExpenseAddedAlert after 5 seconds
-      setTimeout(() => setExpenseAdded(undefined), 5000);
+      closeExpenseAddedAlert();
     } catch (error) {
       setExpenseAdded(false);
     }
@@ -117,11 +124,12 @@ function App() {
       }
 
       setExpenses(expenses.filter(expense => expense.id !== id));
+
       if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
       setExpenseDeleted(true);
       setConfirmDeleteModalIsOpen(false);
-      // close ExpenseDeletedAlert after 5 seconds
-      setTimeout(() => setExpenseDeleted(undefined), 5000);
+
+      closeExpenseDeleteAlert();
     } catch (error) {
       setExpenseDeleted(false);
       setConfirmDeleteModalIsOpen(false);
