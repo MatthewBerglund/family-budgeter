@@ -20,14 +20,16 @@ const ConfirmDeleteModal = ({ expense, setIsOpen, handleCallForAction }) => {
         <h6 className="mb-3">
           Please confirm you want to delete this expense:
         </h6>
-        <dl className="row">
-          <dt className="col-3">Date:</dt>
-          <dd className="col-9">{getUKFormattedDate(date)}</dd>
-          <dt className="col-3">Title:</dt>
-          <dd className="col-9">{title}</dd>
-          <dt className="col-3">Amount:</dt>
-          <dd className="col-9">{getUKFormattedEuros(amount)}</dd>
-        </dl>
+        {expense && (
+          <dl className="row">
+            <dt className="col-3">Date:</dt>
+            <dd className="col-9">{getUKFormattedDate(date)}</dd>
+            <dt className="col-3">Title:</dt>
+            <dd className="col-9">{title}</dd>
+            <dt className="col-3">Amount:</dt>
+            <dd className="col-9">{getUKFormattedEuros(amount)}</dd>
+          </dl>
+        )}
       </ModalBody>
       <ModalFooter>
         <button

@@ -5,7 +5,7 @@ import {
   ModalFooter,
 } from './components/ModalComponents';
 
-const ConfirmMonthModal = ({ setIsOpen, monthToShow, handleCallForAction }) => {
+const ConfirmMonthModal = ({ monthToShow, setIsOpen, handleCallForAction }) => {
   return (
     <Modal modalId="confirmationHistoryView">
       <ModalHeader setIsOpen={setIsOpen}>
