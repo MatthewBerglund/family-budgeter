@@ -1,6 +1,10 @@
 import Expense from '../components/Expense';
 
-const ExpensesList = ({ removeExpense, filteredExpenses }) => {
+const ExpensesHistory = ({
+  filteredExpenses,
+  setConfirmDeleteModalIsOpen,
+  setLastDeleted,
+}) => {
   const sortedExpenses = filteredExpenses.sort((expenseA, expenseB) => {
     return new Date(expenseB.date) - new Date(expenseA.date);
   });
@@ -15,7 +19,8 @@ const ExpensesList = ({ removeExpense, filteredExpenses }) => {
               <Expense
                 key={expense.id}
                 expense={expense}
-                removeExpense={removeExpense}
+                setConfirmDeleteModalIsOpen={setConfirmDeleteModalIsOpen}
+                setLastDeleted={setLastDeleted}
               />
             ))
           ) : (
@@ -27,4 +32,4 @@ const ExpensesList = ({ removeExpense, filteredExpenses }) => {
   );
 };
 
-export default ExpensesList;
+export default ExpensesHistory;
