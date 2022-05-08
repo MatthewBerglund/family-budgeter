@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { convertEurosToCents, getUKFormattedDate } from '../utils/helpers';
 
 const AddExpenses = ({ addExpense, setMonthToShow }) => {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [amount, setAmount] = useState('');
+
+  const titleInput = useRef(null);
+
+  // focus on title input on mount
+  useEffect(() => {
+    titleInput.current?.focus();
+  }, []);
 
   const handleSubmit = evt => {
     evt.preventDefault();
@@ -28,6 +35,7 @@ const AddExpenses = ({ addExpense, setMonthToShow }) => {
                 id="name"
                 name="name"
                 required
+                ref={titleInput}
                 onChange={evt => setTitle(evt.target.value)}
                 value={title}
                 placeholder="Expense Name"
