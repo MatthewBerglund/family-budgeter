@@ -17,7 +17,7 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-function App() {
+const App = () => {
   const currentMonth = getCurrentMonth();
 
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
@@ -212,6 +212,6 @@ function App() {
       </main>
     </>
   );
-}
+};
 
 export default App;
