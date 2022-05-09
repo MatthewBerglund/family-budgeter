@@ -199,14 +199,14 @@ const App = () => {
           <ConfirmMonthModal
             monthToShow={monthToShow}
             setIsOpen={setConfirmMonthModalIsOpen}
-            handleCallForAction={changeMonthView}
+            okCallback={changeMonthView}
           />
         )}
         {confirmDeleteModalIsOpen && (
           <ConfirmDeleteModal
             expense={lastDeleted}
             setIsOpen={setConfirmDeleteModalIsOpen}
-            handleCallForAction={removeExpense}
+            okCallback={removeExpense}
           />
         )}
       </main>
