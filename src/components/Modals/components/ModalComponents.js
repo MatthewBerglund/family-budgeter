@@ -1,3 +1,5 @@
+import { useRef, useEffect } from 'react';
+
 /**
  *
  * Dynamic custom Modal
@@ -6,30 +8,39 @@
  * This custom modal is based on the vertically centered bootstrap modal
  * Docs: https://getbootstrap.com/docs/5.1/components/modal/#vertically-centered
  *
- * Base components:
  *
  * Modal
- * This is the modal outer container
- * @param modalId required to apply any custom JS logic. Must be unique to identify the modal especially if return of iteration (e.g. map)
- * @param children requires at least ModalBody to render the modal itself
- *
- * ModalHeader
- * This is the header within the Modal outer container
- * @param children suggested <h5> tag with the title of the modal
- * @param setIsOpen setter required to close the modal
- *
- * ModalBoday
- * This is the body of the Modal required to correctly render the modal itself
- * Note: The ModalFooter should be passed as children too
- * @param children any HTML tags with necessary data
- *
- * ModalFooter
- * Note: Bootstrap does not support auto focus thus it is strongly suggested to utilise useRef to focus on the Call-For-Action button
- * @param children usually the buttons with Cancel and Call-For-Action actions
+ * @param children any HTML with necessary data
+ * @param cancelCallback callback function to close the modal on click
+ * @param okCallback callback function used for the main action
+ * @param modalTitle string passed as modal title and required ids, should be unique
+ * @param cancelButtonLabel string passed as label to the cancel button
+ * @param okButtonLabel string passed as label to the action button
+ * @param okButtonColor string passed to the action button className, should be a Bottstrap class (e.g. 'btn-primary')
  *
  */
 
-export const Modal = ({ modalId, children }) => {
+export const Modal = ({
+  children,
+  cancelCallback,
+  okCallback,
+  modalTitle,
+  cancelButtonLabel,
+  okButtonLabel,
+  okButtonColor,
+}) => {
+  const okButton = useRef(null);
+
+  useEffect(() => {
+    okButton.current?.focus();
+
+    // the ref must be saved into a variable to accomodate react warning
+    const elementToClean = okButton.current;
+    return () => {
+      elementToClean.blur();
+    };
+  }, []);
+
   return (
     <div
       className="modal fade show"
@@ -37,34 +48,45 @@ export const Modal = ({ modalId, children }) => {
         display: 'block',
         backgroundColor: 'rgba(0,0,0,0.8)',
       }}
-      id={modalId}
+      id={modalTitle}
+      aria-labelledby={modalTitle}
       tabIndex="-1"
     >
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">{children}</div>
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id={modalTitle}>
+              {modalTitle}
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              aria-label="Close"
+              onClick={cancelCallback}
+            ></button>
+          </div>
+          <div className="modal-body">
+            {children}
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={cancelCallback}
+              >
+                {cancelButtonLabel}
+              </button>
+              <button
+                type="button"
+                className={`btn ${okButtonColor}`}
+                ref={okButton}
+                onClick={okCallback}
+              >
+                {okButtonLabel}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
-};
-
-export const ModalHeader = ({ children, setIsOpen }) => {
-  return (
-    <div className="modal-header">
-      {children}
-      <button
-        type="button"
-        className="btn-close"
-        aria-label="Close"
-        onClick={() => setIsOpen(false)}
-      ></button>
-    </div>
-  );
-};
-
-export const ModalBody = ({ children }) => {
-  return <div className="modal-body">{children}</div>;
-};
-
-export const ModalFooter = ({ children }) => {
-  return <div className="modal-footer">{children}</div>;
 };
