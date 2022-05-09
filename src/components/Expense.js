@@ -20,6 +20,7 @@ const Expense = ({ expense, setConfirmDeleteModalIsOpen, setLastDeleted }) => {
         <div className="col-3 col-lg-2 text-end">
           <button
             className="btn btn-danger"
+            data-cy="deleteButton"
             onClick={() => {
               setConfirmDeleteModalIsOpen(true);
               setLastDeleted(expense);

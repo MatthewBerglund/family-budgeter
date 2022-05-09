@@ -77,6 +77,7 @@ export const Modal = ({
               </button>
               <button
                 type="button"
+                data-cy="okButton"
                 className={`btn ${okButtonColor}`}
                 ref={okButton}
                 onClick={okCallback}
