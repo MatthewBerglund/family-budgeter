@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getUKFormattedEuros } from '../utils/helpers';
 
-function Summary({ currentMonth, selectedMonth, filteredExpenses }) {
+const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
   const [totalBudget, setTotalBudget] = useState(7777 * 100);
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [spendingRateDeviation, setSpendingRateDeviation] = useState(0);
@@ -83,6 +83,6 @@ function Summary({ currentMonth, selectedMonth, filteredExpenses }) {
       </div>
     </div>
   );
-}
+};
 
 export default Summary;

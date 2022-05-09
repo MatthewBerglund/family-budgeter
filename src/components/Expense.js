@@ -1,6 +1,8 @@
 import { getUKFormattedDate, getUKFormattedEuros } from '../utils/helpers';
 
-const Expense = ({ title, amount, date, id, removeExpense }) => {
+const Expense = ({ expense, setConfirmDeleteModalIsOpen, setLastDeleted }) => {
+  const { title, amount, date } = expense;
+
   return (
     <li className="container gy-5 px-0 list-group-item">
       <div className="row align-items-center">
@@ -18,7 +20,10 @@ const Expense = ({ title, amount, date, id, removeExpense }) => {
         <div className="col-3 col-lg-2 text-end">
           <button
             className="btn btn-danger"
-            onClick={() => removeExpense({ title, amount, date, id })}
+            onClick={() => {
+              setConfirmDeleteModalIsOpen(true);
+              setLastDeleted(expense);
+            }}
           >
             Delete
           </button>

@@ -5,8 +5,10 @@ import Summary from './views/Summary';
 import AddExpenses from './views/AddExpenses';
 import MonthSelector from './components/MonthSelector';
 import ExpenseHistory from './views/ExpenseHistory';
-import ExpenseAddedAlert from './components/ExpenseAddedAlert';
-import ExpenseDeletedAlert from './components/ExpenseDeletedAlert';
+import ExpenseAddedAlert from './components/Alerts/ExpenseAddedAlert';
+import ExpenseDeletedAlert from './components/Alerts/ExpenseDeletedAlert';
+import ConfirmMonthModal from './components/Modals/ConfirmMonthModal';
+import ConfirmDeleteModal from './components/Modals/ConfirmDeleteModal';
 
 const token = process.env.REACT_APP_MOSTASH_API_KEY;
 const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
@@ -15,18 +17,24 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-function App() {
+const App = () => {
   const currentMonth = getCurrentMonth();
 
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [expenses, setExpenses] = useState([]);
   const [filteredExpenses, setFilteredExpenses] = useState(expenses);
+  const [monthToShow, setMonthToShow] = useState(selectedMonth);
 
   // `expenseAdded` and `expenseDeleted` can be undefined, true or false
   // alerts are hidden when these are undefined
   const [expenseAdded, setExpenseAdded] = useState();
   const [expenseDeleted, setExpenseDeleted] = useState();
   const [lastDeleted, setLastDeleted] = useState({});
+
+  // states to toggle the modals
+  const [confirmMonthModalIsOpen, setConfirmMonthModalIsOpen] = useState(false);
+  const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] =
+    useState(false);
 
   useEffect(() => {
     const fetchExpenses = async () => {
@@ -55,6 +63,14 @@ function App() {
     setFilteredExpenses(expensesToRender);
   }, [expenses, selectedMonth]);
 
+  const closeExpenseAddedAlert = () => {
+    setTimeout(() => setExpenseAdded(undefined), 5000);
+  };
+
+  const closeExpenseDeleteAlert = () => {
+    setTimeout(() => setExpenseDeleted(undefined), 5000);
+  };
+
   const addExpense = async newExpense => {
     const url = `${baseURL}/items.json?kind=expense`;
     const requestOptions = {
@@ -68,17 +84,28 @@ function App() {
     setExpenseDeleted(undefined);
 
     try {
-      const response = await fetch(url, requestOptions);
-      const newExpenseData = await response.json();
-      setExpenses([...expenses, newExpenseData]);
+      const res = await fetch(url, requestOptions);
+      const newExpense = await res.json();
+
+      // Ensure that the catch block is called before setting local states
+      if (!res.ok) {
+        throw new Error('Something went wrong while adding the expense!');
+      }
+
+      if (monthToShow !== selectedMonth) {
+        setConfirmMonthModalIsOpen(true);
+      }
+
+      setExpenses([...expenses, newExpense]);
       setExpenseAdded(true);
-    } catch {
+
+      closeExpenseAddedAlert();
+    } catch (error) {
       setExpenseAdded(false);
     }
   };
 
-  const removeExpense = async expense => {
-    const { id } = expense;
+  const removeExpense = async id => {
     const url = `${baseURL}/items/${id}.json`;
     const requestOptions = { method: 'DELETE', headers };
 
@@ -86,15 +113,32 @@ function App() {
     setExpenseAdded(undefined);
     setExpenseDeleted(undefined);
 
+    setConfirmDeleteModalIsOpen(true);
+
     try {
-      await fetch(url, requestOptions);
-      setLastDeleted({ ...expense });
+      const res = await fetch(url, requestOptions);
+
+      // Ensure that the catch block is called before setting local states
+      if (!res.ok) {
+        throw new Error('Something went wrong while deleting the expense!');
+      }
+
       setExpenses(expenses.filter(expense => expense.id !== id));
+
       if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
       setExpenseDeleted(true);
-    } catch {
+      setConfirmDeleteModalIsOpen(false);
+
+      closeExpenseDeleteAlert();
+    } catch (error) {
       setExpenseDeleted(false);
+      setConfirmDeleteModalIsOpen(false);
     }
+  };
+
+  const changeMonthView = () => {
+    setSelectedMonth(monthToShow);
+    setConfirmMonthModalIsOpen(false);
   };
 
   return (
@@ -102,7 +146,7 @@ function App() {
       <header className="navbar bg-dark bg-opacity-10">
         <div className="container">
           <div className="col-md-9">
-            <h1 className="display-1 text-dark">Matt's Budget</h1>
+            <h1 className="display-1 text-dark">Matt's budget</h1>
           </div>
           <div className="col-md-3">
             <MonthSelector
@@ -125,19 +169,16 @@ function App() {
           <section className="col-lg-6">
             <AddExpenses
               addExpense={addExpense}
-              expenseAdded={expenseAdded}
-              setExpenseAdded={setExpenseAdded}
-              expenseDeleted={setExpenseDeleted}
-              setExpenseDeleted={setExpenseDeleted}
-              lastDeleted={lastDeleted}
+              setMonthToShow={setMonthToShow}
             />
           </section>
         </div>
         <div className="row g-5 mt-1">
           <section className="col">
             <ExpenseHistory
-              removeExpense={removeExpense}
               filteredExpenses={filteredExpenses}
+              setConfirmDeleteModalIsOpen={setConfirmDeleteModalIsOpen}
+              setLastDeleted={setLastDeleted}
             />
           </section>
         </div>
@@ -154,9 +195,23 @@ function App() {
             {...lastDeleted}
           />
         )}
+        {confirmMonthModalIsOpen && (
+          <ConfirmMonthModal
+            monthToShow={monthToShow}
+            setIsOpen={setConfirmMonthModalIsOpen}
+            okCallback={changeMonthView}
+          />
+        )}
+        {confirmDeleteModalIsOpen && (
+          <ConfirmDeleteModal
+            expense={lastDeleted}
+            setIsOpen={setConfirmDeleteModalIsOpen}
+            okCallback={removeExpense}
+          />
+        )}
       </main>
     </>
   );
-}
+};
 
 export default App;
