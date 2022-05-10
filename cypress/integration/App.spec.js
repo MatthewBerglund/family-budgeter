@@ -14,7 +14,11 @@ describe('App', () => {
 
     cy.visit('/');
     cy.findByRole('textbox', { name: /expense name/i }).type('Test Tacos');
-    cy.findByLabelText(/expense date/i).type('2022-02-01');
+    cy.findByLabelText(/expense date/i).click();
+    cy.get('[data-cy="dateParent"]')
+      .find('.react-datepicker')
+      .should('be.visible');
+    cy.findByLabelText(/expense date/i).type('2022-02-01{enter}');
     cy.findByRole('spinbutton', { name: /expense amount in €/i }).type('14.99');
     cy.findByRole('button', { name: /add/i }).click();
 
@@ -84,7 +88,11 @@ describe('App', () => {
 
     cy.visit('/');
     cy.findByRole('textbox', { name: /expense name/i }).type('Tasty bier');
-    cy.findByLabelText(/expense date/i).type('2022-05-01');
+    cy.findByLabelText(/expense date/i).click();
+    cy.get('[data-cy="dateParent"]')
+      .find('.react-datepicker')
+      .should('be.visible');
+    cy.findByLabelText(/expense date/i).type('2022-05-01{enter}');
     cy.findByRole('spinbutton', { name: /expense amount in €/i }).type('4.99');
     cy.findByRole('button', { name: /add/i }).click();
 

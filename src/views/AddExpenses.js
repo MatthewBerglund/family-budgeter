@@ -81,6 +81,7 @@ const AddExpenses = ({ addExpense, setMonthToShow }) => {
             // Inline style required because the datePicker is relatively positioned to its container
             // Bootstrap '.was-validated' class adds 'z-index: 5' to each validated field, causing the datepicker to render behind the validated input-amount
             style={{ zIndex: 6 }}
+            data-cy="dateParent"
           >
             <label className="form-label" htmlFor="date">
               Expense date
