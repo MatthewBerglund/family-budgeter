@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { convertEurosToCents, getUKFormattedDate } from '../utils/helpers';
 import DatePicker from 'react-datepicker';
 
-const AddExpenses = ({ addExpense, setMonthToShow }) => {
+const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
   const [title, setTitle] = useState('');
   const [wasTitleValidated, setWasTitleValidated] = useState(false);
   const [date, setDate] = useState('');
@@ -37,7 +37,9 @@ const AddExpenses = ({ addExpense, setMonthToShow }) => {
   const handleDateChange = date => {
     setDate(date);
     setWasDateValidated(true);
-    setMonthToShow(
+    // newExpenseMonth is needed to compare with selected month
+    // and trigger the ConfirmMonthModal if they are different
+    setNewExpenseMonth(
       getUKFormattedDate(date, {
         year: 'numeric',
         month: 'long',
