@@ -40,10 +40,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
     // newExpenseMonth is needed to compare with selected month
     // and trigger the ConfirmMonthModal if they are different
     setNewExpenseMonth(
-      getUKFormattedDate(date, {
-        year: 'numeric',
-        month: 'long',
-      })
+      getUKFormattedDate(date, { year: 'numeric', month: 'long' })
     );
   };
 
