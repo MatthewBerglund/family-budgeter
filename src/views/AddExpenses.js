@@ -2,8 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { convertEurosToCents, getUKFormattedDate } from '../utils/helpers';
 import DatePicker from 'react-datepicker';
 
-import 'react-datepicker/dist/react-datepicker.css';
-
 const AddExpenses = ({ addExpense, setMonthToShow }) => {
   const [title, setTitle] = useState('');
   const [wasTitleValidated, setWasTitleValidated] = useState(false);
