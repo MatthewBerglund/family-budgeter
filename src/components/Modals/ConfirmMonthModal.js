@@ -1,12 +1,12 @@
 import { Modal } from './components/Modal';
 
-const ConfirmMonthModal = ({ monthToShow, setIsOpen, okCallback }) => {
+const ConfirmMonthModal = ({ newExpenseMonth, setIsOpen, okCallback }) => {
   const modalProps = {
     cancelCallback: () => setIsOpen(false),
-    okCallback: () => okCallback(monthToShow),
+    okCallback: () => okCallback(newExpenseMonth),
     modalTitle: 'Select month view',
     cancelButtonLabel: 'Stay here',
-    okButtonLabel: `Open ${monthToShow}`,
+    okButtonLabel: `Open ${newExpenseMonth}`,
     okButtonColor: 'btn-primary',
   };
 

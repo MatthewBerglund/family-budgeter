@@ -23,7 +23,10 @@ const App = () => {
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [expenses, setExpenses] = useState([]);
   const [filteredExpenses, setFilteredExpenses] = useState(expenses);
-  const [monthToShow, setMonthToShow] = useState(selectedMonth);
+
+  // newExpenseMonth is needed to compare with selected month
+  // and trigger the ConfirmMonthModal if they are different
+  const [newExpenseMonth, setNewExpenseMonth] = useState(selectedMonth);
 
   // `expenseAdded` and `expenseDeleted` can be undefined, true or false
   // alerts are hidden when these are undefined
@@ -92,7 +95,7 @@ const App = () => {
         throw new Error('Something went wrong while adding the expense!');
       }
 
-      if (monthToShow !== selectedMonth) {
+      if (newExpenseMonth !== selectedMonth) {
         setConfirmMonthModalIsOpen(true);
       }
 
@@ -137,7 +140,7 @@ const App = () => {
   };
 
   const changeMonthView = () => {
-    setSelectedMonth(monthToShow);
+    setSelectedMonth(newExpenseMonth);
     setConfirmMonthModalIsOpen(false);
   };
 
@@ -169,7 +172,7 @@ const App = () => {
           <section className="col-lg-6">
             <AddExpenses
               addExpense={addExpense}
-              setMonthToShow={setMonthToShow}
+              setNewExpenseMonth={setNewExpenseMonth}
             />
           </section>
         </div>
@@ -197,7 +200,7 @@ const App = () => {
         )}
         {confirmMonthModalIsOpen && (
           <ConfirmMonthModal
-            monthToShow={monthToShow}
+            newExpenseMonth={newExpenseMonth}
             setIsOpen={setConfirmMonthModalIsOpen}
             okCallback={changeMonthView}
           />

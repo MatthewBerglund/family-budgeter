@@ -45,7 +45,7 @@ const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
       <h3 className="card-header">
         Summary for <span className="fw-bold">{selectedMonth}</span>
       </h3>
-      <div className="card-body container d-flex flex-column justify-content-between">
+      <div className="card-body container d-flex flex-column justify-content-around">
         <h4 className="fw-light row">
           <span className="col-6 col-md-4 col-lg-6 col-xl-5">
             Starting budget:
