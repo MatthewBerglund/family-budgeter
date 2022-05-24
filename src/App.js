@@ -82,7 +82,7 @@ const App = () => {
       body: JSON.stringify(newExpense),
     };
 
-    // Reset alerts in case user did not dismiss them
+    // Reset alerts in case user did not dismiss them. Still necessary?
     setExpenseAdded(undefined);
     setExpenseDeleted(undefined);
 
@@ -112,7 +112,7 @@ const App = () => {
     const url = `${baseURL}/items/${id}.json`;
     const requestOptions = { method: 'DELETE', headers };
 
-    // Reset alerts in case user did not dismiss them
+    // Reset alerts in case user did not dismiss them.  Still necessary?
     setExpenseAdded(undefined);
     setExpenseDeleted(undefined);
 

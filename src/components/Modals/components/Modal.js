@@ -32,7 +32,7 @@ export const Modal = ({
   const okButton = useRef(null);
 
   useEffect(() => {
-    okButton.current?.focus();
+    okButton.current?.focus(); // why do we need the `?`
 
     // the ref must be saved into a variable to accomodate react warning
     const elementToClean = okButton.current;
