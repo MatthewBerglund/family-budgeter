@@ -58,7 +58,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
               type="text"
               id="name"
               name="name"
-              placeholder="e.g. 'Groceries'"
+              placeholder="e.g. Groceries"
               aria-describedby="nameHelp"
               required
               autoFocus
@@ -102,7 +102,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
                 type="number"
                 id="amount"
                 name="amount"
-                placeholder="e.g. '19.99'"
+                placeholder="e.g. 19.99"
                 aria-describedby="amountHelp"
                 required
                 min="0.01"
