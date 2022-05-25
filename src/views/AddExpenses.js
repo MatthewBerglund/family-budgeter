@@ -111,9 +111,6 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
                 onChange={handleAmountChange}
               />
             </div>
-            <div id="amountHelp" className="form-text">
-              Euro amount (with comma and two decimal places)
-            </div>
           </div>
           <button className="btn btn-primary" type="submit">
             Add
