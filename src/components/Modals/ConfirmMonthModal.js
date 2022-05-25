@@ -4,7 +4,7 @@ const ConfirmMonthModal = ({ newExpenseMonth, setIsOpen, okCallback }) => {
   const modalProps = {
     cancelCallback: () => setIsOpen(false),
     okCallback: () => okCallback(newExpenseMonth),
-    modalTitle: 'New expense added',
+    modalTitle: `New expense added to ${newExpenseMonth}`,
     cancelButtonLabel: 'Stay here',
     okButtonLabel: `Open ${newExpenseMonth}`,
     okButtonColor: 'btn-primary',
