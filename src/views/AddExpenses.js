@@ -58,7 +58,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
               type="text"
               id="name"
               name="name"
-              placeholder="... Groceries ..."
+              placeholder="e.g. Groceries"
               aria-describedby="nameHelp"
               required
               autoFocus
@@ -80,7 +80,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
               className="form-control"
               id="date"
               name="date"
-              placeholderText="... 01/05/2022 ..."
+              placeholderText="DD/MM/YYYY"
               aria-describedby="dateHelp"
               required
               selected={date}
@@ -93,7 +93,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
             className={`col mb-2 ${wasAmountValidated ? 'was-validated' : ''}`}
           >
             <label className="form-label" htmlFor="amount">
-              Expense amount in €
+              Expense amount
             </label>
             <div className="input-group">
               <span className="input-group-text">€</span>
@@ -102,7 +102,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
                 type="number"
                 id="amount"
                 name="amount"
-                placeholder="... 19,99 ..."
+                placeholder="e.g. 19.99"
                 aria-describedby="amountHelp"
                 required
                 min="0.01"
@@ -110,9 +110,6 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
                 value={amount}
                 onChange={handleAmountChange}
               />
-            </div>
-            <div id="amountHelp" className="form-text">
-              Euro amount (with comma and two decimal places)
             </div>
           </div>
           <button className="btn btn-primary" type="submit">
