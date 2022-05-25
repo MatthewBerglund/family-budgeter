@@ -93,7 +93,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
             className={`col mb-2 ${wasAmountValidated ? 'was-validated' : ''}`}
           >
             <label className="form-label" htmlFor="amount">
-              Expense amount in €
+              Expense amount
             </label>
             <div className="input-group">
               <span className="input-group-text">€</span>
