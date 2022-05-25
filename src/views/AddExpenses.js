@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { convertEurosToCents, getUKFormattedDate } from '../utils/helpers';
 import DatePicker from 'react-datepicker';
 
@@ -9,13 +9,6 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
   const [wasDateValidated, setWasDateValidated] = useState(false);
   const [amount, setAmount] = useState('');
   const [wasAmountValidated, setWasAmountValidated] = useState(false);
-
-  const titleInput = useRef(null);
-
-  // focus on title input on mount
-  useEffect(() => {
-    titleInput.current?.focus();
-  }, []);
 
   const handleSubmit = evt => {
     evt.preventDefault();
@@ -68,7 +61,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
               placeholder="... Groceries ..."
               aria-describedby="nameHelp"
               required
-              ref={titleInput}
+              autoFocus
               value={title}
               onChange={handleTitleChange}
             />

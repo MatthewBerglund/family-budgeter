@@ -1,5 +1,3 @@
-import { useRef, useEffect } from 'react';
-
 /**
  *
  * Dynamic custom Modal
@@ -29,18 +27,6 @@ export const Modal = ({
   okButtonLabel,
   okButtonColor,
 }) => {
-  const okButton = useRef(null);
-
-  useEffect(() => {
-    okButton.current?.focus();
-
-    // the ref must be saved into a variable to accomodate react warning
-    const elementToClean = okButton.current;
-    return () => {
-      elementToClean.blur();
-    };
-  }, []);
-
   return (
     <div
       className="modal fade show"
@@ -78,8 +64,8 @@ export const Modal = ({
               <button
                 type="button"
                 data-cy="okButton"
+                autoFocus
                 className={`btn ${okButtonColor}`}
-                ref={okButton}
                 onClick={okCallback}
               >
                 {okButtonLabel}
