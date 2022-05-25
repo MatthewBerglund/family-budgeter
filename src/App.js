@@ -82,10 +82,6 @@ const App = () => {
       body: JSON.stringify(newExpense),
     };
 
-    // Reset alerts in case user did not dismiss them
-    setExpenseAdded(undefined);
-    setExpenseDeleted(undefined);
-
     try {
       const res = await fetch(url, requestOptions);
       const newExpense = await res.json();
@@ -101,10 +97,10 @@ const App = () => {
 
       setExpenses([...expenses, newExpense]);
       setExpenseAdded(true);
-
       closeExpenseAddedAlert();
     } catch (error) {
       setExpenseAdded(false);
+      closeExpenseAddedAlert();
     }
   };
 
