@@ -58,7 +58,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
               type="text"
               id="name"
               name="name"
-              placeholder="... Groceries ..."
+              placeholder="e.g. 'Groceries'"
               aria-describedby="nameHelp"
               required
               autoFocus
@@ -80,7 +80,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
               className="form-control"
               id="date"
               name="date"
-              placeholderText="... 01/05/2022 ..."
+              placeholderText="DD/MM/YYYY"
               aria-describedby="dateHelp"
               required
               selected={date}
@@ -102,7 +102,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
                 type="number"
                 id="amount"
                 name="amount"
-                placeholder="... 19,99 ..."
+                placeholder="e.g. '19.99'"
                 aria-describedby="amountHelp"
                 required
                 min="0.01"
