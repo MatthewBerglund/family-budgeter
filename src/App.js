@@ -105,7 +105,7 @@ const App = () => {
   };
 
   const removeExpense = async id => {
-    const url = `${baseURL}/item/${id}.json`;
+    const url = `${baseURL}/items/${id}.json`;
     const requestOptions = { method: 'DELETE', headers };
 
     setConfirmDeleteModalIsOpen(true);
