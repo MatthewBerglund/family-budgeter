@@ -105,12 +105,8 @@ const App = () => {
   };
 
   const removeExpense = async id => {
-    const url = `${baseURL}/items/${id}.json`;
+    const url = `${baseURL}/item/${id}.json`;
     const requestOptions = { method: 'DELETE', headers };
-
-    // Reset alerts in case user did not dismiss them
-    setExpenseAdded(undefined);
-    setExpenseDeleted(undefined);
 
     setConfirmDeleteModalIsOpen(true);
 
@@ -127,11 +123,11 @@ const App = () => {
       if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
       setExpenseDeleted(true);
       setConfirmDeleteModalIsOpen(false);
-
       closeExpenseDeleteAlert();
     } catch (error) {
       setExpenseDeleted(false);
       setConfirmDeleteModalIsOpen(false);
+      closeExpenseDeleteAlert();
     }
   };
 
