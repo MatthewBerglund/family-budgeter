@@ -14,7 +14,7 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
 
   // focus on title input on mount
   useEffect(() => {
-    titleInput.current?.focus();
+    titleInput.current.focus();
   }, []);
 
   const handleSubmit = evt => {

@@ -32,12 +32,11 @@ export const Modal = ({
   const okButton = useRef(null);
 
   useEffect(() => {
-    okButton.current?.focus();
+    const button = okButton.current;
+    button.focus();
 
-    // the ref must be saved into a variable to accomodate react warning
-    const elementToClean = okButton.current;
     return () => {
-      elementToClean.blur();
+      button.blur();
     };
   }, []);
 
