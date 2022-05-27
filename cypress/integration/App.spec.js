@@ -19,7 +19,7 @@ describe('App', () => {
       .find('.react-datepicker')
       .should('be.visible');
     cy.findByLabelText(/expense date/i).type('2022-02-01{enter}');
-    cy.findByRole('spinbutton', { name: /expense amount in €/i }).type('14.99');
+    cy.findByRole('spinbutton', { name: /expense amount/i }).type('14.99');
     cy.findByRole('button', { name: /add/i }).click();
 
     cy.findByRole('combobox', { name: /select a month/i }).should(
@@ -39,7 +39,7 @@ describe('App', () => {
       ''
     );
     cy.findByLabelText(/expense date/i).should('have.value', '');
-    cy.findByRole('spinbutton', { name: /expense amount in €/i }).should(
+    cy.findByRole('spinbutton', { name: /expense amount/i }).should(
       'have.value',
       ''
     );
@@ -93,7 +93,7 @@ describe('App', () => {
       .find('.react-datepicker')
       .should('be.visible');
     cy.findByLabelText(/expense date/i).type('2022-05-01{enter}');
-    cy.findByRole('spinbutton', { name: /expense amount in €/i }).type('4.99');
+    cy.findByRole('spinbutton', { name: /expense amount/i }).type('4.99');
     cy.findByRole('button', { name: /add/i }).click();
 
     cy.get('[data-cy="expenses"] > li')
