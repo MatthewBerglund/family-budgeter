@@ -19,7 +19,7 @@ describe('App', () => {
       .find('.react-datepicker')
       .should('be.visible');
     cy.findByLabelText(/expense date/i).type('2022-02-01{enter}');
-    cy.findByRole('spinbutton', { name: /expense amount in €/i }).type('14.99');
+    cy.findByRole('spinbutton', { name: /expense amount/i }).type('14.99');
     cy.findByRole('button', { name: /add/i }).click();
 
     cy.findByRole('combobox', { name: /select a month/i }).should(
@@ -27,7 +27,7 @@ describe('App', () => {
       'February 2022'
     );
 
-    cy.get('[id="Select month view"]').within(() => {
+    cy.get('[id="New expense added to February 2022"]').within(() => {
       cy.get('[data-cy="okButton"]').click();
     });
 
@@ -39,7 +39,7 @@ describe('App', () => {
       ''
     );
     cy.findByLabelText(/expense date/i).should('have.value', '');
-    cy.findByRole('spinbutton', { name: /expense amount in €/i }).should(
+    cy.findByRole('spinbutton', { name: /expense amount/i }).should(
       'have.value',
       ''
     );
@@ -93,8 +93,11 @@ describe('App', () => {
       .find('.react-datepicker')
       .should('be.visible');
     cy.findByLabelText(/expense date/i).type('2022-05-01{enter}');
-    cy.findByRole('spinbutton', { name: /expense amount in €/i }).type('4.99');
+    cy.findByRole('spinbutton', { name: /expense amount/i }).type('4.99');
     cy.findByRole('button', { name: /add/i }).click();
+
+    // Wait for "Expense added" alert to close
+    cy.findByRole('alert').should('be.visible').wait(5000).should('not.exist');
 
     cy.get('[data-cy="expenses"] > li')
       .should('contain', '01/05/2022')
@@ -109,6 +112,7 @@ describe('App', () => {
       cy.get('[data-cy="okButton"]').click();
     });
 
+    // Wait for "Expense deleted" alert to close
     cy.findByRole('alert').should('be.visible').wait(5000).should('not.exist');
 
     cy.get('[data-cy=expenses]')
