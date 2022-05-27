@@ -1,8 +1,8 @@
 import { getUKFormattedEuros, getUKFormattedDate } from '../../utils/helpers';
 
 const ExpenseDeletedAlert = ({
-  expenseDeleted,
-  setExpenseDeleted,
+  expenseWasDeleted,
+  setShowExpenseDeletedAlert,
   title,
   date,
   amount,
@@ -11,14 +11,14 @@ const ExpenseDeletedAlert = ({
     <div
       role="alert"
       className={`alert ${
-        expenseDeleted ? 'alert-success' : 'alert-danger'
+        expenseWasDeleted ? 'alert-success' : 'alert-danger'
       } alert-dismissible fade show position-fixed top-0 end-0`}
     >
       <h4 className="alert-heading">
-        {expenseDeleted ? 'Expense deleted' : 'Error deleting expense'}
+        {expenseWasDeleted ? 'Expense deleted' : 'Error deleting expense'}
       </h4>
       <p>
-        {expenseDeleted
+        {expenseWasDeleted
           ? `The expense "${title}" from ${getUKFormattedDate(
               date
             )} totaling ${getUKFormattedEuros(amount)} has been deleted.`
@@ -29,7 +29,7 @@ const ExpenseDeletedAlert = ({
         className="btn-close"
         data-bs-dismiss="alert"
         aria-label="Close"
-        onClick={() => setExpenseDeleted(undefined)}
+        onClick={() => setShowExpenseDeletedAlert(false)}
       />
     </div>
   );

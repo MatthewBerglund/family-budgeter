@@ -1,16 +1,16 @@
-const ExpenseAddedAlert = ({ expenseAdded, setExpenseAdded }) => {
+const ExpenseAddedAlert = ({ expenseWasAdded, setShowExpenseAddedAlert }) => {
   return (
     <div
       role="alert"
       className={`alert ${
-        expenseAdded ? 'alert-success' : 'alert-danger'
+        expenseWasAdded ? 'alert-success' : 'alert-danger'
       } alert-dismissible fade show position-fixed top-0 end-0`}
     >
       <h4 className="alert-heading">
-        {expenseAdded ? 'Expense added' : 'Error adding expense'}
+        {expenseWasAdded ? 'Expense added' : 'Error adding expense'}
       </h4>
       <p>
-        {expenseAdded
+        {expenseWasAdded
           ? 'Your expense has been successfully added.'
           : 'Your expense could not be added. Please try again.'}
       </p>
@@ -19,7 +19,7 @@ const ExpenseAddedAlert = ({ expenseAdded, setExpenseAdded }) => {
         className="btn-close"
         data-bs-dismiss="alert"
         aria-label="Close"
-        onClick={() => setExpenseAdded(undefined)}
+        onClick={() => setShowExpenseAddedAlert(false)}
       />
     </div>
   );
