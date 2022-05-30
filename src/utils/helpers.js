@@ -13,7 +13,7 @@ export function getUKFormattedEuros(centAmount) {
   return Intl.NumberFormat('en-GB', options).format(centAmount / 100);
 }
 
-// Takes a date string in `YYYY-MM-DD` format and returns a new string
+// Takes a valid date string and returns a new string
 // based on options format
 export function getUKFormattedDate(
   dateString,
