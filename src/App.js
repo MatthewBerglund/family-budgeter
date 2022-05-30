@@ -33,12 +33,6 @@ const App = () => {
   const [expenseWasDeleted, setExpenseWasDeleted] = useState(false);
   const [showExpenseAddedAlert, setShowExpenseAddedAlert] = useState(false);
   const [showExpenseDeletedAlert, setShowExpenseDeletedAlert] = useState(false);
-
-  // `expenseAdded` and `expenseDeleted` can be undefined, true or false
-  // alerts are hidden when these are undefined
-  // const [expenseAdded, setExpenseAdded] = useState();
-  // const [expenseDeleted, setExpenseDeleted] = useState();
-
   const [lastDeleted, setLastDeleted] = useState({});
 
   // states to toggle the modals
