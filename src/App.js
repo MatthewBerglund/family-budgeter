@@ -82,10 +82,6 @@ const App = () => {
       body: JSON.stringify(newExpense),
     };
 
-    // Reset alerts in case user did not dismiss them
-    setExpenseAdded(undefined);
-    setExpenseDeleted(undefined);
-
     try {
       const res = await fetch(url, requestOptions);
       const newExpense = await res.json();
@@ -101,20 +97,16 @@ const App = () => {
 
       setExpenses([...expenses, newExpense]);
       setExpenseAdded(true);
-
       closeExpenseAddedAlert();
     } catch (error) {
       setExpenseAdded(false);
+      closeExpenseAddedAlert();
     }
   };
 
   const removeExpense = async id => {
     const url = `${baseURL}/items/${id}.json`;
     const requestOptions = { method: 'DELETE', headers };
-
-    // Reset alerts in case user did not dismiss them
-    setExpenseAdded(undefined);
-    setExpenseDeleted(undefined);
 
     setConfirmDeleteModalIsOpen(true);
 
@@ -131,11 +123,11 @@ const App = () => {
       if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
       setExpenseDeleted(true);
       setConfirmDeleteModalIsOpen(false);
-
       closeExpenseDeleteAlert();
     } catch (error) {
       setExpenseDeleted(false);
       setConfirmDeleteModalIsOpen(false);
+      closeExpenseDeleteAlert();
     }
   };
 

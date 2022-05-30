@@ -27,7 +27,7 @@ describe('App', () => {
       'February 2022'
     );
 
-    cy.get('[id="Select month view"]').within(() => {
+    cy.get('[id="New expense added to February 2022"]').within(() => {
       cy.get('[data-cy="okButton"]').click();
     });
 
@@ -96,6 +96,9 @@ describe('App', () => {
     cy.findByRole('spinbutton', { name: /expense amount/i }).type('4.99');
     cy.findByRole('button', { name: /add/i }).click();
 
+    // Wait for "Expense added" alert to close
+    cy.findByRole('alert').should('be.visible').wait(5000).should('not.exist');
+
     cy.get('[data-cy="expenses"] > li')
       .should('contain', '01/05/2022')
       .and('contain', 'Tasty bier')
@@ -109,6 +112,7 @@ describe('App', () => {
       cy.get('[data-cy="okButton"]').click();
     });
 
+    // Wait for "Expense deleted" alert to close
     cy.findByRole('alert').should('be.visible').wait(5000).should('not.exist');
 
     cy.get('[data-cy=expenses]')
