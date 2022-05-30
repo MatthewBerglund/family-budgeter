@@ -81,14 +81,6 @@ const App = () => {
     setTimeout(() => setShowExpenseDeletedAlert(false), 5000);
   };
 
-  // const closeExpenseAddedAlert = () => {
-  //   setTimeout(() => setExpenseAdded(undefined), 5000);
-  // };
-
-  // const closeExpenseDeleteAlert = () => {
-  //   setTimeout(() => setExpenseDeleted(undefined), 5000);
-  // };
-
   const addExpense = async newExpense => {
     const url = `${baseURL}/items.json?kind=expense`;
     const requestOptions = {
