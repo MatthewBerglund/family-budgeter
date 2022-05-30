@@ -1,5 +1,9 @@
 import '@testing-library/cypress/add-commands';
-import { getCurrentMonth, getUKFormattedEuros } from '../../src/utils/helpers';
+import {
+  getCurrentMonth,
+  getUKFormattedEuros,
+  getUKFormattedDate,
+} from '../../src/utils/helpers';
 
 describe('App', () => {
   it('adds expenses', () => {
@@ -121,9 +125,8 @@ describe('App', () => {
   });
 
   it('provides feedback when an expense cannot be added', () => {
-    // Stub response for getting expense items
+    // Stub responses for getting and posting expense items
     cy.intercept('GET', '/items*', []);
-    // Stub post response: server error 500
     cy.intercept('POST', '/items*', {
       statusCode: 500,
     });
@@ -140,6 +143,39 @@ describe('App', () => {
 
     cy.findByRole('alert').within(() => {
       cy.findByRole('heading', { name: /error adding expense/i })
+        .wait(5000)
+        .should('not.exist');
+    });
+  });
+
+  it('provides feedback when an expense cannot be deleted', () => {
+    const today = new Date(Date.now());
+
+    // Stub responses for getting and posting expense items
+    cy.intercept('GET', '/items*', [
+      {
+        id: 5,
+        title: 'Tasty test tacos',
+        date: today.toDateString(),
+        amount: 1499,
+      },
+    ]);
+    cy.intercept('DELETE', '/items/**', {
+      statusCode: 500,
+    });
+
+    cy.visit('/');
+
+    cy.get('[data-cy="expenses"] > li').within(() => {
+      cy.get('[data-cy="deleteButton"]').click();
+    });
+
+    cy.get('[id="Confirm expense deletion"]').within(() => {
+      cy.get('[data-cy="okButton"]').click();
+    });
+
+    cy.findByRole('alert').within(() => {
+      cy.findByRole('heading', { name: /error deleting expense/i })
         .wait(5000)
         .should('not.exist');
     });
