@@ -6,28 +6,30 @@ describe('App', () => {
     // Stub responses for getting and posting expense items
     cy.intercept('GET', '/items*', []);
     cy.intercept('POST', '/items*', {
-      id: 5,
-      title: 'Tasty test tacos',
-      date: '2022-02-01',
-      amount: 1499,
+      id: 6,
+      title: 'Test Expense - Cypress',
+      date: '2022-03-01T22:00:00.000Z',
+      amount: 499,
     });
 
     cy.visit('/');
-    cy.findByRole('textbox', { name: /expense name/i }).type('Test Tacos');
+    cy.findByRole('textbox', { name: /expense name/i }).type(
+      'Test Expense - Cypress'
+    );
     cy.findByLabelText(/expense date/i).click();
     cy.get('[data-cy="dateParent"]')
       .find('.react-datepicker')
       .should('be.visible');
-    cy.findByLabelText(/expense date/i).type('2022-02-01{enter}');
-    cy.findByRole('spinbutton', { name: /expense amount/i }).type('14.99');
+    cy.findByLabelText(/expense date/i).type('2022-03-01{enter}');
+    cy.findByRole('spinbutton', { name: /expense amount/i }).type('4.99');
     cy.findByRole('button', { name: /add/i }).click();
 
     cy.findByRole('combobox', { name: /select a month/i }).should(
       'contain',
-      'February 2022'
+      'March 2022'
     );
 
-    cy.get('[id="New expense added to February 2022"]').within(() => {
+    cy.get('[id="New expense added to March 2022"]').within(() => {
       cy.get('[data-cy="okButton"]').click();
     });
 
@@ -48,14 +50,14 @@ describe('App', () => {
       .should('have.length', 1)
       .and('not.contain', 'You have no prior expenses');
     cy.get('[data-cy="expenses"] > li')
-      .should('contain', '01/02/2022')
-      .and('contain', 'Tasty test tacos')
-      .and('contain', '- €14.99');
+      .should('contain', '01/03/2022')
+      .and('contain', 'Test Expense - Cypress')
+      .and('contain', '- €4.99');
 
     // Check that the summary has been updated
     cy.get('[data-cy="total-budget"]').then($el => {
       const totalBudget = $el.text().replace(/\D/g, '');
-      const totalExpenses = 1499;
+      const totalExpenses = 499;
       const remainingBudget = totalBudget - totalExpenses;
 
       cy.get('[data-cy="total-expenses"]').should(
@@ -71,37 +73,44 @@ describe('App', () => {
     const currentMonth = getCurrentMonth();
     cy.findByRole('combobox', { name: /select a month/i }).select(currentMonth);
     cy.get('[data-cy="expenses"]')
-      .should('not.contain', '01/02/2022')
-      .and('not.contain', 'Tasty test tacos')
-      .and('not.contain', '- €14.99');
+      .should('not.contain', '01/03/2022')
+      .and('not.contain', 'Test Expense - Cypress')
+      .and('not.contain', '- €4.99');
   });
 
   it('deletes expenses', () => {
     // Stub responses for getting and deleting expense items
     cy.intercept('GET', '/items*', []);
-    cy.intercept('DELETE', '/items*', {
+    cy.intercept('POST', '/items*', {
       id: 6,
-      title: 'Tasty bier',
-      date: '2022-05-01',
+      title: 'Test Expense - Cypress',
+      date: '2022-03-01T22:00:00.000Z',
       amount: 499,
     });
+    cy.intercept('DELETE', '/items/**', {});
 
     cy.visit('/');
-    cy.findByRole('textbox', { name: /expense name/i }).type('Tasty bier');
+    cy.findByRole('textbox', { name: /expense name/i }).type(
+      'Test Expense - Cypress'
+    );
     cy.findByLabelText(/expense date/i).click();
     cy.get('[data-cy="dateParent"]')
       .find('.react-datepicker')
       .should('be.visible');
-    cy.findByLabelText(/expense date/i).type('2022-05-01{enter}');
+    cy.findByLabelText(/expense date/i).type('2022-03-01{enter}');
     cy.findByRole('spinbutton', { name: /expense amount/i }).type('4.99');
     cy.findByRole('button', { name: /add/i }).click();
+
+    cy.get('[id="New expense added to March 2022"]').within(() => {
+      cy.get('[data-cy="okButton"]').click();
+    });
 
     // Wait for "Expense added" alert to close
     cy.findByRole('alert').should('be.visible').wait(5000).should('not.exist');
 
     cy.get('[data-cy="expenses"] > li')
-      .should('contain', '01/05/2022')
-      .and('contain', 'Tasty bier')
+      .should('contain', '01/03/2022')
+      .and('contain', 'Test Expense - Cypress')
       .and('contain', '- €4.99');
 
     cy.get('[data-cy="expenses"] > li').within(() => {
@@ -114,6 +123,11 @@ describe('App', () => {
 
     // Wait for "Expense deleted" alert to close
     cy.findByRole('alert').should('be.visible').wait(5000).should('not.exist');
+
+    cy.findByRole('combobox', { name: /select a month/i }).should(
+      'not.contain',
+      'March 2022'
+    );
 
     cy.get('[data-cy=expenses]')
       .should('have.length', 1)
