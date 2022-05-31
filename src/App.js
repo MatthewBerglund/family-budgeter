@@ -28,10 +28,11 @@ const App = () => {
   // and trigger the ConfirmMonthModal if they are different
   const [newExpenseMonth, setNewExpenseMonth] = useState(selectedMonth);
 
-  // `expenseAdded` and `expenseDeleted` can be undefined, true or false
-  // alerts are hidden when these are undefined
-  const [expenseAdded, setExpenseAdded] = useState();
-  const [expenseDeleted, setExpenseDeleted] = useState();
+  // variables for toggling alert visibility and state
+  const [expenseWasAdded, setExpenseWasAdded] = useState(false);
+  const [expenseWasDeleted, setExpenseWasDeleted] = useState(false);
+  const [showExpenseAddedAlert, setShowExpenseAddedAlert] = useState(false);
+  const [showExpenseDeletedAlert, setShowExpenseDeletedAlert] = useState(false);
   const [lastDeleted, setLastDeleted] = useState({});
 
   // states to toggle the modals
@@ -67,11 +68,11 @@ const App = () => {
   }, [expenses, selectedMonth]);
 
   const closeExpenseAddedAlert = () => {
-    setTimeout(() => setExpenseAdded(undefined), 5000);
+    setTimeout(() => setShowExpenseAddedAlert(false), 5000);
   };
 
-  const closeExpenseDeleteAlert = () => {
-    setTimeout(() => setExpenseDeleted(undefined), 5000);
+  const closeExpenseDeletedAlert = () => {
+    setTimeout(() => setShowExpenseDeletedAlert(false), 5000);
   };
 
   const addExpense = async newExpense => {
@@ -96,10 +97,12 @@ const App = () => {
       }
 
       setExpenses([...expenses, newExpense]);
-      setExpenseAdded(true);
+      setExpenseWasAdded(true);
+      setShowExpenseAddedAlert(true);
       closeExpenseAddedAlert();
     } catch (error) {
-      setExpenseAdded(false);
+      setExpenseWasAdded(false);
+      setShowExpenseAddedAlert(true);
       closeExpenseAddedAlert();
     }
   };
@@ -121,13 +124,15 @@ const App = () => {
       setExpenses(expenses.filter(expense => expense.id !== id));
 
       if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
-      setExpenseDeleted(true);
+      setExpenseWasDeleted(true);
+      setShowExpenseDeletedAlert(true);
       setConfirmDeleteModalIsOpen(false);
-      closeExpenseDeleteAlert();
+      closeExpenseDeletedAlert();
     } catch (error) {
-      setExpenseDeleted(false);
+      setExpenseWasDeleted(false);
+      setShowExpenseDeletedAlert(true);
       setConfirmDeleteModalIsOpen(false);
-      closeExpenseDeleteAlert();
+      closeExpenseDeletedAlert();
     }
   };
 
@@ -177,19 +182,19 @@ const App = () => {
             />
           </section>
         </div>
-        {expenseAdded === undefined ? null : (
+        {showExpenseAddedAlert ? (
           <ExpenseAddedAlert
-            expenseAdded={expenseAdded}
-            setExpenseAdded={setExpenseAdded}
+            expenseWasAdded={expenseWasAdded}
+            setShowExpenseAddedAlert={setShowExpenseAddedAlert}
           />
-        )}
-        {expenseDeleted === undefined ? null : (
+        ) : null}
+        {showExpenseDeletedAlert ? (
           <ExpenseDeletedAlert
-            expenseDeleted={expenseDeleted}
-            setExpenseDeleted={setExpenseDeleted}
+            expenseWasDeleted={expenseWasDeleted}
+            setShowExpenseDeletedAlert={setExpenseWasDeleted}
             {...lastDeleted}
           />
-        )}
+        ) : null}
         {confirmMonthModalIsOpen && (
           <ConfirmMonthModal
             newExpenseMonth={newExpenseMonth}

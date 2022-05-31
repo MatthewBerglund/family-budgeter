@@ -1,5 +1,9 @@
 import '@testing-library/cypress/add-commands';
-import { getCurrentMonth, getUKFormattedEuros } from '../../src/utils/helpers';
+import {
+  getCurrentMonth,
+  getUKFormattedEuros,
+  getUKFormattedDate,
+} from '../../src/utils/helpers';
 
 describe('App', () => {
   it('adds expenses', () => {
@@ -118,5 +122,62 @@ describe('App', () => {
     cy.get('[data-cy=expenses]')
       .should('have.length', 1)
       .and('contain', 'You have no prior expenses');
+  });
+
+  it('provides feedback when an expense cannot be added', () => {
+    // Stub responses for getting and posting expense items
+    cy.intercept('GET', '/items*', []);
+    cy.intercept('POST', '/items*', {
+      statusCode: 500,
+    });
+
+    cy.visit('/');
+    cy.findByRole('textbox', { name: /expense name/i }).type('Test Tacos');
+    cy.findByLabelText(/expense date/i).click();
+    cy.get('[data-cy="dateParent"]')
+      .find('.react-datepicker')
+      .should('be.visible');
+    cy.findByLabelText(/expense date/i).type('2022-02-01{enter}');
+    cy.findByRole('spinbutton', { name: /expense amount/i }).type('14.99');
+    cy.findByRole('button', { name: /add/i }).click();
+
+    cy.findByRole('alert').within(() => {
+      cy.findByRole('heading', { name: /error adding expense/i })
+        .wait(5000)
+        .should('not.exist');
+    });
+  });
+
+  it('provides feedback when an expense cannot be deleted', () => {
+    const today = new Date(Date.now());
+
+    // Stub responses for getting and posting expense items
+    cy.intercept('GET', '/items*', [
+      {
+        id: 5,
+        title: 'Tasty test tacos',
+        date: today.toDateString(),
+        amount: 1499,
+      },
+    ]);
+    cy.intercept('DELETE', '/items/**', {
+      statusCode: 500,
+    });
+
+    cy.visit('/');
+
+    cy.get('[data-cy="expenses"] > li').within(() => {
+      cy.get('[data-cy="deleteButton"]').click();
+    });
+
+    cy.get('[id="Confirm expense deletion"]').within(() => {
+      cy.get('[data-cy="okButton"]').click();
+    });
+
+    cy.findByRole('alert').within(() => {
+      cy.findByRole('heading', { name: /error deleting expense/i })
+        .wait(5000)
+        .should('not.exist');
+    });
   });
 });
