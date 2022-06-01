@@ -103,8 +103,6 @@ const App = () => {
         setActiveAlert={setActiveAlert}
       />
     );
-
-    closeAlerts();
   };
 
   const removeExpense = async id => {
@@ -139,8 +137,6 @@ const App = () => {
         {...lastDeleted}
       />
     );
-
-    closeAlerts();
   };
 
   const changeMonthView = () => {
