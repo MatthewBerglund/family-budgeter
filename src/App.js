@@ -9,6 +9,7 @@ import ExpenseAddedAlert from './components/Alerts/ExpenseAddedAlert';
 import ExpenseDeletedAlert from './components/Alerts/ExpenseDeletedAlert';
 import ConfirmMonthModal from './components/Modals/ConfirmMonthModal';
 import ConfirmDeleteModal from './components/Modals/ConfirmDeleteModal';
+import EditExpenseModal from './components/Modals/EditExpenseModal';
 
 const token = process.env.REACT_APP_MOSTASH_API_KEY;
 const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
@@ -31,8 +32,10 @@ const App = () => {
   // variables for toggling alert visibility and state
   const [activeAlert, setActiveAlert] = useState(null);
   const [lastDeleted, setLastDeleted] = useState({});
+  const [expenseToEdit, setExpenseToEdit] = useState({});
 
   // states to toggle the modals
+  const [editExpenseModalIsOpen, setEditExpenseModalIsOpen] = useState(false);
   const [confirmMonthModalIsOpen, setConfirmMonthModalIsOpen] = useState(false);
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] =
     useState(false);
@@ -135,6 +138,8 @@ const App = () => {
     );
   };
 
+  const editExpense = () => {};
+
   const changeMonthView = () => {
     setSelectedMonth(newExpenseMonth);
     setConfirmMonthModalIsOpen(false);
@@ -177,7 +182,9 @@ const App = () => {
             <ExpenseHistory
               filteredExpenses={filteredExpenses}
               setConfirmDeleteModalIsOpen={setConfirmDeleteModalIsOpen}
+              setEditExpenseModalIsOpen={setEditExpenseModalIsOpen}
               setLastDeleted={setLastDeleted}
+              setExpenseToEdit={setExpenseToEdit}
             />
           </section>
         </div>
@@ -194,6 +201,13 @@ const App = () => {
             expense={lastDeleted}
             setIsOpen={setConfirmDeleteModalIsOpen}
             okCallback={removeExpense}
+          />
+        )}
+        {editExpenseModalIsOpen && (
+          <EditExpenseModal
+            expense={expenseToEdit}
+            setIsOpen={setEditExpenseModalIsOpen}
+            okCallback={editExpense}
           />
         )}
       </main>

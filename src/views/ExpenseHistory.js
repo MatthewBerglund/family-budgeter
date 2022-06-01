@@ -3,7 +3,9 @@ import Expense from '../components/Expense';
 const ExpensesHistory = ({
   filteredExpenses,
   setConfirmDeleteModalIsOpen,
+  setEditExpenseModalIsOpen,
   setLastDeleted,
+  setExpenseToEdit,
 }) => {
   const sortedExpenses = filteredExpenses.sort((expenseA, expenseB) => {
     return new Date(expenseB.date) - new Date(expenseA.date);
@@ -20,7 +22,9 @@ const ExpensesHistory = ({
                 key={expense.id}
                 expense={expense}
                 setConfirmDeleteModalIsOpen={setConfirmDeleteModalIsOpen}
+                setEditExpenseModalIsOpen={setEditExpenseModalIsOpen}
                 setLastDeleted={setLastDeleted}
+                setExpenseToEdit={setExpenseToEdit}
               />
             ))
           ) : (

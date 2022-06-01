@@ -1,6 +1,12 @@
 import { getUKFormattedDate, getUKFormattedEuros } from '../utils/helpers';
 
-const Expense = ({ expense, setConfirmDeleteModalIsOpen, setLastDeleted }) => {
+const Expense = ({
+  expense,
+  setConfirmDeleteModalIsOpen,
+  setEditExpenseModalIsOpen,
+  setLastDeleted,
+  setExpenseToEdit,
+}) => {
   const { title, amount, date } = expense;
 
   return (
@@ -18,7 +24,17 @@ const Expense = ({ expense, setConfirmDeleteModalIsOpen, setLastDeleted }) => {
           </div>
         </div>
         <div className="col-2 col-lg-1 d-flex ps-lg-3">
-          <button className="btn btn-outline-secondary flex-fill">Edit</button>
+          <button
+            className="btn btn-outline-secondary flex-fill"
+            onClick={() => {
+              // Open edit modal
+              console.log('Edit modal opened');
+              setEditExpenseModalIsOpen(true);
+              setExpenseToEdit(expense);
+            }}
+          >
+            Edit
+          </button>
         </div>
         <div className="col-2 col-lg-1 d-flex justify-content-center">
           <button
