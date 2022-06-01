@@ -1,15 +1,15 @@
 import Alert from './components/Alert';
 
-const ExpenseAddedAlert = ({ expenseWasAdded, setActiveAlert }) => {
+const ExpenseAddedAlert = ({ errorOccurred, closeCallback }) => {
   return (
     <Alert
-      color={expenseWasAdded ? 'success' : 'danger'}
-      heading={expenseWasAdded ? 'Expense added' : 'Error adding expense'}
-      closeCallback={() => setActiveAlert(null)}
+      color={errorOccurred ? 'danger' : 'success'}
+      heading={errorOccurred ? 'Error adding expense' : 'Expense added'}
+      closeCallback={closeCallback}
     >
-      {expenseWasAdded
-        ? 'Your expense has been successfully added.'
-        : 'The expense could not be added. Please try again.'}
+      {errorOccurred
+        ? 'The expense could not be added. Please try again.'
+        : 'Your expense has been successfully added.'}
     </Alert>
   );
 };

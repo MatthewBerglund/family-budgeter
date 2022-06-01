@@ -64,6 +64,8 @@ const App = () => {
     setFilteredExpenses(expensesToRender);
   }, [expenses, selectedMonth]);
 
+  const closeAlert = () => setActiveAlert(null);
+
   const addExpense = async newExpense => {
     const url = `${baseURL}/items.json?kind=expense`;
     const requestOptions = {
@@ -72,7 +74,7 @@ const App = () => {
       body: JSON.stringify(newExpense),
     };
 
-    let expenseWasAdded;
+    let errorOccurred = false;
 
     try {
       const res = await fetch(url, requestOptions);
@@ -88,15 +90,14 @@ const App = () => {
       }
 
       setExpenses([...expenses, newExpense]);
-      expenseWasAdded = true;
     } catch (error) {
-      expenseWasAdded = false;
+      errorOccurred = true;
     }
 
     setActiveAlert(
       <ExpenseAddedAlert
-        expenseWasAdded={expenseWasAdded}
-        setActiveAlert={setActiveAlert}
+        errorOccurred={errorOccurred}
+        closeCallback={closeAlert}
       />
     );
   };
@@ -104,7 +105,7 @@ const App = () => {
   const removeExpense = async id => {
     const url = `${baseURL}/items/${id}.json`;
     const requestOptions = { method: 'DELETE', headers };
-    let expenseWasDeleted;
+    let errorOccurred = false;
 
     setConfirmDeleteModalIsOpen(true);
 
@@ -117,19 +118,18 @@ const App = () => {
       }
 
       setExpenses(expenses.filter(expense => expense.id !== id));
-      expenseWasDeleted = true;
 
       if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
       setConfirmDeleteModalIsOpen(false);
     } catch (error) {
-      expenseWasDeleted = false;
+      errorOccurred = true;
       setConfirmDeleteModalIsOpen(false);
     }
 
     setActiveAlert(
       <ExpenseDeletedAlert
-        expenseWasDeleted={expenseWasDeleted}
-        setActiveAlert={setActiveAlert}
+        errorOccurred={errorOccurred}
+        closeCallback={closeAlert}
         {...lastDeleted}
       />
     );
