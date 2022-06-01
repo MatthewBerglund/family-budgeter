@@ -64,10 +64,6 @@ const App = () => {
     setFilteredExpenses(expensesToRender);
   }, [expenses, selectedMonth]);
 
-  const closeAlerts = () => {
-    setTimeout(() => setActiveAlert(null), 5000);
-  };
-
   const addExpense = async newExpense => {
     const url = `${baseURL}/items.json?kind=expense`;
     const requestOptions = {
