@@ -3,7 +3,7 @@ import Alert from './components/Alert';
 
 const ExpenseDeletedAlert = ({
   expenseWasDeleted,
-  setShowExpenseDeletedAlert,
+  setActiveAlert,
   title,
   date,
   amount,
@@ -12,7 +12,7 @@ const ExpenseDeletedAlert = ({
     <Alert
       color={expenseWasDeleted ? 'success' : 'danger'}
       heading={expenseWasDeleted ? 'Expense deleted' : 'Error deleting expense'}
-      closeCallback={() => setShowExpenseDeletedAlert(false)}
+      closeCallback={() => setActiveAlert(null)}
     >
       {expenseWasDeleted
         ? `The expense "${title}" from ${getUKFormattedDate(date)} totaling
