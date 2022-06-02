@@ -69,3 +69,17 @@ export function convertEurosToCents(amount) {
     return parseFloat(amount + '00');
   }
 }
+
+// Takes an integer representing an amount in cents and returns a string
+// representing the same amount in euros.
+export function convertCentsToEuros(amount) {
+  if (!Number.isInteger(amount)) {
+    throw new TypeError(`${amount} is not an integer`);
+  }
+
+  if (arguments.length > 1) {
+    throw new RangeError('Only one argument may be passed to the function.');
+  }
+
+  return Number.parseFloat(amount / 100).toFixed(2);
+}

@@ -1,6 +1,6 @@
 import { Modal } from './components/Modal';
 import { useState } from 'react';
-import { getUKFormattedDate, getUKFormattedEuros } from '../../utils/helpers';
+import { getUKFormattedDate, convertCentsToEuros } from '../../utils/helpers';
 
 const EditExpenseModal = ({ setIsOpen, okCallback, expense }) => {
   const [name, setName] = useState(expense.title);
@@ -34,9 +34,9 @@ const EditExpenseModal = ({ setIsOpen, okCallback, expense }) => {
         <div className="row">
           <label className="col-2">Amount</label>
           <input
-            type="text"
+            type="number"
             className="col-9"
-            value={getUKFormattedEuros(amount)}
+            value={convertCentsToEuros(amount)}
           />
         </div>
       </div>
