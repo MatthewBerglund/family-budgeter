@@ -28,8 +28,10 @@ const EditExpenseModal = ({ setIsOpen, okCallback, expense }) => {
     <Modal {...modalProps}>
       <div className="container d-grid gap-3 mb-3">
         <div className="row">
-          <label className="col-2">Name</label>
-          <input type="text" className="col-9" value={name} />
+          <label className="col-form-label col-2">Name</label>
+          <div className="col-10">
+            <input type="text" className="form-control" value={name} />
+          </div>
         </div>
         <div
           className={`row d-flex ${wasDateValidated ? 'was-validated' : ''}`}
@@ -52,12 +54,14 @@ const EditExpenseModal = ({ setIsOpen, okCallback, expense }) => {
           </div>
         </div>
         <div className="row">
-          <label className="col-2">Amount</label>
-          <input
-            type="number"
-            className="col-9"
-            value={convertCentsToEuros(amount)}
-          />
+          <label className="col-form-label col-2">Amount</label>
+          <div className="col-10">
+            <input
+              type="number"
+              className="form-control"
+              value={convertCentsToEuros(amount)}
+            />
+          </div>
         </div>
       </div>
     </Modal>
