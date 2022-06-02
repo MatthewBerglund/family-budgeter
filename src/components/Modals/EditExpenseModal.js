@@ -1,41 +1,51 @@
 import DatePicker from 'react-datepicker';
 import { Modal } from './components/Modal';
-import { parseISO } from 'date-fns';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { convertCentsToEuros, getUKFormattedDate } from '../../utils/helpers';
 
-const EditExpenseModal = ({ setIsOpen, okCallback, expense }) => {
+const EditExpenseModal = ({ setIsOpen, expense }) => {
   const [name, setName] = useState(expense.title);
   const [date, setDate] = useState(new Date(expense.date));
-  const [wasDateValidated, setWasDateValidated] = useState(false);
-  const [amount, setAmount] = useState(expense.amount);
+  const [amount, setAmount] = useState(convertCentsToEuros(expense.amount));
+  const formEl = useRef(null);
 
-  const handleDateChange = date => {
-    setDate(date);
-    setWasDateValidated(true);
+  const handleSubmit = e => {
+    e.preventDefault();
+    console.log(`name: ${name}`);
+    console.log(`date: ${date}`);
+    console.log(`amount: ${amount}`);
   };
 
   const modalProps = {
     cancelCallback: () => setIsOpen(false),
-    okCallback: () => okCallback(),
     modalTitle: 'Edit expense',
+    okCallback: () => formEl.current.requestSubmit(),
     cancelButtonLabel: 'Cancel',
-    okButtonLabel: `Save`,
+    okButtonLabel: 'Save',
     okButtonColor: 'btn-primary',
   };
 
   return (
     <Modal {...modalProps}>
-      <div className="container d-grid gap-3 mb-3">
+      <form
+        ref={formEl}
+        className="container d-grid gap-3 mb-3 was-validated"
+        id="edit-expense-form"
+        onSubmit={handleSubmit}
+      >
         <div className="row">
           <label className="col-form-label col-2">Name</label>
           <div className="col-10">
-            <input type="text" className="form-control" value={name} />
+            <input
+              type="text"
+              className="form-control"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              required
+            />
           </div>
         </div>
-        <div
-          className={`row d-flex ${wasDateValidated ? 'was-validated' : ''}`}
-        >
+        <div className="row d-flex">
           <label className="col-form-label col-2" htmlFor="date">
             Date
           </label>
@@ -47,7 +57,7 @@ const EditExpenseModal = ({ setIsOpen, okCallback, expense }) => {
               aria-describedby="dateHelp"
               required
               selected={date}
-              onChange={handleDateChange}
+              onChange={date => setDate(date)}
               dateFormat="dd/MM/yyyy"
               todayButton="Today"
             />
@@ -59,11 +69,13 @@ const EditExpenseModal = ({ setIsOpen, okCallback, expense }) => {
             <input
               type="number"
               className="form-control"
-              value={convertCentsToEuros(amount)}
+              value={amount}
+              onChange={e => setAmount(e.target.value)}
+              required
             />
           </div>
         </div>
-      </div>
+      </form>
     </Modal>
   );
 };

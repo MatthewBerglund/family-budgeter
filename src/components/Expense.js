@@ -27,8 +27,6 @@ const Expense = ({
           <button
             className="btn btn-outline-secondary flex-fill"
             onClick={() => {
-              // Open edit modal
-              console.log('Edit modal opened');
               setEditExpenseModalIsOpen(true);
               setExpenseToEdit(expense);
             }}
