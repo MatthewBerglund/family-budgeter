@@ -1,4 +1,10 @@
+import { useEffect } from 'react';
+
 const Alert = ({ color, heading, closeCallback, children }) => {
+  useEffect(() => {
+    setTimeout(closeCallback, 5000);
+  }, [closeCallback]);
+
   return (
     <div
       role="alert"

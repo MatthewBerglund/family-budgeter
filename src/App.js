@@ -5,8 +5,8 @@ import Summary from './views/Summary';
 import AddExpenses from './views/AddExpenses';
 import MonthSelector from './components/MonthSelector';
 import ExpenseHistory from './views/ExpenseHistory';
-import ExpenseAddedAlert from './components/Alerts/ExpenseAddedAlert';
-import ExpenseDeletedAlert from './components/Alerts/ExpenseDeletedAlert';
+
+import UserActionAlert from './components/Alerts/UserActionAlert';
 import ConfirmMonthModal from './components/Modals/ConfirmMonthModal';
 import ConfirmDeleteModal from './components/Modals/ConfirmDeleteModal';
 
@@ -29,10 +29,9 @@ const App = () => {
   const [newExpenseMonth, setNewExpenseMonth] = useState(selectedMonth);
 
   // variables for toggling alert visibility and state
-  const [expenseWasAdded, setExpenseWasAdded] = useState(false);
-  const [expenseWasDeleted, setExpenseWasDeleted] = useState(false);
-  const [showExpenseAddedAlert, setShowExpenseAddedAlert] = useState(false);
-  const [showExpenseDeletedAlert, setShowExpenseDeletedAlert] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [userAction, setUserAction] = useState('');
+  const [errorOccurred, setErrorOccurred] = useState(false);
   const [lastDeleted, setLastDeleted] = useState({});
 
   // states to toggle the modals
@@ -67,13 +66,7 @@ const App = () => {
     setFilteredExpenses(expensesToRender);
   }, [expenses, selectedMonth]);
 
-  const closeExpenseAddedAlert = () => {
-    setTimeout(() => setShowExpenseAddedAlert(false), 5000);
-  };
-
-  const closeExpenseDeletedAlert = () => {
-    setTimeout(() => setShowExpenseDeletedAlert(false), 5000);
-  };
+  const closeAlert = () => setIsAlertOpen(false);
 
   const addExpense = async newExpense => {
     const url = `${baseURL}/items.json?kind=expense`;
@@ -97,14 +90,12 @@ const App = () => {
       }
 
       setExpenses([...expenses, newExpense]);
-      setExpenseWasAdded(true);
-      setShowExpenseAddedAlert(true);
-      closeExpenseAddedAlert();
     } catch (error) {
-      setExpenseWasAdded(false);
-      setShowExpenseAddedAlert(true);
-      closeExpenseAddedAlert();
+      setErrorOccurred(true);
     }
+
+    setUserAction('add_expense');
+    setIsAlertOpen(true);
   };
 
   const removeExpense = async id => {
@@ -124,16 +115,14 @@ const App = () => {
       setExpenses(expenses.filter(expense => expense.id !== id));
 
       if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
-      setExpenseWasDeleted(true);
-      setShowExpenseDeletedAlert(true);
       setConfirmDeleteModalIsOpen(false);
-      closeExpenseDeletedAlert();
     } catch (error) {
-      setExpenseWasDeleted(false);
-      setShowExpenseDeletedAlert(true);
+      setErrorOccurred(true);
       setConfirmDeleteModalIsOpen(false);
-      closeExpenseDeletedAlert();
     }
+
+    setUserAction('delete_expense');
+    setIsAlertOpen(true);
   };
 
   const changeMonthView = () => {
@@ -182,19 +171,14 @@ const App = () => {
             />
           </section>
         </div>
-        {showExpenseAddedAlert ? (
-          <ExpenseAddedAlert
-            expenseWasAdded={expenseWasAdded}
-            setShowExpenseAddedAlert={setShowExpenseAddedAlert}
+        {isAlertOpen && (
+          <UserActionAlert
+            userAction={userAction}
+            errorOccurred={errorOccurred}
+            closeCallback={closeAlert}
+            expense={lastDeleted}
           />
-        ) : null}
-        {showExpenseDeletedAlert ? (
-          <ExpenseDeletedAlert
-            expenseWasDeleted={expenseWasDeleted}
-            setShowExpenseDeletedAlert={setExpenseWasDeleted}
-            {...lastDeleted}
-          />
-        ) : null}
+        )}
         {confirmMonthModalIsOpen && (
           <ConfirmMonthModal
             newExpenseMonth={newExpenseMonth}
