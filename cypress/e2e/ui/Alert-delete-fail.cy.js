@@ -1,8 +1,8 @@
 import '@testing-library/cypress/add-commands';
 
-import { getUKFormattedDate } from '../../../src/utils/helpers';
+const TEST_MONTH = 'February 2022';
 
-describe('ALERT DELETE EXPENSE - FAIL', () => {
+describe('Alert delete expense - fail', () => {
   before(() => {
     cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as(
       'getExpenseArray'
@@ -18,7 +18,6 @@ describe('ALERT DELETE EXPENSE - FAIL', () => {
   });
 
   it('selects test month', () => {
-    const TEST_MONTH = 'February 2022';
     cy.findByRole('combobox', { name: /select a month/i }).select(TEST_MONTH);
   });
 

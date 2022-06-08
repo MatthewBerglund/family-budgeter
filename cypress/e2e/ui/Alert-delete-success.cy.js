@@ -2,7 +2,7 @@ import '@testing-library/cypress/add-commands';
 
 import { getUKFormattedDate } from '../../../src/utils/helpers';
 
-describe('ALERT DELETE EXPENSE - SUCCESS', () => {
+describe('Alert delete expense - success', () => {
   before(() => {
     cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as(
       'getExpenseArray'

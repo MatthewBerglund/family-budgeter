@@ -1,12 +1,13 @@
 import '@testing-library/cypress/add-commands';
 
+import expensePost from '../../fixtures/expense-post.json';
 import {
   getUKFormattedEuros,
   getUKFormattedDate,
   getCurrentMonth,
 } from '../../../src/utils/helpers';
 
-describe('ADD EXPENSE - NOT CURRENT MONTH', () => {
+describe('Add expense - not within current month', () => {
   before(() => {
     cy.intercept('GET', '**/items*', []).as('getExpenses');
     cy.visit('/');
@@ -40,7 +41,7 @@ describe('ADD EXPENSE - NOT CURRENT MONTH', () => {
     });
   });
 
-  it('it closes the alert', () => {
+  it('closes the alert', () => {
     cy.findByRole('alert').within(() => {
       cy.get('[class="btn-close"]').click();
     });
@@ -72,34 +73,29 @@ describe('ADD EXPENSE - NOT CURRENT MONTH', () => {
   });
 
   it('checks that the summary has been correctly updated', () => {
-    cy.fixture('expense-post').then(expense => {
-      cy.get('[data-cy="total-budget"]').then($el => {
-        const totalBudget = $el.text().replace(/\D/g, '');
-        const totalExpenses = expense.amount;
-        const remainingBudget = totalBudget - totalExpenses;
+    cy.get('[data-cy="total-budget"]').then($el => {
+      const totalBudget = $el.text().replace(/\D/g, '');
+      const totalExpenses = expensePost.amount;
+      const remainingBudget = totalBudget - totalExpenses;
 
-        cy.get('[data-cy="total-expenses"]').should(
-          'contain',
-          getUKFormattedEuros(totalExpenses)
-        );
-        cy.get('[data-cy="remaining-budget"]').should(
-          'contain',
-          getUKFormattedEuros(remainingBudget)
-        );
-      });
+      cy.get('[data-cy="total-expenses"]').should(
+        'contain',
+        getUKFormattedEuros(totalExpenses)
+      );
+      cy.get('[data-cy="remaining-budget"]').should(
+        'contain',
+        getUKFormattedEuros(remainingBudget)
+      );
     });
   });
 
-  it('checks that current month is not updated', () => {
+  it("checks that the new expense is not rendered in other month's history", () => {
     const currentMonth = getCurrentMonth();
-    cy.fixture('expense-post').then(expense => {
-      cy.findByRole('combobox', { name: /select a month/i }).select(
-        currentMonth
-      );
-      cy.get('[data-cy="expenses"]')
-        .should('not.contain', getUKFormattedDate(expense.date))
-        .and('not.contain', `${expense.title}`)
-        .and('not.contain', `- ${getUKFormattedEuros(expense.amount)}`);
-    });
+
+    cy.findByRole('combobox', { name: /select a month/i }).select(currentMonth);
+    cy.get('[data-cy="expenses"]')
+      .should('not.contain', getUKFormattedDate(expensePost.date))
+      .and('not.contain', `${expensePost.title}`)
+      .and('not.contain', `- ${getUKFormattedEuros(expensePost.amount)}`);
   });
 });

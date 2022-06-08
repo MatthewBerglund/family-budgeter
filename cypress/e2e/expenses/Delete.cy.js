@@ -1,11 +1,14 @@
 import '@testing-library/cypress/add-commands';
 
+import expenseArray from '../../fixtures/expense-array.json';
 import {
   getUKFormattedEuros,
   getUKFormattedDate,
 } from '../../../src/utils/helpers';
 
-describe('DELETE EXPENSE - NOT CURRENT MONTH', () => {
+const TEST_MONTH = 'February 2022';
+
+describe('Delete expense - not within current month', () => {
   before(() => {
     cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as(
       'getExpenseArray'
@@ -19,7 +22,6 @@ describe('DELETE EXPENSE - NOT CURRENT MONTH', () => {
   });
 
   it('selects test month', () => {
-    const TEST_MONTH = 'February 2022';
     cy.findByRole('combobox', { name: /select a month/i }).select(TEST_MONTH);
   });
 
@@ -30,15 +32,13 @@ describe('DELETE EXPENSE - NOT CURRENT MONTH', () => {
 
     cy.get('[data-cy="expenses"] > li').last().as('oldestExpense');
 
-    cy.fixture('expense-array').then(expenses => {
-      cy.get('@oldestExpense')
-        .should('contain', getUKFormattedDate(expenses[0].date))
-        .and('contain', `${expenses[0].title}`)
-        .and('contain', `- ${getUKFormattedEuros(expenses[0].amount)}`);
-    });
+    cy.get('@oldestExpense')
+      .should('contain', getUKFormattedDate(expenseArray[0].date))
+      .and('contain', `${expenseArray[0].title}`)
+      .and('contain', `- ${getUKFormattedEuros(expenseArray[0].amount)}`);
   });
 
-  it('selects oldest expense in month', () => {
+  it('deletes the oldest expense in the month', () => {
     cy.get('[data-cy="expenses"] > li').as('history');
     cy.get('@history').last().as('toBeDeleted');
     cy.get('@toBeDeleted').within(() => {
@@ -54,37 +54,33 @@ describe('DELETE EXPENSE - NOT CURRENT MONTH', () => {
   });
 
   it('checks if expenses are correctly rendered', () => {
-    cy.fixture('expense-array').then(expenses => {
-      cy.get('[data-cy="expenses"] > li')
-        .should('have.length', 2)
-        .should('not.contain', getUKFormattedDate(expenses[0].date))
-        .and('not.contain', `${expenses[0].title}`)
-        .and('not.contain', `- ${getUKFormattedEuros(expenses[0].amount)}`);
-    });
+    cy.get('[data-cy="expenses"] > li')
+      .should('have.length', 2)
+      .should('not.contain', getUKFormattedDate(expenseArray[0].date))
+      .and('not.contain', `${expenseArray[0].title}`)
+      .and('not.contain', `- ${getUKFormattedEuros(expenseArray[0].amount)}`);
   });
 
-  it('it closes the alert', () => {
+  it('closes the alert', () => {
     cy.findByRole('alert').within(() => {
       cy.get('[class="btn-close"]').click();
     });
   });
 
   it('checks that the summary has been correctly updated', () => {
-    cy.fixture('expense-array').then(expenses => {
-      cy.get('[data-cy="total-budget"]').then($el => {
-        const totalBudget = $el.text().replace(/\D/g, '');
-        const totalExpenses = expenses[1].amount + expenses[2].amount;
-        const remainingBudget = totalBudget - totalExpenses;
+    cy.get('[data-cy="total-budget"]').then($el => {
+      const totalBudget = $el.text().replace(/\D/g, '');
+      const totalExpenses = expenseArray[1].amount + expenseArray[2].amount;
+      const remainingBudget = totalBudget - totalExpenses;
 
-        cy.get('[data-cy="total-expenses"]').should(
-          'contain',
-          getUKFormattedEuros(totalExpenses)
-        );
-        cy.get('[data-cy="remaining-budget"]').should(
-          'contain',
-          getUKFormattedEuros(remainingBudget)
-        );
-      });
+      cy.get('[data-cy="total-expenses"]').should(
+        'contain',
+        getUKFormattedEuros(totalExpenses)
+      );
+      cy.get('[data-cy="remaining-budget"]').should(
+        'contain',
+        getUKFormattedEuros(remainingBudget)
+      );
     });
   });
 });

@@ -2,7 +2,7 @@ import '@testing-library/cypress/add-commands';
 
 import { getUKFormattedDate } from '../../../src/utils/helpers';
 
-describe('MODAL CONFIRM MONTH SELECTION', () => {
+describe('Modal confirm month selection', () => {
   before(() => {
     cy.intercept('GET', '**/items*', []).as('getExpenses');
     cy.visit('/');

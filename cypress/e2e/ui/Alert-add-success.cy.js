@@ -2,7 +2,7 @@ import '@testing-library/cypress/add-commands';
 
 import { getUKFormattedDate } from '../../../src/utils/helpers';
 
-describe('ALERT ADD EXPENSE - SUCCESS', () => {
+describe('Alert add expense - success', () => {
   before(() => {
     cy.intercept('GET', '**/items*', []).as('getExpenses');
     cy.visit('/');

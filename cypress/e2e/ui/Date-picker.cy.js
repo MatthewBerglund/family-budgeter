@@ -2,7 +2,7 @@
 
 import '@testing-library/cypress/add-commands';
 
-describe('DATE PICKER', () => {
+describe('Date picker', () => {
   before(() => {
     cy.intercept('GET', '**/items*', []).as('getExpenses');
     cy.visit('/');

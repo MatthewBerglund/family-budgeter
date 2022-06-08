@@ -1,6 +1,6 @@
 import '@testing-library/cypress/add-commands';
 
-describe('MODAL CONFIRM DELETION', () => {
+describe('Modal confirmation deletion', () => {
   before(() => {
     cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as(
       'getExpenseArray'
