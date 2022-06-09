@@ -29,7 +29,7 @@ const EditExpenseModal = ({ setIsOpen, expense }) => {
     <Modal {...modalProps}>
       <form
         ref={formEl}
-        className="container d-grid gap-3 mb-3 was-validated"
+        className="container d-grid gap-3 mb-3"
         id="edit-expense-form"
         onSubmit={handleSubmit}
       >
@@ -45,7 +45,7 @@ const EditExpenseModal = ({ setIsOpen, expense }) => {
             />
           </div>
         </div>
-        <div className="row d-flex">
+        <div className="row">
           <label className="col-form-label col-2" htmlFor="date">
             Date
           </label>
@@ -66,13 +66,16 @@ const EditExpenseModal = ({ setIsOpen, expense }) => {
         <div className="row">
           <label className="col-form-label col-2">Amount</label>
           <div className="col-10">
-            <input
-              type="number"
-              className="form-control"
-              value={amount}
-              onChange={e => setAmount(e.target.value)}
-              required
-            />
+            <div className="input-group">
+              <span className="input-group-text">€</span>
+              <input
+                type="number"
+                className="form-control"
+                value={amount}
+                onChange={e => setAmount(e.target.value)}
+                required
+              />
+            </div>
           </div>
         </div>
       </form>
