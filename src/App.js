@@ -147,6 +147,12 @@ const App = () => {
       // Remove previous version of expense, replace with updated version
       const expensesCopy = [...expenses].filter(expense => expense.id !== id);
       expensesCopy.push(updatedExpense);
+
+      // Reorder expenses locally to match order on mostash (by ID)
+      expensesCopy.sort((expenseA, expenseB) => {
+        return expenseA.id - expenseB.id;
+      });
+
       setExpenses(expensesCopy);
     } catch (error) {
       console.log(error);
