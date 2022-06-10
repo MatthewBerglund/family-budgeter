@@ -1,19 +1,23 @@
 import DatePicker from 'react-datepicker';
 import { Modal } from './components/Modal';
 import { useState, useRef } from 'react';
-import { convertCentsToEuros, getUKFormattedDate } from '../../utils/helpers';
+import { convertCentsToEuros, convertEurosToCents } from '../../utils/helpers';
 
-const EditExpenseModal = ({ setIsOpen, expense }) => {
-  const [name, setName] = useState(expense.title);
+const EditExpenseModal = ({ setIsOpen, expense, editExpense }) => {
+  const [title, setTitle] = useState(expense.title);
   const [date, setDate] = useState(new Date(expense.date));
   const [amount, setAmount] = useState(convertCentsToEuros(expense.amount));
   const formEl = useRef(null);
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(`name: ${name}`);
-    console.log(`date: ${date}`);
-    console.log(`amount: ${amount}`);
+    const newExpenseData = {
+      title,
+      date,
+      amount: convertEurosToCents(amount),
+    };
+    editExpense(expense.id, newExpenseData);
+    setIsOpen(false);
   };
 
   const modalProps = {
@@ -39,8 +43,8 @@ const EditExpenseModal = ({ setIsOpen, expense }) => {
             <input
               type="text"
               className="form-control"
-              value={name}
-              onChange={e => setName(e.target.value)}
+              value={title}
+              onChange={e => setTitle(e.target.value)}
               required
             />
           </div>

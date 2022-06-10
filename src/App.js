@@ -128,7 +128,30 @@ const App = () => {
     setIsAlertOpen(true);
   };
 
-  const editExpense = () => {};
+  const editExpense = async (id, newExpenseData) => {
+    const url = `${baseURL}/items/${id}.json?stash=${token}`;
+    const requestOptions = {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(newExpenseData),
+    };
+
+    try {
+      const res = await fetch(url, requestOptions);
+      const updatedExpense = await res.json();
+
+      if (!res.ok) {
+        throw new Error('Something went wrong while editing the expense!');
+      }
+
+      // Remove previous version of expense, replace with updated version
+      const expensesCopy = [...expenses].filter(expense => expense.id !== id);
+      expensesCopy.push(updatedExpense);
+      setExpenses(expensesCopy);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const changeMonthView = () => {
     setSelectedMonth(newExpenseMonth);
@@ -204,7 +227,7 @@ const App = () => {
           <EditExpenseModal
             expense={expenseToEdit}
             setIsOpen={setEditExpenseModalIsOpen}
-            okCallback={editExpense}
+            editExpense={editExpense}
           />
         )}
       </main>
