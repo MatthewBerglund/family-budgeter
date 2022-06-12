@@ -146,7 +146,7 @@ const App = () => {
 
       const expensesCopy = [...expenses];
       const index = expensesCopy.findIndex(expense => expense.id === id);
-      expensesCopy.splice(index, 1, updatedExpense)
+      expensesCopy.splice(index, 1, updatedExpense);
       setExpenses(expensesCopy);
 
       const updatedExpenseMonth = getUKFormattedDate(updatedExpense.date, {
