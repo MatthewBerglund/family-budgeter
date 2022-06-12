@@ -144,16 +144,19 @@ const App = () => {
         throw new Error('Something went wrong while editing the expense!');
       }
 
-      // Remove previous version of expense, replace with updated version
-      const expensesCopy = [...expenses].filter(expense => expense.id !== id);
-      expensesCopy.push(updatedExpense);
+      const expensesCopy = [...expenses];
+      const index = expensesCopy.findIndex(expense => expense.id === id);
+      expensesCopy.splice(index, 1, updatedExpense)
+      setExpenses(expensesCopy);
 
-      // Reorder expenses locally to match order on mostash (by ID)
-      expensesCopy.sort((expenseA, expenseB) => {
-        return expenseA.id - expenseB.id;
+      const updatedExpenseMonth = getUKFormattedDate(updatedExpense.date, {
+        year: 'numeric',
+        month: 'long',
       });
 
-      setExpenses(expensesCopy);
+      if (updatedExpenseMonth !== selectedMonth && filteredExpenses.length === 1) {
+        setSelectedMonth(currentMonth);
+      }
     } catch (error) {
       console.log(error);
     }
