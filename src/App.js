@@ -145,10 +145,11 @@ const App = () => {
       }
 
       const expensesCopy = [...expenses];
-      const index = expensesCopy.findIndex(expense => expense.id === id);
-      expensesCopy.splice(index, 1, updatedExpense);
+      const indexToEdit = expensesCopy.findIndex(expense => expense.id === id);
+      expensesCopy.splice(indexToEdit, 1, updatedExpense);
       setExpenses(expensesCopy);
 
+      // Handle month selection if moving last expense to a different month
       const updatedExpenseMonth = getUKFormattedDate(updatedExpense.date, {
         year: 'numeric',
         month: 'long',
