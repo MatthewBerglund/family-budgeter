@@ -159,8 +159,11 @@ const App = () => {
         setSelectedMonth(currentMonth);
       }
     } catch (error) {
-      console.log(error);
+      setErrorOccurred(true);
     }
+
+    setUserAction('edit_expense');
+    setIsAlertOpen(true);
   };
 
   const changeMonthView = () => {
