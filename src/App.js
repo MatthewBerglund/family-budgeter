@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { ref, push, set, onValue } from 'firebase/database';
+import database from './firebase';
 import { getUKFormattedDate, getCurrentMonth } from './utils/helpers';
 
 import Summary from './views/Summary';
@@ -40,20 +42,35 @@ const App = () => {
     useState(false);
 
   useEffect(() => {
-    const fetchExpenses = async () => {
-      const url = `${baseURL}/items.json?stash=${token}&kind=expense`;
+    const expensesRef = ref(database, 'expenses');
 
-      try {
-        const response = await fetch(url);
-        const expenseData = await response.json();
-        setExpenses(expenseData);
-      } catch {
-        alert('Error loading expenses. Please try again later.');
-      }
-    };
+    onValue(expensesRef, (snapshot) => {
+      const expensesObj = snapshot.val();
+      const keys = Object.keys(expensesObj);
+      const expenses = Object.values(expensesObj);
+      const expensesArray = expenses.map((expense, index) => {
+        return { ...expense, id: keys[index] };
+      });
 
-    fetchExpenses();
+      setExpenses(expensesArray);
+    });
   }, []);
+
+  // useEffect(() => {
+  //   const fetchExpenses = async () => {
+  //     const url = `${baseURL}/items.json?stash=${token}&kind=expense`;
+
+  //     try {
+  //       const response = await fetch(url);
+  //       const expenseData = await response.json();
+  //       setExpenses(expenseData);
+  //     } catch {
+  //       alert('Error loading expenses. Please try again later.');
+  //     }
+  //   };
+
+  //   fetchExpenses();
+  // }, []);
 
   useEffect(() => {
     const expensesToRender = expenses.filter(expense => {
@@ -68,35 +85,41 @@ const App = () => {
 
   const closeAlert = () => setIsAlertOpen(false);
 
-  const addExpense = async newExpense => {
-    const url = `${baseURL}/items.json?kind=expense`;
-    const requestOptions = {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(newExpense),
-    };
-
-    try {
-      const res = await fetch(url, requestOptions);
-      const newExpense = await res.json();
-
-      // Ensure that the catch block is called before setting local states
-      if (!res.ok) {
-        throw new Error('Something went wrong while adding the expense!');
-      }
-
-      if (newExpenseMonth !== selectedMonth) {
-        setConfirmMonthModalIsOpen(true);
-      }
-
-      setExpenses([...expenses, newExpense]);
-    } catch (error) {
-      setErrorOccurred(true);
-    }
-
-    setUserAction('add_expense');
-    setIsAlertOpen(true);
+  const addExpense = expense => {
+    const expensesRef = ref(database, 'expenses');
+    const newExpenseRef = push(expensesRef);
+    set(newExpenseRef, expense);
   };
+
+  // const addExpense = async newExpense => {
+  //   const url = `${baseURL}/items.json?kind=expense`;
+  //   const requestOptions = {
+  //     method: 'POST',
+  //     headers,
+  //     body: JSON.stringify(newExpense),
+  //   };
+
+  //   try {
+  //     const res = await fetch(url, requestOptions);
+  //     const newExpense = await res.json();
+
+  //     // Ensure that the catch block is called before setting local states
+  //     if (!res.ok) {
+  //       throw new Error('Something went wrong while adding the expense!');
+  //     }
+
+  //     if (newExpenseMonth !== selectedMonth) {
+  //       setConfirmMonthModalIsOpen(true);
+  //     }
+
+  //     setExpenses([...expenses, newExpense]);
+  //   } catch (error) {
+  //     setErrorOccurred(true);
+  //   }
+
+  //   setUserAction('add_expense');
+  //   setIsAlertOpen(true);
+  // };
 
   const removeExpense = async id => {
     const url = `${baseURL}/items/${id}.json`;
