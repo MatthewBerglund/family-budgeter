@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ref, push, set, onValue } from 'firebase/database';
-import database from './firebase';
+import db from './firebase';
 import { getUKFormattedDate, getCurrentMonth } from './utils/helpers';
 
 import Summary from './views/Summary';
@@ -41,36 +41,26 @@ const App = () => {
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] =
     useState(false);
 
+  // Add event listener to get expenses from db on value change 
   useEffect(() => {
-    const expensesRef = ref(database, 'expenses');
+    const expensesRef = ref(db, 'expenses');
 
-    onValue(expensesRef, (snapshot) => {
+    const handleValueChange = snapshot => {
       const expensesObj = snapshot.val();
       const keys = Object.keys(expensesObj);
-      const expenses = Object.values(expensesObj);
-      const expensesArray = expenses.map((expense, index) => {
+      const expenseValues = Object.values(expensesObj);
+      const expensesArray = expenseValues.map((expense, index) => {
         return { ...expense, id: keys[index] };
       });
 
       setExpenses(expensesArray);
+    };
+
+    onValue(expensesRef, handleValueChange, err => {
+      console.log(err);
+      alert('Error loading expenses. Please try again later.');
     });
   }, []);
-
-  // useEffect(() => {
-  //   const fetchExpenses = async () => {
-  //     const url = `${baseURL}/items.json?stash=${token}&kind=expense`;
-
-  //     try {
-  //       const response = await fetch(url);
-  //       const expenseData = await response.json();
-  //       setExpenses(expenseData);
-  //     } catch {
-  //       alert('Error loading expenses. Please try again later.');
-  //     }
-  //   };
-
-  //   fetchExpenses();
-  // }, []);
 
   useEffect(() => {
     const expensesToRender = expenses.filter(expense => {
@@ -86,7 +76,7 @@ const App = () => {
   const closeAlert = () => setIsAlertOpen(false);
 
   const addExpense = expense => {
-    const expensesRef = ref(database, 'expenses');
+    const expensesRef = ref(db, 'expenses');
     const newExpenseRef = push(expensesRef);
     set(newExpenseRef, expense);
   };
