@@ -43,8 +43,6 @@ const App = () => {
 
   // Add event listener to get expenses from db on value change 
   useEffect(() => {
-    const expensesRef = ref(db, 'expenses');
-
     const handleValueChange = snapshot => {
       const expensesObj = snapshot.val();
       const keys = Object.keys(expensesObj);
@@ -56,10 +54,13 @@ const App = () => {
       setExpenses(expensesArray);
     };
 
-    onValue(expensesRef, handleValueChange, err => {
+    try {
+      const expensesRef = ref(db, 'expenses');
+      onValue(expensesRef, handleValueChange);
+    } catch (err) {
       console.log(err);
       alert('Error loading expenses. Please try again later.');
-    });
+    }
   }, []);
 
   useEffect(() => {
