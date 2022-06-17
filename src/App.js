@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ref, push, set, onValue } from 'firebase/database';
+import { ref, push, set, onValue, remove } from 'firebase/database';
 import db from './firebase';
 import { getUKFormattedDate, getCurrentMonth } from './utils/helpers';
 
@@ -44,14 +44,15 @@ const App = () => {
   // Add event listener to get expenses from db on value change 
   useEffect(() => {
     const handleValueChange = snapshot => {
-      const expensesObj = snapshot.val();
-      const keys = Object.keys(expensesObj);
-      const expenseValues = Object.values(expensesObj);
-      const expensesArray = expenseValues.map((expense, index) => {
-        return { ...expense, id: keys[index] };
-      });
-
-      setExpenses(expensesArray);
+      const dbExpenses = snapshot.val();
+      if (dbExpenses) {
+        const keys = Object.keys(dbExpenses);
+        const values = Object.values(dbExpenses);
+        const expensesArray = values.map((expense, index) => ({ ...expense, id: keys[index] }));
+        setExpenses(expensesArray);
+      } else {
+        setExpenses([]);
+      }
     };
 
     try {
@@ -93,32 +94,49 @@ const App = () => {
     setIsAlertOpen(true);
   };
 
-  const removeExpense = async id => {
-    const url = `${baseURL}/items/${id}.json`;
-    const requestOptions = { method: 'DELETE', headers };
-
-    setConfirmDeleteModalIsOpen(true);
-
+  const removeExpense = expenseId => {
     try {
-      const res = await fetch(url, requestOptions);
+      const expenseRef = ref(db, 'expenses/' + expenseId);
+      remove(expenseRef);
 
-      // Ensure that the catch block is called before setting local states
-      if (!res.ok) {
-        throw new Error('Something went wrong while deleting the expense!');
-      }
-
-      setExpenses(expenses.filter(expense => expense.id !== id));
-
-      if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
-      setConfirmDeleteModalIsOpen(false);
-    } catch (error) {
+      if (filteredExpenses.length === 1) {
+        setSelectedMonth(currentMonth);
+      };
+    } catch (err) {
       setErrorOccurred(true);
-      setConfirmDeleteModalIsOpen(false);
     }
 
+    setConfirmDeleteModalIsOpen(false);
     setUserAction('delete_expense');
     setIsAlertOpen(true);
   };
+
+  // const removeExpense = async id => {
+  //   const url = `${baseURL}/items/${id}.json`;
+  //   const requestOptions = { method: 'DELETE', headers };
+
+  //   setConfirmDeleteModalIsOpen(true);
+
+  //   try {
+  //     const res = await fetch(url, requestOptions);
+
+  //     // Ensure that the catch block is called before setting local states
+  //     if (!res.ok) {
+  //       throw new Error('Something went wrong while deleting the expense!');
+  //     }
+
+  //     setExpenses(expenses.filter(expense => expense.id !== id));
+
+  //     if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
+  //     setConfirmDeleteModalIsOpen(false);
+  //   } catch (error) {
+  //     setErrorOccurred(true);
+  //     setConfirmDeleteModalIsOpen(false);
+  //   }
+
+  //   setUserAction('delete_expense');
+  //   setIsAlertOpen(true);
+  // };
 
   const changeMonthView = () => {
     setSelectedMonth(newExpenseMonth);
