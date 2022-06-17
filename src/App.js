@@ -77,40 +77,21 @@ const App = () => {
   const closeAlert = () => setIsAlertOpen(false);
 
   const addExpense = expense => {
-    const expensesRef = ref(db, 'expenses');
-    const newExpenseRef = push(expensesRef);
-    set(newExpenseRef, expense);
+    try {
+      const expensesRef = ref(db, 'expenses');
+      const newExpenseRef = push(expensesRef);
+      set(newExpenseRef, expense);
+
+      if (newExpenseMonth !== selectedMonth) {
+        setConfirmMonthModalIsOpen(true);
+      }
+    } catch (err) {
+      setErrorOccurred(true);
+    }
+
+    setUserAction('add_expense');
+    setIsAlertOpen(true);
   };
-
-  // const addExpense = async newExpense => {
-  //   const url = `${baseURL}/items.json?kind=expense`;
-  //   const requestOptions = {
-  //     method: 'POST',
-  //     headers,
-  //     body: JSON.stringify(newExpense),
-  //   };
-
-  //   try {
-  //     const res = await fetch(url, requestOptions);
-  //     const newExpense = await res.json();
-
-  //     // Ensure that the catch block is called before setting local states
-  //     if (!res.ok) {
-  //       throw new Error('Something went wrong while adding the expense!');
-  //     }
-
-  //     if (newExpenseMonth !== selectedMonth) {
-  //       setConfirmMonthModalIsOpen(true);
-  //     }
-
-  //     setExpenses([...expenses, newExpense]);
-  //   } catch (error) {
-  //     setErrorOccurred(true);
-  //   }
-
-  //   setUserAction('add_expense');
-  //   setIsAlertOpen(true);
-  // };
 
   const removeExpense = async id => {
     const url = `${baseURL}/items/${id}.json`;
