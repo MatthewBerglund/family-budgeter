@@ -12,13 +12,6 @@ import UserActionAlert from './components/Alerts/UserActionAlert';
 import ConfirmMonthModal from './components/Modals/ConfirmMonthModal';
 import ConfirmDeleteModal from './components/Modals/ConfirmDeleteModal';
 
-const token = process.env.REACT_APP_MOSTASH_API_KEY;
-const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
-const headers = {
-  Stash: token,
-  'Content-Type': 'application/json',
-};
-
 const App = () => {
   const currentMonth = getCurrentMonth();
 
@@ -79,6 +72,7 @@ const App = () => {
 
   const addExpense = expense => {
     try {
+      // Generate new child location w/ unique key for expense and add to 'expenses' collection
       const expensesRef = ref(db, 'expenses');
       const newExpenseRef = push(expensesRef);
       set(newExpenseRef, expense);
@@ -110,33 +104,6 @@ const App = () => {
     setUserAction('delete_expense');
     setIsAlertOpen(true);
   };
-
-  // const removeExpense = async id => {
-  //   const url = `${baseURL}/items/${id}.json`;
-  //   const requestOptions = { method: 'DELETE', headers };
-
-  //   setConfirmDeleteModalIsOpen(true);
-
-  //   try {
-  //     const res = await fetch(url, requestOptions);
-
-  //     // Ensure that the catch block is called before setting local states
-  //     if (!res.ok) {
-  //       throw new Error('Something went wrong while deleting the expense!');
-  //     }
-
-  //     setExpenses(expenses.filter(expense => expense.id !== id));
-
-  //     if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
-  //     setConfirmDeleteModalIsOpen(false);
-  //   } catch (error) {
-  //     setErrorOccurred(true);
-  //     setConfirmDeleteModalIsOpen(false);
-  //   }
-
-  //   setUserAction('delete_expense');
-  //   setIsAlertOpen(true);
-  // };
 
   const changeMonthView = () => {
     setSelectedMonth(newExpenseMonth);
