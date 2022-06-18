@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ref, push, set, onValue, remove } from 'firebase/database';
+import { collection, addDoc } from 'firebase/firestore';
 import db from './firebase';
 import { getUKFormattedDate, getCurrentMonth } from './utils/helpers';
 
@@ -73,17 +74,17 @@ const App = () => {
 
   const closeAlert = () => setIsAlertOpen(false);
 
-  const addExpense = expense => {
+  const addExpense = async expense => {
     try {
-      // Generate new child location w/ unique key for expense and add to 'expenses' collection
-      const expensesRef = ref(db, 'expenses');
-      const newExpenseRef = push(expensesRef);
-      set(newExpenseRef, expense);
+      // Add expense data to new doc w/ ID inside "expenses" collection
+      const expenseRef = collection(db, 'expenses');
+      await addDoc(expenseRef, expense);
 
       if (newExpenseMonth !== selectedMonth) {
         setConfirmMonthModalIsOpen(true);
       }
     } catch (err) {
+      console.log(err);
       setErrorOccurred(true);
     }
 
@@ -109,41 +110,41 @@ const App = () => {
   };
 
   const editExpense = async (id, newExpenseData) => {
-    const url = `${baseURL}/items/${id}.json?stash=${token}`;
-    const requestOptions = {
-      method: 'PUT',
-      headers,
-      body: JSON.stringify(newExpenseData),
-    };
+    // const url = `${baseURL}/items/${id}.json?stash=${token}`;
+    // const requestOptions = {
+    //   method: 'PUT',
+    //   headers,
+    //   body: JSON.stringify(newExpenseData),
+    // };
 
-    try {
-      const res = await fetch(url, requestOptions);
-      const updatedExpense = await res.json();
+    // try {
+    //   const res = await fetch(url, requestOptions);
+    //   const updatedExpense = await res.json();
 
-      if (!res.ok) {
-        throw new Error('Something went wrong while editing the expense!');
-      }
+    //   if (!res.ok) {
+    //     throw new Error('Something went wrong while editing the expense!');
+    //   }
 
-      const expensesCopy = [...expenses];
-      const indexToEdit = expensesCopy.findIndex(expense => expense.id === id);
-      expensesCopy.splice(indexToEdit, 1, updatedExpense);
-      setExpenses(expensesCopy);
+    //   const expensesCopy = [...expenses];
+    //   const indexToEdit = expensesCopy.findIndex(expense => expense.id === id);
+    //   expensesCopy.splice(indexToEdit, 1, updatedExpense);
+    //   setExpenses(expensesCopy);
 
-      // Handle month selection if moving last expense to a different month
-      const updatedExpenseMonth = getUKFormattedDate(updatedExpense.date, {
-        year: 'numeric',
-        month: 'long',
-      });
+    //   // Handle month selection if moving last expense to a different month
+    //   const updatedExpenseMonth = getUKFormattedDate(updatedExpense.date, {
+    //     year: 'numeric',
+    //     month: 'long',
+    //   });
 
-      if (updatedExpenseMonth !== selectedMonth && filteredExpenses.length === 1) {
-        setSelectedMonth(currentMonth);
-      }
-    } catch (error) {
-      setErrorOccurred(true);
-    }
+    //   if (updatedExpenseMonth !== selectedMonth && filteredExpenses.length === 1) {
+    //     setSelectedMonth(currentMonth);
+    //   }
+    // } catch (error) {
+    //   setErrorOccurred(true);
+    // }
 
-    setUserAction('edit_expense');
-    setIsAlertOpen(true);
+    // setUserAction('edit_expense');
+    // setIsAlertOpen(true);
   };
 
   const changeMonthView = () => {

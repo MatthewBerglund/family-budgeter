@@ -1,7 +1,0 @@
-{
-  "version": "11.1.0",
-  "database": {
-    "version": "4.8.0",
-    "path": "database_export"
-  }
-}
