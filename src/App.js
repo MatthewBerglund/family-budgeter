@@ -11,6 +11,7 @@ import ExpenseHistory from './views/ExpenseHistory';
 import UserActionAlert from './components/Alerts/UserActionAlert';
 import ConfirmMonthModal from './components/Modals/ConfirmMonthModal';
 import ConfirmDeleteModal from './components/Modals/ConfirmDeleteModal';
+import EditExpenseModal from './components/Modals/EditExpenseModal';
 
 const App = () => {
   const currentMonth = getCurrentMonth();
@@ -28,8 +29,10 @@ const App = () => {
   const [userAction, setUserAction] = useState('');
   const [errorOccurred, setErrorOccurred] = useState(false);
   const [lastDeleted, setLastDeleted] = useState({});
+  const [expenseToEdit, setExpenseToEdit] = useState({});
 
   // states to toggle the modals
+  const [editExpenseModalIsOpen, setEditExpenseModalIsOpen] = useState(false);
   const [confirmMonthModalIsOpen, setConfirmMonthModalIsOpen] = useState(false);
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] =
     useState(false);
@@ -105,6 +108,44 @@ const App = () => {
     setIsAlertOpen(true);
   };
 
+  const editExpense = async (id, newExpenseData) => {
+    const url = `${baseURL}/items/${id}.json?stash=${token}`;
+    const requestOptions = {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(newExpenseData),
+    };
+
+    try {
+      const res = await fetch(url, requestOptions);
+      const updatedExpense = await res.json();
+
+      if (!res.ok) {
+        throw new Error('Something went wrong while editing the expense!');
+      }
+
+      const expensesCopy = [...expenses];
+      const indexToEdit = expensesCopy.findIndex(expense => expense.id === id);
+      expensesCopy.splice(indexToEdit, 1, updatedExpense);
+      setExpenses(expensesCopy);
+
+      // Handle month selection if moving last expense to a different month
+      const updatedExpenseMonth = getUKFormattedDate(updatedExpense.date, {
+        year: 'numeric',
+        month: 'long',
+      });
+
+      if (updatedExpenseMonth !== selectedMonth && filteredExpenses.length === 1) {
+        setSelectedMonth(currentMonth);
+      }
+    } catch (error) {
+      setErrorOccurred(true);
+    }
+
+    setUserAction('edit_expense');
+    setIsAlertOpen(true);
+  };
+
   const changeMonthView = () => {
     setSelectedMonth(newExpenseMonth);
     setConfirmMonthModalIsOpen(false);
@@ -147,7 +188,9 @@ const App = () => {
             <ExpenseHistory
               filteredExpenses={filteredExpenses}
               setConfirmDeleteModalIsOpen={setConfirmDeleteModalIsOpen}
+              setEditExpenseModalIsOpen={setEditExpenseModalIsOpen}
               setLastDeleted={setLastDeleted}
+              setExpenseToEdit={setExpenseToEdit}
             />
           </section>
         </div>
@@ -171,6 +214,13 @@ const App = () => {
             expense={lastDeleted}
             setIsOpen={setConfirmDeleteModalIsOpen}
             okCallback={removeExpense}
+          />
+        )}
+        {editExpenseModalIsOpen && (
+          <EditExpenseModal
+            expense={expenseToEdit}
+            setIsOpen={setEditExpenseModalIsOpen}
+            editExpense={editExpense}
           />
         )}
       </main>

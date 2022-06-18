@@ -2,6 +2,7 @@ import {
   getUKFormattedEuros,
   getCurrentMonth,
   getUniqueMonthsFromExpenses,
+  convertCentsToEuros,
 } from './helpers';
 
 // Values and function for stubbing and resetting Date.now()
@@ -158,5 +159,46 @@ describe('getUniqueMonthsFromExpenses', () => {
     ];
     const actual = getUniqueMonthsFromExpenses(expenses);
     expect(actual).toStrictEqual(expected);
+  });
+
+  describe('convertCentsToEuros', () => {
+    it('should throw an error if no argument is passed', () => {
+      function passZeroArgs() {
+        convertCentsToEuros();
+      }
+      expect(passZeroArgs).toThrowError('undefined is not an integer');
+    });
+
+    it('should throw an error if passed a value that is not an integer', () => {
+      function passString() {
+        convertCentsToEuros('any string');
+      }
+      function passFloat() {
+        convertCentsToEuros(1.1);
+      }
+      expect(passString).toThrowError('any string is not an integer');
+      expect(passFloat).toThrowError('1.1 is not an integer');
+    });
+
+    it('should throw an error if passed more than one argument', () => {
+      function passMoreThanOneArg() {
+        convertCentsToEuros(100, 200);
+      }
+      expect(passMoreThanOneArg).toThrowError(
+        'Only one argument may be passed to the function.'
+      );
+    });
+
+    it('should convert cents to full euros', () => {
+      expect(convertCentsToEuros(0)).toBe('0.00');
+      expect(convertCentsToEuros(1)).toBe('0.01');
+      expect(convertCentsToEuros(12)).toBe('0.12');
+      expect(convertCentsToEuros(100)).toBe('1.00');
+      expect(convertCentsToEuros(123)).toBe('1.23');
+      expect(convertCentsToEuros(1000)).toBe('10.00');
+      expect(convertCentsToEuros(1234)).toBe('12.34');
+      expect(convertCentsToEuros(10000)).toBe('100.00');
+      expect(convertCentsToEuros(12345)).toBe('123.45');
+    });
   });
 });
