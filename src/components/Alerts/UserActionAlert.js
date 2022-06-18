@@ -26,6 +26,7 @@ const UserActionAlert = ({
       return <ExpenseAddedAlert {...baseProps} />;
     case 'delete_expense':
       // required props: errorOccurred, closeCallback, expense
+      // takes `expense` prop to provide feedback about which expense was deleted
       return <ExpenseDeletedAlert {...baseProps} {...expense} />;
     case 'edit_expense':
       // required props: errorOccurred, closeCallback
