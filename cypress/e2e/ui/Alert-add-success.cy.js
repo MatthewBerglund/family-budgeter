@@ -1,6 +1,6 @@
 import '@testing-library/cypress/add-commands';
 
-import { getUKFormattedDate } from '../../../src/utils/helpers';
+const EXPENSE_MONTH = 'March 2022';
 
 describe('Alert add expense - success', () => {
   before(() => {
@@ -21,19 +21,13 @@ describe('Alert add expense - success', () => {
   });
 
   it('selects expense month', () => {
-    cy.fixture('expense-raw').then(expense => {
-      const expenseMonth = getUKFormattedDate(expense.date, {
-        year: 'numeric',
-        month: 'long',
-      });
-      cy.get(`[id="New expense added to ${expenseMonth}"]`).within(() => {
-        cy.get('[data-cy="okButton"]').click();
-      });
-      cy.findByRole('combobox', { name: /select a month/i }).should(
-        'have.value',
-        expenseMonth
-      );
+    cy.get(`[id="New expense added to ${EXPENSE_MONTH}"]`).within(() => {
+      cy.get('[data-cy="okButton"]').click();
     });
+    cy.findByRole('combobox', { name: /select a month/i }).should(
+      'have.value',
+      EXPENSE_MONTH
+    );
   });
 
   it('checks that alert is automatically closed', () => {
