@@ -1,17 +1,13 @@
 import '@testing-library/cypress/add-commands';
 
-import expensePost from '../../fixtures/expense-post.json';
-import {
-  getUKFormattedEuros,
-  getUKFormattedDate,
-  getCurrentMonth,
-} from '../../../src/utils/helpers';
+import { getCurrentMonth } from '../../../src/utils/helpers';
+
+const EXPENSE_MONTH = 'March 2022';
+const CURRENT_MONTH = getCurrentMonth();
 
 describe('Add expense - not within current month', () => {
   before(() => {
     cy.intercept('GET', '**/items*', []).as('getExpenses');
-    cy.visit('/');
-    cy.wait('@getExpenses');
   });
 
   beforeEach(() => {
@@ -21,24 +17,20 @@ describe('Add expense - not within current month', () => {
   });
 
   it('adds the expense', () => {
+    cy.visit('/');
+    cy.wait('@getExpenses');
     cy.addExpenseFromFixture('expense-raw');
     cy.wait('@postExpense');
   });
 
   it('selects expense month', () => {
-    cy.fixture('expense-raw').then(expense => {
-      const expenseMonth = getUKFormattedDate(expense.date, {
-        year: 'numeric',
-        month: 'long',
-      });
-      cy.get(`[id="New expense added to ${expenseMonth}"]`).within(() => {
-        cy.get('[data-cy="okButton"]').click();
-      });
-      cy.findByRole('combobox', { name: /select a month/i }).should(
-        'have.value',
-        expenseMonth
-      );
+    cy.get(`[id="New expense added to ${EXPENSE_MONTH}"]`).within(() => {
+      cy.get('[data-cy="okButton"]').click();
     });
+    cy.findByRole('combobox', { name: /select a month/i }).should(
+      'have.value',
+      EXPENSE_MONTH
+    );
   });
 
   it('closes the alert', () => {
@@ -66,36 +58,25 @@ describe('Add expense - not within current month', () => {
 
     cy.fixture('expense-post').then(expense => {
       cy.get('[data-cy="expenses"] > li')
-        .should('contain', getUKFormattedDate(expense.date))
-        .and('contain', `${expense.title}`)
-        .and('contain', `- ${getUKFormattedEuros(expense.amount)}`);
+        .should('contain', '01/03/2022')
+        .and('contain', 'Test Expense - Cypress')
+        .and('contain', '- €4.99');
     });
   });
 
   it('checks that the summary has been correctly updated', () => {
-    cy.get('[data-cy="total-budget"]').then($el => {
-      const totalBudget = $el.text().replace(/\D/g, '');
-      const totalExpenses = expensePost.amount;
-      const remainingBudget = totalBudget - totalExpenses;
-
-      cy.get('[data-cy="total-expenses"]').should(
-        'contain',
-        getUKFormattedEuros(totalExpenses)
-      );
-      cy.get('[data-cy="remaining-budget"]').should(
-        'contain',
-        getUKFormattedEuros(remainingBudget)
-      );
-    });
+    cy.get('[data-cy="total-budget"]').should('contain', '€7,777.00');
+    cy.get('[data-cy="total-expenses"]').should('contain', '€4.99');
+    cy.get('[data-cy="remaining-budget"]').should('contain', '€7,772.01');
   });
 
   it("checks that the new expense is not rendered in other month's history", () => {
-    const currentMonth = getCurrentMonth();
-
-    cy.findByRole('combobox', { name: /select a month/i }).select(currentMonth);
+    cy.findByRole('combobox', { name: /select a month/i }).select(
+      CURRENT_MONTH
+    );
     cy.get('[data-cy="expenses"]')
-      .should('not.contain', getUKFormattedDate(expensePost.date))
-      .and('not.contain', `${expensePost.title}`)
-      .and('not.contain', `- ${getUKFormattedEuros(expensePost.amount)}`);
+      .should('not.contain', '01/03/2022')
+      .and('not.contain', 'Test Expense - Cypress')
+      .and('not.contain', '- €4.99');
   });
 });

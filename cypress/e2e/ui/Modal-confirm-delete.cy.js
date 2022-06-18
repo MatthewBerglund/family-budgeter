@@ -1,5 +1,7 @@
 import '@testing-library/cypress/add-commands';
 
+const TEST_MONTH = 'February 2022';
+
 describe('Modal confirmation deletion', () => {
   before(() => {
     cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as(
@@ -14,7 +16,6 @@ describe('Modal confirmation deletion', () => {
   });
 
   it('selects test month', () => {
-    const TEST_MONTH = 'February 2022';
     cy.findByRole('combobox', { name: /select a month/i }).select(TEST_MONTH);
   });
 

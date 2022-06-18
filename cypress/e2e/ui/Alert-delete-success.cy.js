@@ -1,6 +1,6 @@
 import '@testing-library/cypress/add-commands';
 
-import { getUKFormattedDate } from '../../../src/utils/helpers';
+const TEST_MONTH = 'February 2022';
 
 describe('Alert delete expense - success', () => {
   before(() => {
@@ -16,7 +16,6 @@ describe('Alert delete expense - success', () => {
   });
 
   it('selects test month', () => {
-    const TEST_MONTH = 'February 2022';
     cy.findByRole('combobox', { name: /select a month/i }).select(TEST_MONTH);
   });
 
@@ -35,10 +34,8 @@ describe('Alert delete expense - success', () => {
   });
 
   it('checks if the alert is correctly rendered', () => {
-    cy.fixture('expense-array').then(expenses => {
-      cy.findByRole('alert').within(() => {
-        cy.get('p').should('contain', getUKFormattedDate(expenses[0].date));
-      });
+    cy.findByRole('alert').within(() => {
+      cy.get('p').should('contain', '01/02/2022');
     });
   });
 

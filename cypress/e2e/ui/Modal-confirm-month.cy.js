@@ -1,6 +1,6 @@
 import '@testing-library/cypress/add-commands';
 
-import { getUKFormattedDate } from '../../../src/utils/helpers';
+const EXPENSE_MONTH = 'March 2022';
 
 describe('Modal confirm month selection', () => {
   before(() => {
@@ -21,15 +21,6 @@ describe('Modal confirm month selection', () => {
   });
 
   it('checks that the modal is correctly rendered', () => {
-    cy.fixture('expense-raw').then(expense => {
-      const expenseMonth = getUKFormattedDate(expense.date, {
-        year: 'numeric',
-        month: 'long',
-      });
-
-      cy.get(`[id="New expense added to ${expenseMonth}"]`).should(
-        'be.visible'
-      );
-    });
+    cy.get(`[id="New expense added to ${EXPENSE_MONTH}"]`).should('be.visible');
   });
 });
