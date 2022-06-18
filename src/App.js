@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { ref, push, set, onValue, remove } from 'firebase/database';
-import { collection, addDoc } from 'firebase/firestore';
+import { ref, remove } from 'firebase/database';
+import { collection, addDoc, query, onSnapshot } from 'firebase/firestore';
 import db from './firebase';
 import { getUKFormattedDate, getCurrentMonth } from './utils/helpers';
 
@@ -38,27 +38,22 @@ const App = () => {
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] =
     useState(false);
 
-  // Add event listener to get expenses from db on value change 
   useEffect(() => {
-    const handleValueChange = snapshot => {
-      const dbExpenses = snapshot.val();
-      if (dbExpenses) {
-        const keys = Object.keys(dbExpenses);
-        const values = Object.values(dbExpenses);
-        const expensesArray = values.map((expense, index) => ({ ...expense, id: keys[index] }));
-        setExpenses(expensesArray);
-      } else {
-        setExpenses([]);
-      }
-    };
-
     try {
-      const expensesRef = ref(db, 'expenses');
-      onValue(expensesRef, handleValueChange);
+      // Listen for changes to any doc in "expenses" collection and update expenses locally
+      const q = query(collection(db, "expenses"));
+      onSnapshot(q, (querySnapshot) => {
+        const expensesArray = [];
+        querySnapshot.forEach((doc) => {
+          expensesArray.push(doc.data());
+        });
+        setExpenses([...expensesArray]);
+      });
     } catch (err) {
       console.log(err);
       alert('Error loading expenses. Please try again later.');
     }
+
   }, []);
 
   useEffect(() => {
@@ -77,8 +72,8 @@ const App = () => {
   const addExpense = async expense => {
     try {
       // Add expense data to new doc w/ ID inside "expenses" collection
-      const expenseRef = collection(db, 'expenses');
-      await addDoc(expenseRef, expense);
+      const expensesRef = collection(db, 'expenses');
+      await addDoc(expensesRef, expense);
 
       if (newExpenseMonth !== selectedMonth) {
         setConfirmMonthModalIsOpen(true);
