@@ -39,8 +39,7 @@ const App = () => {
   // states to toggle the modals
   const [editExpenseModalIsOpen, setEditExpenseModalIsOpen] = useState(false);
   const [confirmMonthModalIsOpen, setConfirmMonthModalIsOpen] = useState(false);
-  const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] =
-    useState(false);
+  const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchExpenses = async () => {
@@ -60,10 +59,7 @@ const App = () => {
 
   useEffect(() => {
     const expensesToRender = expenses.filter(expense => {
-      let formattedExpenseDate = getUKFormattedDate(new Date(expense.date), {
-        year: 'numeric',
-        month: 'long',
-      });
+      let formattedExpenseDate = getUKFormattedDate(new Date(expense.date), { year: 'numeric', month: 'long' });
       return selectedMonth === formattedExpenseDate;
     });
     setFilteredExpenses(expensesToRender);
@@ -73,11 +69,7 @@ const App = () => {
 
   const addExpense = async newExpense => {
     const url = `${baseURL}/items.json?kind=expense`;
-    const requestOptions = {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(newExpense),
-    };
+    const requestOptions = { method: 'POST', headers, body: JSON.stringify(newExpense) };
 
     try {
       const res = await fetch(url, requestOptions);
@@ -130,11 +122,7 @@ const App = () => {
 
   const editExpense = async (id, newExpenseData) => {
     const url = `${baseURL}/items/${id}.json?stash=${token}`;
-    const requestOptions = {
-      method: 'PUT',
-      headers,
-      body: JSON.stringify(newExpenseData),
-    };
+    const requestOptions = { method: 'PUT', headers, body: JSON.stringify(newExpenseData) };
 
     try {
       const res = await fetch(url, requestOptions);
@@ -150,10 +138,7 @@ const App = () => {
       setExpenses(expensesCopy);
 
       // Handle month selection if moving last expense to a different month
-      const updatedExpenseMonth = getUKFormattedDate(updatedExpense.date, {
-        year: 'numeric',
-        month: 'long',
-      });
+      const updatedExpenseMonth = getUKFormattedDate(updatedExpense.date, { year: 'numeric', month: 'long' });
 
       if (updatedExpenseMonth !== selectedMonth && filteredExpenses.length === 1) {
         setSelectedMonth(currentMonth);
@@ -179,70 +164,28 @@ const App = () => {
             <h1 className="display-1 text-dark">Matt's budget</h1>
           </div>
           <div className="col-md-3">
-            <MonthSelector
-              expenses={expenses}
-              selectedMonth={selectedMonth}
-              setSelectedMonth={setSelectedMonth}
-            />
+            <MonthSelector expenses={expenses} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
           </div>
         </div>
       </header>
       <main className="container py-5">
         <div className="row g-5">
           <section className="col-lg-6">
-            <Summary
-              currentMonth={currentMonth}
-              selectedMonth={selectedMonth}
-              filteredExpenses={filteredExpenses}
-            />
+            <Summary currentMonth={currentMonth} selectedMonth={selectedMonth} filteredExpenses={filteredExpenses} />
           </section>
           <section className="col-lg-6">
-            <AddExpenses
-              addExpense={addExpense}
-              setNewExpenseMonth={setNewExpenseMonth}
-            />
+            <AddExpenses addExpense={addExpense} setNewExpenseMonth={setNewExpenseMonth} />
           </section>
         </div>
         <div className="row g-5 mt-1">
           <section className="col">
-            <ExpenseHistory
-              filteredExpenses={filteredExpenses}
-              setConfirmDeleteModalIsOpen={setConfirmDeleteModalIsOpen}
-              setEditExpenseModalIsOpen={setEditExpenseModalIsOpen}
-              setLastDeleted={setLastDeleted}
-              setExpenseToEdit={setExpenseToEdit}
-            />
+            <ExpenseHistory filteredExpenses={filteredExpenses} setConfirmDeleteModalIsOpen={setConfirmDeleteModalIsOpen} setEditExpenseModalIsOpen={setEditExpenseModalIsOpen} setLastDeleted={setLastDeleted} setExpenseToEdit={setExpenseToEdit} />
           </section>
         </div>
-        {isAlertOpen && (
-          <UserActionAlert
-            userAction={userAction}
-            errorOccurred={errorOccurred}
-            closeCallback={closeAlert}
-            expense={lastDeleted}
-          />
-        )}
-        {confirmMonthModalIsOpen && (
-          <ConfirmMonthModal
-            newExpenseMonth={newExpenseMonth}
-            setIsOpen={setConfirmMonthModalIsOpen}
-            okCallback={changeMonthView}
-          />
-        )}
-        {confirmDeleteModalIsOpen && (
-          <ConfirmDeleteModal
-            expense={lastDeleted}
-            setIsOpen={setConfirmDeleteModalIsOpen}
-            okCallback={removeExpense}
-          />
-        )}
-        {editExpenseModalIsOpen && (
-          <EditExpenseModal
-            expense={expenseToEdit}
-            setIsOpen={setEditExpenseModalIsOpen}
-            editExpense={editExpense}
-          />
-        )}
+        {isAlertOpen && <UserActionAlert userAction={userAction} errorOccurred={errorOccurred} closeCallback={closeAlert} expense={lastDeleted} />}
+        {confirmMonthModalIsOpen && <ConfirmMonthModal newExpenseMonth={newExpenseMonth} setIsOpen={setConfirmMonthModalIsOpen} okCallback={changeMonthView} />}
+        {confirmDeleteModalIsOpen && <ConfirmDeleteModal expense={lastDeleted} setIsOpen={setConfirmDeleteModalIsOpen} okCallback={removeExpense} />}
+        {editExpenseModalIsOpen && <EditExpenseModal expense={expenseToEdit} setIsOpen={setEditExpenseModalIsOpen} editExpense={editExpense} />}
       </main>
     </>
   );
