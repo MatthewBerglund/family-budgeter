@@ -41,19 +41,19 @@ const App = () => {
   useEffect(() => {
     try {
       // Listen for changes to any doc in "expenses" collection and update expenses locally
-      const q = query(collection(db, "expenses"));
-      onSnapshot(q, (querySnapshot) => {
+      const q = query(collection(db, 'expenses'));
+      onSnapshot(q, querySnapshot => {
         const expensesArray = [];
-        querySnapshot.forEach((doc) => {
-          expensesArray.push(doc.data());
+        querySnapshot.forEach(doc => {
+          let expense = { ...doc.data(), id: doc.id };
+          expensesArray.push(expense);
         });
-        setExpenses([...expensesArray]);
+        setExpenses(expensesArray);
       });
     } catch (err) {
       console.log(err);
       alert('Error loading expenses. Please try again later.');
     }
-
   }, []);
 
   useEffect(() => {
@@ -94,7 +94,7 @@ const App = () => {
 
       if (filteredExpenses.length === 1) {
         setSelectedMonth(currentMonth);
-      };
+      }
     } catch (err) {
       setErrorOccurred(true);
     }
@@ -111,33 +111,27 @@ const App = () => {
     //   headers,
     //   body: JSON.stringify(newExpenseData),
     // };
-
     // try {
     //   const res = await fetch(url, requestOptions);
     //   const updatedExpense = await res.json();
-
     //   if (!res.ok) {
     //     throw new Error('Something went wrong while editing the expense!');
     //   }
-
     //   const expensesCopy = [...expenses];
     //   const indexToEdit = expensesCopy.findIndex(expense => expense.id === id);
     //   expensesCopy.splice(indexToEdit, 1, updatedExpense);
     //   setExpenses(expensesCopy);
-
     //   // Handle month selection if moving last expense to a different month
     //   const updatedExpenseMonth = getUKFormattedDate(updatedExpense.date, {
     //     year: 'numeric',
     //     month: 'long',
     //   });
-
     //   if (updatedExpenseMonth !== selectedMonth && filteredExpenses.length === 1) {
     //     setSelectedMonth(currentMonth);
     //   }
     // } catch (error) {
     //   setErrorOccurred(true);
     // }
-
     // setUserAction('edit_expense');
     // setIsAlertOpen(true);
   };
