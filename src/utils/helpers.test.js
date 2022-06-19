@@ -1,9 +1,4 @@
-import {
-  getUKFormattedEuros,
-  getCurrentMonth,
-  getUniqueMonthsFromExpenses,
-  convertCentsToEuros,
-} from './helpers';
+import { getUKFormattedEuros, getCurrentMonth, getUniqueMonthsFromExpenses, convertCentsToEuros } from './helpers';
 
 // Values and function for stubbing and resetting Date.now()
 const realDateNow = Date.now.bind(global.Date);
@@ -37,9 +32,7 @@ describe('getUKFormattedEuros', () => {
     function passMoreThanOneArg() {
       getUKFormattedEuros(100, 200);
     }
-    expect(passMoreThanOneArg).toThrowError(
-      'Only one argument may be passed to the function.'
-    );
+    expect(passMoreThanOneArg).toThrowError('Only one argument may be passed to the function.');
   });
 
   it('should return a string representing a full euro amount in UK English', () => {
@@ -96,9 +89,7 @@ describe('getUniqueMonthsFromExpenses', () => {
     function passMoreThanOneArg() {
       getUniqueMonthsFromExpenses([], []);
     }
-    expect(passMoreThanOneArg).toThrowError(
-      'Only one argument may be passed to the function.'
-    );
+    expect(passMoreThanOneArg).toThrowError('Only one argument may be passed to the function.');
   });
 
   it('should return a new array', () => {
@@ -151,12 +142,7 @@ describe('getUniqueMonthsFromExpenses', () => {
       { title: 'Dec 2021 expense', date: '2021-12-01', amount: 100, id: 4 },
     ];
 
-    const expected = [
-      'January 2021',
-      'December 2021',
-      'January 2022',
-      'April 2022',
-    ];
+    const expected = ['January 2021', 'December 2021', 'January 2022', 'April 2022'];
     const actual = getUniqueMonthsFromExpenses(expenses);
     expect(actual).toStrictEqual(expected);
   });
@@ -184,9 +170,7 @@ describe('getUniqueMonthsFromExpenses', () => {
       function passMoreThanOneArg() {
         convertCentsToEuros(100, 200);
       }
-      expect(passMoreThanOneArg).toThrowError(
-        'Only one argument may be passed to the function.'
-      );
+      expect(passMoreThanOneArg).toThrowError('Only one argument may be passed to the function.');
     });
 
     it('should convert cents to full euros', () => {

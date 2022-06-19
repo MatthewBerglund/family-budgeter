@@ -6,5 +6,6 @@
   "jsxSingleQuote": false,
   "bracketSpacing": true,
   "bracketSameLine": false,
-  "arrowParens": "avoid"
+  "arrowParens": "avoid",
+  "printWidth": 1000
 }

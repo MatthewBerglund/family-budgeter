@@ -4,9 +4,7 @@ const TEST_MONTH = 'February 2022';
 
 describe('Delete expense - not within current month', () => {
   before(() => {
-    cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as(
-      'getExpenseArray'
-    );
+    cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as('getExpenseArray');
   });
 
   beforeEach(() => {
@@ -20,16 +18,9 @@ describe('Delete expense - not within current month', () => {
   });
 
   it('checks if fixtures expenses are correctly rendered and sorted', () => {
-    cy.get('[data-cy="expenses"] > li')
-      .should('have.length', 3)
-      .and('not.contain', 'You have no prior expenses');
-
+    cy.get('[data-cy="expenses"] > li').should('have.length', 3).and('not.contain', 'You have no prior expenses');
     cy.get('[data-cy="expenses"] > li').last().as('oldestExpense');
-
-    cy.get('@oldestExpense')
-      .should('contain', '01/02/2022')
-      .and('contain', 'Test Expense - Cypress - Feb 22 - Pizza')
-      .and('contain', '- €0.99');
+    cy.get('@oldestExpense').should('contain', '01/02/2022').and('contain', 'Test Expense - Cypress - Feb 22 - Pizza').and('contain', '- €0.99');
   });
 
   it('deletes the oldest expense in the month', () => {
@@ -48,11 +39,7 @@ describe('Delete expense - not within current month', () => {
   });
 
   it('checks if expenses are correctly rendered', () => {
-    cy.get('[data-cy="expenses"] > li')
-      .should('have.length', 2)
-      .should('not.contain', '01/02/2022')
-      .and('not.contain', 'Test Expense - Cypress - Feb 22 - Pizza')
-      .and('not.contain', '- €0,99');
+    cy.get('[data-cy="expenses"] > li').should('have.length', 2).should('not.contain', '01/02/2022').and('not.contain', 'Test Expense - Cypress - Feb 22 - Pizza').and('not.contain', '- €0,99');
   });
 
   it('closes the alert', () => {

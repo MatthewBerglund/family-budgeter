@@ -19,15 +19,10 @@ const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
     const date = new Date(selectedMonth);
 
     // Get last day of selected month
-    const daysInMonth = new Date(
-      date.getFullYear(),
-      date.getMonth() + 1,
-      0
-    ).getDate();
+    const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 
     // Set day equal to today's date or last day of the month
-    const dayOfMonth =
-      selectedMonth === currentMonth ? new Date().getDate() : daysInMonth;
+    const dayOfMonth = selectedMonth === currentMonth ? new Date().getDate() : daysInMonth;
 
     const targetRate = totalBudget / daysInMonth;
     const actualRate = totalExpenses / dayOfMonth;
@@ -47,37 +42,18 @@ const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
       </h3>
       <div className="card-body container d-flex flex-column justify-content-around">
         <h4 className="fw-light row">
-          <span className="col-6 col-md-4 col-lg-6 col-xl-5">
-            Starting budget:
-          </span>
-          <span
-            className="col-4 fw-bold text-end"
-            data-cy="total-budget"
-          >{`${getUKFormattedEuros(totalBudget)}`}</span>
+          <span className="col-6 col-md-4 col-lg-6 col-xl-5">Starting budget:</span>
+          <span className="col-4 fw-bold text-end" data-cy="total-budget">{`${getUKFormattedEuros(totalBudget)}`}</span>
           <div className="col-3"></div>
         </h4>
         <h4 className="fw-light row">
           <span className="col-6 col-md-4 col-lg-6 col-xl-5">Money spent:</span>
-          <span
-            className="col-4 fw-bold text-end"
-            data-cy="total-expenses"
-          >{`${getUKFormattedEuros(totalExpenses)}`}</span>
+          <span className="col-4 fw-bold text-end" data-cy="total-expenses">{`${getUKFormattedEuros(totalExpenses)}`}</span>
           <div className="col-3"></div>
         </h4>
         <h4 className="fw-light row">
-          <span className="col-6 col-md-4 col-lg-6 col-xl-5">
-            Remaining budget:
-          </span>
-          <span
-            className={`col-4 fw-bold text-end ${
-              spendingRateDeviation >= 0.1
-                ? 'text-danger'
-                : spendingRateDeviation > 0
-                ? 'text-warning'
-                : 'text-success'
-            }`}
-            data-cy="remaining-budget"
-          >{`${getUKFormattedEuros(totalBudget - totalExpenses)}`}</span>
+          <span className="col-6 col-md-4 col-lg-6 col-xl-5">Remaining budget:</span>
+          <span className={`col-4 fw-bold text-end ${spendingRateDeviation >= 0.1 ? 'text-danger' : spendingRateDeviation > 0 ? 'text-warning' : 'text-success'}`} data-cy="remaining-budget">{`${getUKFormattedEuros(totalBudget - totalExpenses)}`}</span>
           <div className="col-3"></div>
         </h4>
       </div>

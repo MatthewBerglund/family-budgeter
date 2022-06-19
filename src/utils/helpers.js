@@ -15,10 +15,7 @@ export function getUKFormattedEuros(centAmount) {
 
 // Takes a valid date string and returns a new string
 // based on options format
-export function getUKFormattedDate(
-  dateString,
-  options = { year: 'numeric', month: 'numeric', day: 'numeric' }
-) {
+export function getUKFormattedDate(dateString, options = { year: 'numeric', month: 'numeric', day: 'numeric' }) {
   const dateObj = new Date(dateString);
   return Intl.DateTimeFormat('en-GB', options).format(dateObj);
 }

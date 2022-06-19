@@ -4,17 +4,13 @@ const TEST_MONTH = 'February 2022';
 
 describe('Alert delete expense - fail', () => {
   before(() => {
-    cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as(
-      'getExpenseArray'
-    );
+    cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as('getExpenseArray');
     cy.visit('/');
     cy.wait('@getExpenseArray');
   });
 
   beforeEach(() => {
-    cy.intercept('DELETE', '**/items/**', {
-      statusCode: 500,
-    }).as('deleteExpenseFail');
+    cy.intercept('DELETE', '**/items/**', { statusCode: 500 }).as('deleteExpenseFail');
   });
 
   it('selects test month', () => {
@@ -38,10 +34,7 @@ describe('Alert delete expense - fail', () => {
 
   it('checks if the alert is correctly rendered', () => {
     cy.findByRole('alert').within(() => {
-      cy.get('p').should(
-        'contain',
-        'The expense could not be deleted. Please try again.'
-      );
+      cy.get('p').should('contain', 'The expense could not be deleted. Please try again.');
     });
   });
 

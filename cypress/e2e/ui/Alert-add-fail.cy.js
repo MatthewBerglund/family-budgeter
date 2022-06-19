@@ -8,9 +8,7 @@ describe('Alert add expense - fail', () => {
   });
 
   beforeEach(() => {
-    cy.intercept('POST', '**/items*', {
-      statusCode: 500,
-    }).as('postExpenseFail');
+    cy.intercept('POST', '**/items*', { statusCode: 500 }).as('postExpenseFail');
   });
 
   it('adds the expense', () => {
@@ -19,10 +17,7 @@ describe('Alert add expense - fail', () => {
   });
 
   it('checks if the alert is correctly rendered', () => {
-    cy.findByRole('alert').should(
-      'contain',
-      'The expense could not be added. Please try again.'
-    );
+    cy.findByRole('alert').should('contain', 'The expense could not be added. Please try again.');
   });
 
   it('checks that alert is automatically closed', () => {

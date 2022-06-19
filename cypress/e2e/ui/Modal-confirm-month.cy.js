@@ -10,9 +10,7 @@ describe('Modal confirm month selection', () => {
   });
 
   beforeEach(() => {
-    cy.intercept('POST', '**/items*', { fixture: 'expense-post' }).as(
-      'postExpense'
-    );
+    cy.intercept('POST', '**/items*', { fixture: 'expense-post' }).as('postExpense');
   });
 
   it('adds the expense', () => {

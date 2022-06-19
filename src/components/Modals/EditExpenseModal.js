@@ -31,22 +31,11 @@ const EditExpenseModal = ({ setIsOpen, expense, editExpense }) => {
 
   return (
     <Modal {...modalProps}>
-      <form
-        ref={formEl}
-        className="container d-grid gap-3 mb-3"
-        id="edit-expense-form"
-        onSubmit={handleSubmit}
-      >
+      <form ref={formEl} className="container d-grid gap-3 mb-3" id="edit-expense-form" onSubmit={handleSubmit}>
         <div className="row">
           <label className="col-form-label col-2">Name</label>
           <div className="col-10">
-            <input
-              type="text"
-              className="form-control"
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              required
-            />
+            <input type="text" className="form-control" value={title} onChange={e => setTitle(e.target.value)} required />
           </div>
         </div>
         <div className="row">
@@ -54,17 +43,7 @@ const EditExpenseModal = ({ setIsOpen, expense, editExpense }) => {
             Date
           </label>
           <div className="col-10">
-            <DatePicker
-              className="form-control"
-              id="date"
-              name="date"
-              aria-describedby="dateHelp"
-              required
-              selected={date}
-              onChange={date => setDate(date)}
-              dateFormat="dd/MM/yyyy"
-              todayButton="Today"
-            />
+            <DatePicker className="form-control" id="date" name="date" aria-describedby="dateHelp" required selected={date} onChange={date => setDate(date)} dateFormat="dd/MM/yyyy" todayButton="Today" />
           </div>
         </div>
         <div className="row">
@@ -72,13 +51,7 @@ const EditExpenseModal = ({ setIsOpen, expense, editExpense }) => {
           <div className="col-10">
             <div className="input-group">
               <span className="input-group-text">€</span>
-              <input
-                type="number"
-                className="form-control"
-                value={amount}
-                onChange={e => setAmount(e.target.value)}
-                required
-              />
+              <input type="number" className="form-control" value={amount} onChange={e => setAmount(e.target.value)} required />
             </div>
           </div>
         </div>

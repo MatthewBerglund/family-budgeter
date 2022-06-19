@@ -18,56 +18,24 @@
  *
  */
 
-export const Modal = ({
-  children,
-  cancelCallback,
-  okCallback,
-  modalTitle,
-  cancelButtonLabel,
-  okButtonLabel,
-  okButtonColor,
-}) => {
+export const Modal = ({ children, cancelCallback, okCallback, modalTitle, cancelButtonLabel, okButtonLabel, okButtonColor }) => {
   return (
-    <div
-      className="modal fade show"
-      style={{
-        display: 'block',
-        backgroundColor: 'rgba(0,0,0,0.8)',
-      }}
-      id={modalTitle}
-      aria-labelledby={modalTitle}
-      tabIndex="-1"
-    >
+    <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.8)' }} id={modalTitle} aria-labelledby={modalTitle} tabIndex="-1">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id={modalTitle}>
               {modalTitle}
             </h5>
-            <button
-              type="button"
-              className="btn-close"
-              aria-label="Close"
-              onClick={cancelCallback}
-            ></button>
+            <button type="button" className="btn-close" aria-label="Close" onClick={cancelCallback}></button>
           </div>
           <div className="modal-body">
             {children}
             <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={cancelCallback}
-              >
+              <button type="button" className="btn btn-secondary" onClick={cancelCallback}>
                 {cancelButtonLabel}
               </button>
-              <button
-                type="button"
-                data-cy="okButton"
-                autoFocus
-                className={`btn ${okButtonColor}`}
-                onClick={okCallback}
-              >
+              <button type="button" data-cy="okButton" autoFocus className={`btn ${okButtonColor}`} onClick={okCallback}>
                 {okButtonLabel}
               </button>
             </div>
