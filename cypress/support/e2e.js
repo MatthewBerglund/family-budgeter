@@ -7,13 +7,9 @@
 
 Cypress.Commands.add('addExpenseFromFixture', fixture => {
   cy.fixture(fixture).then(expense => {
-    cy.findByRole('textbox', { name: /expense name/i }).type(
-      `${expense.title}`
-    );
+    cy.findByRole('textbox', { name: /expense name/i }).type(`${expense.title}`);
     cy.findByLabelText(/expense date/i).type(`${expense.date}{enter}`);
-    cy.findByRole('spinbutton', { name: /expense amount/i }).type(
-      `${expense.amount}`
-    );
+    cy.findByRole('spinbutton', { name: /expense amount/i }).type(`${expense.amount}`);
     cy.findByRole('button', { name: /add/i }).click();
   });
 });

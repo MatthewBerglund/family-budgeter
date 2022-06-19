@@ -4,9 +4,7 @@ const TEST_MONTH = 'February 2022';
 
 describe('Modal confirmation deletion', () => {
   before(() => {
-    cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as(
-      'getExpenseArray'
-    );
+    cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as('getExpenseArray');
     cy.visit('/');
     cy.wait('@getExpenseArray');
   });

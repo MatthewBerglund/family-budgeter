@@ -10,9 +10,7 @@ describe('Alert add expense - success', () => {
   });
 
   beforeEach(() => {
-    cy.intercept('POST', '**/items*', { fixture: 'expense-post' }).as(
-      'postExpense'
-    );
+    cy.intercept('POST', '**/items*', { fixture: 'expense-post' }).as('postExpense');
   });
 
   it('adds the expense', () => {
@@ -24,10 +22,7 @@ describe('Alert add expense - success', () => {
     cy.get(`[id="New expense added to ${EXPENSE_MONTH}"]`).within(() => {
       cy.get('[data-cy="okButton"]').click();
     });
-    cy.findByRole('combobox', { name: /select a month/i }).should(
-      'have.value',
-      EXPENSE_MONTH
-    );
+    cy.findByRole('combobox', { name: /select a month/i }).should('have.value', EXPENSE_MONTH);
   });
 
   it('checks that alert is automatically closed', () => {
