@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
-import { ref, remove } from 'firebase/database';
-import { collection, addDoc, query, onSnapshot } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  addDoc,
+  deleteDoc,
+  query,
+  onSnapshot,
+} from 'firebase/firestore';
+
 import db from './firebase';
 import { getUKFormattedDate, getCurrentMonth } from './utils/helpers';
 
@@ -71,7 +78,6 @@ const App = () => {
 
   const addExpense = async expense => {
     try {
-      // Add expense data to new doc w/ ID inside "expenses" collection
       const expensesRef = collection(db, 'expenses');
       await addDoc(expensesRef, expense);
 
@@ -87,10 +93,10 @@ const App = () => {
     setIsAlertOpen(true);
   };
 
-  const removeExpense = expenseId => {
+  const removeExpense = async expenseId => {
     try {
-      const expenseRef = ref(db, 'expenses/' + expenseId);
-      remove(expenseRef);
+      const expenseRef = doc(db, 'expenses', expenseId);
+      await deleteDoc(expenseRef);
 
       if (filteredExpenses.length === 1) {
         setSelectedMonth(currentMonth);
