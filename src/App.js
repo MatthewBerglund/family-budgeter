@@ -4,6 +4,7 @@ import {
   doc,
   addDoc,
   deleteDoc,
+  updateDoc,
   query,
   onSnapshot,
 } from 'firebase/firestore';
@@ -102,6 +103,7 @@ const App = () => {
         setSelectedMonth(currentMonth);
       }
     } catch (err) {
+      console.log(err);
       setErrorOccurred(true);
     }
 
@@ -110,36 +112,29 @@ const App = () => {
     setIsAlertOpen(true);
   };
 
-  const editExpense = async (id, newExpenseData) => {
-    // const url = `${baseURL}/items/${id}.json?stash=${token}`;
-    // const requestOptions = {
-    //   method: 'PUT',
-    //   headers,
-    //   body: JSON.stringify(newExpenseData),
-    // };
-    // try {
-    //   const res = await fetch(url, requestOptions);
-    //   const updatedExpense = await res.json();
-    //   if (!res.ok) {
-    //     throw new Error('Something went wrong while editing the expense!');
-    //   }
-    //   const expensesCopy = [...expenses];
-    //   const indexToEdit = expensesCopy.findIndex(expense => expense.id === id);
-    //   expensesCopy.splice(indexToEdit, 1, updatedExpense);
-    //   setExpenses(expensesCopy);
-    //   // Handle month selection if moving last expense to a different month
-    //   const updatedExpenseMonth = getUKFormattedDate(updatedExpense.date, {
-    //     year: 'numeric',
-    //     month: 'long',
-    //   });
-    //   if (updatedExpenseMonth !== selectedMonth && filteredExpenses.length === 1) {
-    //     setSelectedMonth(currentMonth);
-    //   }
-    // } catch (error) {
-    //   setErrorOccurred(true);
-    // }
-    // setUserAction('edit_expense');
-    // setIsAlertOpen(true);
+  const editExpense = async (expenseId, newExpenseData) => {
+    try {
+      const expenseRef = doc(db, 'expenses', expenseId);
+      await updateDoc(expenseRef, newExpenseData);
+
+      const updatedExpenseMonth = getUKFormattedDate(newExpenseData.date, {
+        year: 'numeric',
+        month: 'long',
+      });
+
+      if (
+        updatedExpenseMonth !== selectedMonth &&
+        filteredExpenses.length === 1
+      ) {
+        setSelectedMonth(currentMonth);
+      }
+    } catch (err) {
+      console.log(err);
+      setErrorOccurred(true);
+    }
+
+    setUserAction('edit_expense');
+    setIsAlertOpen(true);
   };
 
   const changeMonthView = () => {

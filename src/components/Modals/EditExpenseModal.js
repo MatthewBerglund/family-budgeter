@@ -13,7 +13,7 @@ const EditExpenseModal = ({ setIsOpen, expense, editExpense }) => {
     e.preventDefault();
     const newExpenseData = {
       title,
-      date,
+      date: date.toString(),
       amount: convertEurosToCents(amount),
     };
     editExpense(expense.id, newExpenseData);
