@@ -12,12 +12,7 @@ import ExpenseEditedAlert from './ExpenseEditedAlert';
  * @param expense {object} information about the expense on which the user action was performed (title, amount, date, id)
  */
 
-const UserActionAlert = ({
-  userAction,
-  errorOccurred,
-  closeCallback,
-  expense,
-}) => {
+const UserActionAlert = ({ userAction, errorOccurred, closeCallback, expense }) => {
   const baseProps = { errorOccurred, closeCallback };
 
   switch (userAction) {

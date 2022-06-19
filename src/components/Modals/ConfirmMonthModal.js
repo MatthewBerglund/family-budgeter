@@ -12,10 +12,7 @@ const ConfirmMonthModal = ({ newExpenseMonth, setIsOpen, okCallback }) => {
 
   return (
     <Modal {...modalProps}>
-      <h6 className="mb-3">
-        Your expense has been added. Would you like to switch to the month for
-        this expense?
-      </h6>
+      <h6 className="mb-3">Your expense has been added. Would you like to switch to the month for this expense?</h6>
     </Modal>
   );
 };
