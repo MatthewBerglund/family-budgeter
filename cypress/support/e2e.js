@@ -17,3 +17,13 @@ Cypress.Commands.add('addExpenseFromFixture', fixture => {
     cy.findByRole('button', { name: /add/i }).click();
   });
 });
+
+// Flushes the Cloud Firestore emulator database
+Cypress.Commands.add('clearDB', async () => {
+  const url = 'http://localhost:8080/emulator/v1/projects/family-budgeter-1/databases/(default)/documents';
+  try {
+    await fetch(url, { method: 'DELETE' });
+  } catch (err) {
+    console.log('Database could not be flushed: ' + err);
+  }
+});

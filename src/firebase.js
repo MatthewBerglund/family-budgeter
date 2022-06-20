@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getFirestore, initializeFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 
 let firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -11,10 +11,17 @@ let firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+let db;
 
 if (window.location.hostname === 'localhost') {
+  // Emulator settings
+  // Needed for Firestore support in Cypress (see https://github.com/cypress-io/cypress/issues/6350)
+  // `experimentalForceLongPolling` may be removed in the future
+  db = initializeFirestore(app, { experimentalForceLongPolling: true, merge: true });
   connectFirestoreEmulator(db, 'localhost', 8080);
+} else {
+  // Live settings
+  db = getFirestore(app);
 }
 
 export default db;
