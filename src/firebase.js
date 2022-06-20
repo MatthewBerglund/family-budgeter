@@ -15,6 +15,8 @@ const db = firebase.firestore();
 
 if (window.location.hostname === 'localhost') {
   db.useEmulator('localhost', 8080);
+  // Settings to work-around cypress error "could not reach cloud firestore backend"
+  // experimentalForceLongPolling may be removed in the future
   db.settings({
     experimentalForceLongPolling: true,
     merge: true,
