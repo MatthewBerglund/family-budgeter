@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import "firebase/firestore";
+import 'firebase/firestore';
 
 let firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -15,6 +15,10 @@ const db = firebase.firestore();
 
 if (window.location.hostname === 'localhost') {
   db.useEmulator('localhost', 8080);
+  db.settings({
+    experimentalForceLongPolling: true,
+    merge: true,
+  });
 }
 
 export default db;
