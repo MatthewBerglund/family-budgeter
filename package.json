@@ -19,9 +19,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "cypress": "cypress open",
-    "em:start": "firebase emulators:start --import=./saved-data --export-on-exit",
-    "em:exec": "firebase emulators:exec --import=./saved-data 'npm start'"
+    "cypress": "cypress open"
   },
   "eslintConfig": {
     "extends": [
