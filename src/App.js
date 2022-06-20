@@ -1,16 +1,6 @@
 import { useState, useEffect } from 'react';
-import {
-  collection,
-  doc,
-  addDoc,
-  deleteDoc,
-  updateDoc,
-  query,
-  onSnapshot,
-} from 'firebase/firestore';
-
-import db from './firebase';
 import { getUKFormattedDate, getCurrentMonth } from './utils/helpers';
+import db from './firebase';
 
 import Summary from './views/Summary';
 import AddExpenses from './views/AddExpenses';
@@ -48,9 +38,8 @@ const App = () => {
 
   useEffect(() => {
     try {
-      // Listen for changes to any doc in "expenses" collection and update expenses locally
-      const q = query(collection(db, 'expenses'));
-      onSnapshot(q, querySnapshot => {
+      // Listen for changes to "expenses" collection in db, update local expenses accordingly
+      db.collection('expenses').onSnapshot(querySnapshot => {
         const expensesArray = [];
         querySnapshot.forEach(doc => {
           let expense = { ...doc.data(), id: doc.id };
@@ -79,8 +68,7 @@ const App = () => {
 
   const addExpense = async expense => {
     try {
-      const expensesRef = collection(db, 'expenses');
-      await addDoc(expensesRef, expense);
+      await db.collection('expenses').add(expense);
 
       if (newExpenseMonth !== selectedMonth) {
         setConfirmMonthModalIsOpen(true);
@@ -96,8 +84,7 @@ const App = () => {
 
   const removeExpense = async expenseId => {
     try {
-      const expenseRef = doc(db, 'expenses', expenseId);
-      await deleteDoc(expenseRef);
+      await db.collection('expenses').doc(expenseId).delete();
 
       if (filteredExpenses.length === 1) {
         setSelectedMonth(currentMonth);
@@ -114,18 +101,11 @@ const App = () => {
 
   const editExpense = async (expenseId, newExpenseData) => {
     try {
-      const expenseRef = doc(db, 'expenses', expenseId);
-      await updateDoc(expenseRef, newExpenseData);
+      await db.collection('expenses').doc(expenseId).update(newExpenseData);
 
-      const updatedExpenseMonth = getUKFormattedDate(newExpenseData.date, {
-        year: 'numeric',
-        month: 'long',
-      });
+      const updatedExpenseMonth = getUKFormattedDate(newExpenseData.date, { year: 'numeric', month: 'long' });
 
-      if (
-        updatedExpenseMonth !== selectedMonth &&
-        filteredExpenses.length === 1
-      ) {
+      if (updatedExpenseMonth !== selectedMonth && filteredExpenses.length === 1) {
         setSelectedMonth(currentMonth);
       }
     } catch (err) {
