@@ -4,20 +4,17 @@ const EXPENSE_MONTH = 'March 2022';
 
 describe('Modal confirm month selection', () => {
   before(() => {
-    cy.intercept('GET', '**/items*', []).as('getExpenses');
-    cy.visit('/');
-    cy.wait('@getExpenses');
+    cy.clearDatabase();
   });
 
-  beforeEach(() => {
-    cy.intercept('POST', '**/items*', { fixture: 'expense-post' }).as(
-      'postExpense'
-    );
+  after(() => {
+    cy.clearDatabase();
   });
 
   it('adds the expense', () => {
+    cy.visit('/');
     cy.addExpenseFromFixture('expense-raw');
-    cy.wait('@postExpense');
+    cy.wait(100);
   });
 
   it('checks that the modal is correctly rendered', () => {
