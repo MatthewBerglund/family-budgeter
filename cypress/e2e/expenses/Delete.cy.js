@@ -14,7 +14,7 @@ describe('Delete expense - not within current month', () => {
   it('adds an initial expense', () => {
     cy.visit('/');
     cy.wait(100);
-    cy.fixture('expenses-raw').then(expenses => {
+    cy.fixture('expense-array').then(expenses => {
       cy.addExpense(expenses[0]);
     });
     cy.wait(100);
@@ -31,7 +31,7 @@ describe('Delete expense - not within current month', () => {
   });
 
   it('adds additional expenses', () => {
-    cy.fixture('expenses-raw').then(expenses => {
+    cy.fixture('expense-array').then(expenses => {
       cy.addExpense(expenses[1]);
       cy.addExpense(expenses[2]);
     });
