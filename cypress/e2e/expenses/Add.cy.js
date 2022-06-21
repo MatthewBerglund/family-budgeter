@@ -6,8 +6,12 @@ const CURRENT_MONTH = getCurrentMonth();
 
 describe('Add expense - not within current month', () => {
   before(() => {
-    cy.clearDB();
+    cy.clearDatabase();
   });
+
+  after(() => {
+    cy.clearDatabase();
+  })
 
   it('adds the expense', () => {
     cy.visit('/');

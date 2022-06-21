@@ -1,0 +1,17 @@
+[
+  {
+    "title": "Test Expense - Cypress - Feb 22 - Pizza",
+    "date": "2022-02-01",
+    "amount": 0.99
+  },
+  {
+    "title": "Test Expense - Cypress - Feb 22 - Tacos",
+    "date": "2022-02-02",
+    "amount": 4.99
+  },
+  {
+    "title": "Test Expense - Cypress - Feb 22 - Bier",
+    "date": "2022-02-02",
+    "amount": 5.99
+  }
+]
