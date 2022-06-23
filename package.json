@@ -42,5 +42,8 @@
   "devDependencies": {
     "@testing-library/cypress": "^8.0.3",
     "cypress": "^10.0.2"
+  },
+  "overrides": {
+    "autoprefixer": "10.4.5"
   }
 }
