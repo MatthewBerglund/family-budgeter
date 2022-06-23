@@ -2,9 +2,15 @@ import { useEffect, useState } from 'react';
 import { getUKFormattedEuros } from '../utils/helpers';
 
 const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
-  const [totalBudget, setTotalBudget] = useState(7777 * 100);
+  const [totalBudget, setTotalBudget] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [spendingRateDeviation, setSpendingRateDeviation] = useState(0);
+
+  // Set total budget on initial render
+  // Needed temporarily to avoid compile warning about unused variables
+  useEffect(() => {
+    setTotalBudget(7777 * 100);
+  }, []);
 
   const updateTotalExpenses = () => {
     const expenseSum = filteredExpenses
@@ -69,13 +75,12 @@ const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
             Remaining budget:
           </span>
           <span
-            className={`col-4 fw-bold text-end ${
-              spendingRateDeviation >= 0.1
-                ? 'text-danger'
-                : spendingRateDeviation > 0
+            className={`col-4 fw-bold text-end ${spendingRateDeviation >= 0.1
+              ? 'text-danger'
+              : spendingRateDeviation > 0
                 ? 'text-warning'
                 : 'text-success'
-            }`}
+              }`}
             data-cy="remaining-budget"
           >{`${getUKFormattedEuros(totalBudget - totalExpenses)}`}</span>
           <div className="col-3"></div>
