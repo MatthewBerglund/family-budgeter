@@ -1,4 +1,15 @@
 import { useState, useEffect } from 'react';
+import {
+  collection,
+  doc,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+  query,
+  onSnapshot,
+} from 'firebase/firestore';
+
+import db from './firebase';
 import { getUKFormattedDate, getCurrentMonth } from './utils/helpers';
 
 import Summary from './views/Summary';
@@ -10,13 +21,6 @@ import UserActionAlert from './components/Alerts/UserActionAlert';
 import ConfirmMonthModal from './components/Modals/ConfirmMonthModal';
 import ConfirmDeleteModal from './components/Modals/ConfirmDeleteModal';
 import EditExpenseModal from './components/Modals/EditExpenseModal';
-
-const token = process.env.REACT_APP_MOSTASH_API_KEY;
-const baseURL = process.env.REACT_APP_MOSTASH_BASE_URL;
-const headers = {
-  Stash: token,
-  'Content-Type': 'application/json',
-};
 
 const App = () => {
   const currentMonth = getCurrentMonth();
@@ -43,19 +47,21 @@ const App = () => {
     useState(false);
 
   useEffect(() => {
-    const fetchExpenses = async () => {
-      const url = `${baseURL}/items.json?stash=${token}&kind=expense`;
-
-      try {
-        const response = await fetch(url);
-        const expenseData = await response.json();
-        setExpenses(expenseData);
-      } catch {
-        alert('Error loading expenses. Please try again later.');
-      }
-    };
-
-    fetchExpenses();
+    try {
+      // Listen for changes to any doc in "expenses" collection and update expenses locally
+      const q = query(collection(db, 'expenses'));
+      onSnapshot(q, querySnapshot => {
+        const expensesArray = [];
+        querySnapshot.forEach(doc => {
+          let expense = { ...doc.data(), id: doc.id };
+          expensesArray.push(expense);
+        });
+        setExpenses(expensesArray);
+      });
+    } catch (err) {
+      console.log(err);
+      alert('Error loading expenses. Please try again later.');
+    }
   }, []);
 
   useEffect(() => {
@@ -71,29 +77,16 @@ const App = () => {
 
   const closeAlert = () => setIsAlertOpen(false);
 
-  const addExpense = async newExpense => {
-    const url = `${baseURL}/items.json?kind=expense`;
-    const requestOptions = {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(newExpense),
-    };
-
+  const addExpense = async expense => {
     try {
-      const res = await fetch(url, requestOptions);
-      const newExpense = await res.json();
-
-      // Ensure that the catch block is called before setting local states
-      if (!res.ok) {
-        throw new Error('Something went wrong while adding the expense!');
-      }
+      const expensesRef = collection(db, 'expenses');
+      await addDoc(expensesRef, expense);
 
       if (newExpenseMonth !== selectedMonth) {
         setConfirmMonthModalIsOpen(true);
       }
-
-      setExpenses([...expenses, newExpense]);
-    } catch (error) {
+    } catch (err) {
+      console.log(err);
       setErrorOccurred(true);
     }
 
@@ -101,64 +94,42 @@ const App = () => {
     setIsAlertOpen(true);
   };
 
-  const removeExpense = async id => {
-    const url = `${baseURL}/items/${id}.json`;
-    const requestOptions = { method: 'DELETE', headers };
-
-    setConfirmDeleteModalIsOpen(true);
-
+  const removeExpense = async expenseId => {
     try {
-      const res = await fetch(url, requestOptions);
+      const expenseRef = doc(db, 'expenses', expenseId);
+      await deleteDoc(expenseRef);
 
-      // Ensure that the catch block is called before setting local states
-      if (!res.ok) {
-        throw new Error('Something went wrong while deleting the expense!');
+      if (filteredExpenses.length === 1) {
+        setSelectedMonth(currentMonth);
       }
-
-      setExpenses(expenses.filter(expense => expense.id !== id));
-
-      if (filteredExpenses.length === 1) setSelectedMonth(currentMonth);
-      setConfirmDeleteModalIsOpen(false);
-    } catch (error) {
+    } catch (err) {
+      console.log(err);
       setErrorOccurred(true);
-      setConfirmDeleteModalIsOpen(false);
     }
 
+    setConfirmDeleteModalIsOpen(false);
     setUserAction('delete_expense');
     setIsAlertOpen(true);
   };
 
-  const editExpense = async (id, newExpenseData) => {
-    const url = `${baseURL}/items/${id}.json?stash=${token}`;
-    const requestOptions = {
-      method: 'PUT',
-      headers,
-      body: JSON.stringify(newExpenseData),
-    };
-
+  const editExpense = async (expenseId, newExpenseData) => {
     try {
-      const res = await fetch(url, requestOptions);
-      const updatedExpense = await res.json();
+      const expenseRef = doc(db, 'expenses', expenseId);
+      await updateDoc(expenseRef, newExpenseData);
 
-      if (!res.ok) {
-        throw new Error('Something went wrong while editing the expense!');
-      }
-
-      const expensesCopy = [...expenses];
-      const indexToEdit = expensesCopy.findIndex(expense => expense.id === id);
-      expensesCopy.splice(indexToEdit, 1, updatedExpense);
-      setExpenses(expensesCopy);
-
-      // Handle month selection if moving last expense to a different month
-      const updatedExpenseMonth = getUKFormattedDate(updatedExpense.date, {
+      const updatedExpenseMonth = getUKFormattedDate(newExpenseData.date, {
         year: 'numeric',
         month: 'long',
       });
 
-      if (updatedExpenseMonth !== selectedMonth && filteredExpenses.length === 1) {
+      if (
+        updatedExpenseMonth !== selectedMonth &&
+        filteredExpenses.length === 1
+      ) {
         setSelectedMonth(currentMonth);
       }
-    } catch (error) {
+    } catch (err) {
+      console.log(err);
       setErrorOccurred(true);
     }
 

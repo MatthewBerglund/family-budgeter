@@ -1,20 +1,17 @@
 [
   {
-    "id": 1,
     "title": "Test Expense - Cypress - Feb 22 - Pizza",
-    "date": "2022-02-01T22:00:00.000Z",
-    "amount": 99
+    "date": "2022-02-01",
+    "amount": 0.99
   },
   {
-    "id": 2,
     "title": "Test Expense - Cypress - Feb 22 - Tacos",
-    "date": "2022-02-02T22:00:00.000Z",
-    "amount": 499
+    "date": "2022-02-02",
+    "amount": 4.99
   },
   {
-    "id": 3,
     "title": "Test Expense - Cypress - Feb 22 - Bier",
-    "date": "2022-02-02T22:00:00.000Z",
-    "amount": 599
+    "date": "2022-02-02",
+    "amount": 5.99
   }
 ]

@@ -1,25 +1,43 @@
 import '@testing-library/cypress/add-commands';
 
-const TEST_MONTH = 'February 2022';
+const EXPENSE_MONTH = 'February 2022';
 
 describe('Delete expense - not within current month', () => {
   before(() => {
-    cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as(
-      'getExpenseArray'
+    cy.clearDatabase();
+  });
+
+  after(() => {
+    cy.clearDatabase();
+  });
+
+  it('adds an initial expense', () => {
+    cy.visit('/');
+    cy.wait(100);
+    cy.fixture('expense-array').then(expenses => {
+      cy.addExpense(expenses[0]);
+    });
+    cy.wait(100);
+  });
+
+  it('navigates to the new expense month', () => {
+    cy.get(`[id="New expense added to ${EXPENSE_MONTH}"]`).within(() => {
+      cy.get('[data-cy="okButton"]').click();
+    });
+    cy.findByRole('combobox', { name: /select a month/i }).should(
+      'have.value',
+      EXPENSE_MONTH
     );
   });
 
-  beforeEach(() => {
-    cy.intercept('DELETE', '**/items/**', {}).as('deleteExpense');
+  it('adds additional expenses', () => {
+    cy.fixture('expense-array').then(expenses => {
+      cy.addExpense(expenses[1]);
+      cy.addExpense(expenses[2]);
+    });
   });
 
-  it('selects test month', () => {
-    cy.visit('/');
-    cy.wait('@getExpenseArray');
-    cy.findByRole('combobox', { name: /select a month/i }).select(TEST_MONTH);
-  });
-
-  it('checks if fixtures expenses are correctly rendered and sorted', () => {
+  it('checks if the expenses are correctly rendered and sorted', () => {
     cy.get('[data-cy="expenses"] > li')
       .should('have.length', 3)
       .and('not.contain', 'You have no prior expenses');
@@ -44,7 +62,7 @@ describe('Delete expense - not within current month', () => {
     cy.get('[id="Confirm expense deletion"]').within(() => {
       cy.get('[data-cy="okButton"]').click();
     });
-    cy.wait('@deleteExpense');
+    cy.wait(100);
   });
 
   it('checks if expenses are correctly rendered', () => {
@@ -52,7 +70,7 @@ describe('Delete expense - not within current month', () => {
       .should('have.length', 2)
       .should('not.contain', '01/02/2022')
       .and('not.contain', 'Test Expense - Cypress - Feb 22 - Pizza')
-      .and('not.contain', '- €0,99');
+      .and('not.contain', '- €0.99');
   });
 
   it('closes the alert', () => {

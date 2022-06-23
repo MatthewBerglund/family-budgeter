@@ -1,6 +1,5 @@
 {
-  "id": 1,
   "title": "Test Expense - Cypress",
-  "date": "2022-03-01T22:00:00.000Z",
-  "amount": 499
+  "date": "2022-03-01",
+  "amount": 4.99
 }

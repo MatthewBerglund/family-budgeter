@@ -1,24 +1,40 @@
 import '@testing-library/cypress/add-commands';
 
-const TEST_MONTH = 'February 2022';
+const EXPENSE_MONTH = 'February 2022';
 
 describe('Alert delete expense - fail', () => {
   before(() => {
-    cy.intercept('GET', '**/items*', { fixture: 'expense-array' }).as(
-      'getExpenseArray'
-    );
+    cy.clearDatabase();
+  });
+
+  after(() => {
+    cy.clearDatabase();
+  });
+
+  it('adds an initial expense', () => {
     cy.visit('/');
-    cy.wait('@getExpenseArray');
+    cy.wait(100);
+    cy.fixture('expense-array').then(expenses => {
+      cy.addExpense(expenses[0]);
+    });
+    cy.wait(100);
   });
 
-  beforeEach(() => {
-    cy.intercept('DELETE', '**/items/**', {
-      statusCode: 500,
-    }).as('deleteExpenseFail');
+  it('navigates to the new expense month', () => {
+    cy.get(`[id="New expense added to ${EXPENSE_MONTH}"]`).within(() => {
+      cy.get('[data-cy="okButton"]').click();
+    });
+    cy.findByRole('combobox', { name: /select a month/i }).should(
+      'have.value',
+      EXPENSE_MONTH
+    );
   });
 
-  it('selects test month', () => {
-    cy.findByRole('combobox', { name: /select a month/i }).select(TEST_MONTH);
+  it('adds additional expenses', () => {
+    cy.fixture('expense-array').then(expenses => {
+      cy.addExpense(expenses[1]);
+      cy.addExpense(expenses[2]);
+    });
   });
 
   it('selects oldest expense in month', () => {
@@ -33,7 +49,7 @@ describe('Alert delete expense - fail', () => {
     cy.get('[id="Confirm expense deletion"]').within(() => {
       cy.get('[data-cy="okButton"]').click();
     });
-    cy.wait('@deleteExpenseFail');
+    cy.wait(100);
   });
 
   it('checks if the alert is correctly rendered', () => {

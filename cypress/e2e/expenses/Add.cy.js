@@ -1,5 +1,4 @@
 import '@testing-library/cypress/add-commands';
-
 import { getCurrentMonth } from '../../../src/utils/helpers';
 
 const EXPENSE_MONTH = 'March 2022';
@@ -7,20 +6,18 @@ const CURRENT_MONTH = getCurrentMonth();
 
 describe('Add expense - not within current month', () => {
   before(() => {
-    cy.intercept('GET', '**/items*', []).as('getExpenses');
+    cy.clearDatabase();
   });
 
-  beforeEach(() => {
-    cy.intercept('POST', '**/items*', { fixture: 'expense-post' }).as(
-      'postExpense'
-    );
-  });
+  after(() => {
+    cy.clearDatabase();
+  })
 
   it('adds the expense', () => {
     cy.visit('/');
-    cy.wait('@getExpenses');
+    cy.wait(100);
     cy.addExpenseFromFixture('expense-raw');
-    cy.wait('@postExpense');
+    cy.wait(100);
   });
 
   it('selects expense month', () => {

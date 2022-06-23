@@ -12,7 +12,13 @@ const AddExpenses = ({ addExpense, setNewExpenseMonth }) => {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    const expense = { title, date, amount: convertEurosToCents(amount) };
+
+    const expense = {
+      title,
+      date: date.toString(),
+      amount: convertEurosToCents(amount),
+    };
+
     addExpense(expense);
     setTitle('');
     setDate('');

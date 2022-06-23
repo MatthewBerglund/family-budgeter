@@ -2,20 +2,17 @@ import '@testing-library/cypress/add-commands';
 
 describe('Alert add expense - fail', () => {
   before(() => {
-    cy.intercept('GET', '**/items*', []).as('getExpenses');
-    cy.visit('/');
-    cy.wait('@getExpenses');
+    cy.clearDatabase();
   });
 
-  beforeEach(() => {
-    cy.intercept('POST', '**/items*', {
-      statusCode: 500,
-    }).as('postExpenseFail');
+  after(() => {
+    cy.clearDatabase();
   });
 
   it('adds the expense', () => {
+    cy.visit('/');
     cy.addExpenseFromFixture('expense-raw');
-    cy.wait('@postExpenseFail');
+    cy.wait(100);
   });
 
   it('checks if the alert is correctly rendered', () => {
