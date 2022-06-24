@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { collection, doc, addDoc, deleteDoc, updateDoc, query, onSnapshot } from 'firebase/firestore';
 import { getUKFormattedDate, getCurrentMonth } from '../utils/helpers';
 import db from '../firebase';
@@ -14,27 +14,6 @@ import ConfirmDeleteModal from '../components/Modals/ConfirmDeleteModal';
 import EditExpenseModal from '../components/Modals/EditExpenseModal';
 
 const UserDashboard = () => {
-  const currentMonth = getCurrentMonth();
-
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-  const [expenses, setExpenses] = useState([]);
-  const [filteredExpenses, setFilteredExpenses] = useState(expenses);
-
-  // newExpenseMonth is needed to compare with selected month
-  // and trigger the ConfirmMonthModal if they are different
-  const [newExpenseMonth, setNewExpenseMonth] = useState(selectedMonth);
-
-  // variables for toggling alert visibility and state
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const [userAction, setUserAction] = useState('');
-  const [errorOccurred, setErrorOccurred] = useState(false);
-  const [lastDeleted, setLastDeleted] = useState({});
-  const [expenseToEdit, setExpenseToEdit] = useState({});
-
-  // states to toggle the modals
-  const [editExpenseModalIsOpen, setEditExpenseModalIsOpen] = useState(false);
-  const [confirmMonthModalIsOpen, setConfirmMonthModalIsOpen] = useState(false);
-  const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(false);
 
   const changeMonthView = (month) => {
     setSelectedMonth(month);

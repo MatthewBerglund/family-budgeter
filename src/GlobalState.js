@@ -1,24 +1,27 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer } from 'react';
 
-import appReducer from "./appReducer";
+import appReducer from './appReducer';
 
+// Expense history states
 const expenses = [];
 const filteredExpenses = expenses;
 
+// Month view states
 const currentMonth = getCurrentMonth();
 const selectedMonth = currentMonth;
-// Compared against selected month to hide or show ConfirmMonthModal
 const newExpenseMonth = selectedMonth;
 
+// Alert states and visibility
 const userAction = '';
 const didErrorOccur = false;
 const lastExpenseDeleted = {};
-const expenseToEdit = {}
-
 const isAlertOpen = false;
-const isEditExpenseModalOpen = false;
+
+// Modal states and visibility
 const isConfirmMonthModalOpen = false;
 const isConformDeleteModalOpen = false;
+const isEditExpenseModalOpen = false;
+const expenseToEdit = {};
 
 const initialState = {
   expenses,
@@ -33,7 +36,7 @@ const initialState = {
   isAlertOpen,
   isConfirmMonthModalOpen,
   isConformDeleteModalOpen,
-  isEditExpenseModalOpen
+  isEditExpenseModalOpen,
 };
 
 export const GlobalContext = createContext(initialState);
@@ -42,23 +45,32 @@ export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
   function addExpense(expense) {
-    dispatch({
-      type: 'ADD_EXPENSE',
-      payload: expense,
-    });
+    dispatch({ type: 'ADD_EXPENSE', payload: expense });
   }
 
   function editExpense(id, newExpenseData) {
-    dispatch({
-      type: 'EDIT_EXPENSE',
-      payload: { ...newExpenseData, id },
-    });
+    dispatch({ type: 'EDIT_EXPENSE', payload: { ...newExpenseData, id } });
   }
 
   function deleteExpense(id) {
-    dispatch({
-      type: 'EDIT_EXPENSE',
-      payload: id,
-    });
+    dispatch({ type: 'DELETE_EXPENSE', payload: id });
   }
+
+  function restoreExpenses(expenses) {
+    dispatch({ type: 'RESTORE_EXPENSES', payload: expenses });
+  }
+
+  return (
+    <GlobalContext.Provider
+      value={{
+        state,
+        addExpense,
+        editExpense,
+        deleteExpense,
+        restoreExpenses
+      }}
+    >
+      {children}
+    </GlobalContext.Provider>
+  );
 };
