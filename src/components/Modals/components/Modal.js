@@ -15,7 +15,8 @@
  * @param cancelButtonLabel string passed as label to the cancel button
  * @param okButtonLabel string passed as label to the action button
  * @param okButtonColor string passed to the action button className, should be a Bottstrap class (e.g. 'btn-primary')
- *
+ * @param okButtonType optional string representing the button type. Defaults to "button" if not passed.
+ * @param form optional string representing the form to associate `okButton` with
  */
 
 export const Modal = ({
@@ -26,6 +27,8 @@ export const Modal = ({
   cancelButtonLabel,
   okButtonLabel,
   okButtonColor,
+  okButtonType,
+  form
 }) => {
   return (
     <div
@@ -62,7 +65,8 @@ export const Modal = ({
                 {cancelButtonLabel}
               </button>
               <button
-                type="button"
+                type={okButtonType || "button"}
+                form={form}
                 data-cy="okButton"
                 autoFocus
                 className={`btn ${okButtonColor}`}
