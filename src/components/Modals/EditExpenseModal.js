@@ -26,7 +26,6 @@ const EditExpenseModal = ({ setIsOpen, expense, editExpense }) => {
     cancelButtonLabel: 'Cancel',
     okButtonLabel: 'Save',
     okButtonColor: 'btn-primary',
-    okButtonType: 'submit',
     form: 'edit-expense-form'
   };
 
