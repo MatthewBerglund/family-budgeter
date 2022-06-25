@@ -1,6 +1,9 @@
+import { useContext } from 'react';
+import { GlobalContext } from '../GlobalState';
 import { getUniqueMonthsFromExpenses } from '../utils/helpers';
 
-const MonthSelector = ({ expenses, selectedMonth, setSelectedMonth }) => {
+const MonthSelector = ({ selectedMonth, setSelectedMonth }) => {
+  const { expenses } = useContext(GlobalContext);
   const months = getUniqueMonthsFromExpenses(expenses);
 
   return (

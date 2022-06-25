@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { GlobalContext } from '../GlobalState';
 import { getUKFormattedEuros } from '../utils/helpers';
 
-const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
+const Summary = ({ selectedMonth, expenses }) => {
+  const { currentMonth } = useContext(GlobalContext);
+
   const [totalBudget, setTotalBudget] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [spendingRateDeviation, setSpendingRateDeviation] = useState(0);
@@ -13,7 +16,7 @@ const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
   }, []);
 
   const updateTotalExpenses = () => {
-    const expenseSum = filteredExpenses
+    const expenseSum = expenses
       .map(expense => expense.amount)
       .reduce((sum, curr) => {
         return sum + curr;
@@ -25,15 +28,10 @@ const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
     const date = new Date(selectedMonth);
 
     // Get last day of selected month
-    const daysInMonth = new Date(
-      date.getFullYear(),
-      date.getMonth() + 1,
-      0
-    ).getDate();
+    const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 
     // Set day equal to today's date or last day of the month
-    const dayOfMonth =
-      selectedMonth === currentMonth ? new Date().getDate() : daysInMonth;
+    const dayOfMonth = (selectedMonth === currentMonth) ? new Date().getDate() : daysInMonth;
 
     const targetRate = totalBudget / daysInMonth;
     const actualRate = totalExpenses / dayOfMonth;

@@ -1,24 +1,25 @@
-import { useEffect } from 'react';
-import { collection, doc, addDoc, deleteDoc, updateDoc, query, onSnapshot } from 'firebase/firestore';
-import { getUKFormattedDate, getCurrentMonth } from '../utils/helpers';
+import { useEffect, useState, useContext } from 'react';
+import { collection, query, onSnapshot } from 'firebase/firestore';
+import { getCurrentMonth } from '../utils/helpers';
 import db from '../firebase';
 
 import Summary from './Summary';
 import AddExpenses from './AddExpenses';
 import MonthSelector from '../components/MonthSelector';
 import ExpenseHistory from './ExpenseHistory';
-
-import UserActionAlert from '../components/Alerts/UserActionAlert';
-import ConfirmMonthModal from '../components/Modals/ConfirmMonthModal';
-import ConfirmDeleteModal from '../components/Modals/ConfirmDeleteModal';
-import EditExpenseModal from '../components/Modals/EditExpenseModal';
+import { GlobalContext } from '../GlobalState';
+import { getUKFormattedDate } from '../utils/helpers';
 
 const UserDashboard = () => {
+  const { restoreExpenses, expenses, currentMonth } = useContext(GlobalContext);
 
-  const changeMonthView = (month) => {
-    setSelectedMonth(month);
-    setConfirmMonthModalIsOpen(false);
-  };
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth)
+  const [selectedMonthExpenses, setSelectedMonthExpenses] = useState([]);
+
+  // const changeMonthView = (month) => {
+  //   setSelectedMonth(month);
+  //   setConfirmMonthModalIsOpen(false);
+  // };
 
   useEffect(() => {
     try {
@@ -30,7 +31,7 @@ const UserDashboard = () => {
           let expense = { ...doc.data(), id: doc.id };
           expensesArray.push(expense);
         });
-        setExpenses(expensesArray); // <== dispatch RESTORE_EXPENSES w/ payload `expenseArray`
+        restoreExpenses(expensesArray);
       });
     } catch (err) {
       console.log(err);
@@ -39,77 +40,15 @@ const UserDashboard = () => {
   }, []);
 
   useEffect(() => {
-    const expensesToRender = expenses.filter(expense => {
-      let formattedExpenseDate = getUKFormattedDate(new Date(expense.date), {
-        year: 'numeric',
-        month: 'long',
-      });
-      return selectedMonth === formattedExpenseDate;
-    });
-    setFilteredExpenses(expensesToRender);
+    const filteredExpenses = expenses
+      .filter(expense => {
+        const expenseMonth = getUKFormattedDate(new Date(expense.date), { year: 'numeric', month: 'long' });
+        return selectedMonth === expenseMonth;
+      })
+      .sort((expenseA, expenseB) => new Date(expenseB.date) - new Date(expenseA.date));
+
+    setSelectedMonthExpenses(filteredExpenses);
   }, [expenses, selectedMonth]);
-
-  const closeAlert = () => setIsAlertOpen(false);
-
-  const addExpense = async expense => {
-    try {
-      const expensesRef = collection(db, 'expenses');
-      await addDoc(expensesRef, expense);
-
-      if (newExpenseMonth !== selectedMonth) {
-        setConfirmMonthModalIsOpen(true);
-      }
-    } catch (err) {
-      console.log(err);
-      setErrorOccurred(true);
-    }
-
-    setUserAction('add_expense');
-    setIsAlertOpen(true);
-  };
-
-  const removeExpense = async expenseId => {
-    try {
-      const expenseRef = doc(db, 'expenses', expenseId);
-      await deleteDoc(expenseRef);
-
-      if (filteredExpenses.length === 1) {
-        setSelectedMonth(currentMonth);
-      }
-    } catch (err) {
-      console.log(err);
-      setErrorOccurred(true);
-    }
-
-    setConfirmDeleteModalIsOpen(false);
-    setUserAction('delete_expense');
-    setIsAlertOpen(true);
-  };
-
-  const editExpense = async (expenseId, newExpenseData) => {
-    try {
-      const expenseRef = doc(db, 'expenses', expenseId);
-      await updateDoc(expenseRef, newExpenseData);
-
-      const updatedExpenseMonth = getUKFormattedDate(newExpenseData.date, {
-        year: 'numeric',
-        month: 'long',
-      });
-
-      if (
-        updatedExpenseMonth !== selectedMonth &&
-        filteredExpenses.length === 1
-      ) {
-        setSelectedMonth(currentMonth);
-      }
-    } catch (err) {
-      console.log(err);
-      setErrorOccurred(true);
-    }
-
-    setUserAction('edit_expense');
-    setIsAlertOpen(true);
-  };
 
   return (
     <>
@@ -120,7 +59,6 @@ const UserDashboard = () => {
           </div>
           <div className="col-md-3">
             <MonthSelector
-              expenses={expenses}
               selectedMonth={selectedMonth}
               setSelectedMonth={setSelectedMonth}
             />
@@ -131,58 +69,19 @@ const UserDashboard = () => {
         <div className="row g-5">
           <section className="col-lg-6">
             <Summary
-              currentMonth={currentMonth}
               selectedMonth={selectedMonth}
-              filteredExpenses={filteredExpenses}
+              expenses={selectedMonthExpenses}
             />
           </section>
           <section className="col-lg-6">
-            <AddExpenses
-              addExpense={addExpense}
-              setNewExpenseMonth={setNewExpenseMonth}
-            />
+            <AddExpenses />
           </section>
         </div>
         <div className="row g-5 mt-1">
           <section className="col">
-            <ExpenseHistory
-              filteredExpenses={filteredExpenses}
-              setConfirmDeleteModalIsOpen={setConfirmDeleteModalIsOpen}
-              setEditExpenseModalIsOpen={setEditExpenseModalIsOpen}
-              setLastDeleted={setLastDeleted}
-              setExpenseToEdit={setExpenseToEdit}
-            />
+            <ExpenseHistory expenses={selectedMonthExpenses} />
           </section>
         </div>
-        {isAlertOpen && (
-          <UserActionAlert
-            userAction={userAction}
-            errorOccurred={errorOccurred}
-            closeCallback={closeAlert}
-            expense={lastDeleted}
-          />
-        )}
-        {confirmMonthModalIsOpen && (
-          <ConfirmMonthModal
-            newExpenseMonth={newExpenseMonth}
-            setIsOpen={setConfirmMonthModalIsOpen}
-            okCallback={changeMonthView}
-          />
-        )}
-        {confirmDeleteModalIsOpen && (
-          <ConfirmDeleteModal
-            expense={lastDeleted}
-            setIsOpen={setConfirmDeleteModalIsOpen}
-            okCallback={removeExpense}
-          />
-        )}
-        {editExpenseModalIsOpen && (
-          <EditExpenseModal
-            expense={expenseToEdit}
-            setIsOpen={setEditExpenseModalIsOpen}
-            editExpense={editExpense}
-          />
-        )}
       </main>
     </>
   );

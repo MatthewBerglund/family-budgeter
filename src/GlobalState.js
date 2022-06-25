@@ -1,48 +1,16 @@
 import { createContext, useReducer } from 'react';
 
 import appReducer from './appReducer';
+import { getCurrentMonth } from './utils/helpers';
 
-// Expense history states
-const expenses = [];
-const filteredExpenses = expenses;
-
-// Month view states
-const currentMonth = getCurrentMonth();
-const selectedMonth = currentMonth;
-const newExpenseMonth = selectedMonth;
-
-// Alert states and visibility
-const userAction = '';
-const didErrorOccur = false;
-const lastExpenseDeleted = {};
-const isAlertOpen = false;
-
-// Modal states and visibility
-const isConfirmMonthModalOpen = false;
-const isConformDeleteModalOpen = false;
-const isEditExpenseModalOpen = false;
-const expenseToEdit = {};
-
-const initialState = {
-  expenses,
-  filteredExpenses,
-  currentMonth,
-  selectedMonth,
-  newExpenseMonth,
-  userAction,
-  didErrorOccur,
-  lastExpenseDeleted,
-  expenseToEdit,
-  isAlertOpen,
-  isConfirmMonthModalOpen,
-  isConformDeleteModalOpen,
-  isEditExpenseModalOpen,
-};
+const initialState = { expenses: [] };
 
 export const GlobalContext = createContext(initialState);
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
+
+  const currentMonth = getCurrentMonth();
 
   function addExpense(expense) {
     dispatch({ type: 'ADD_EXPENSE', payload: expense });
@@ -63,11 +31,12 @@ export const GlobalProvider = ({ children }) => {
   return (
     <GlobalContext.Provider
       value={{
-        state,
+        expenses: state.expenses,
         addExpense,
         editExpense,
         deleteExpense,
-        restoreExpenses
+        restoreExpenses,
+        currentMonth,
       }}
     >
       {children}
