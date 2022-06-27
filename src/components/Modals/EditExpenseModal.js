@@ -23,10 +23,10 @@ const EditExpenseModal = ({ setIsOpen, expense, editExpense }) => {
   const modalProps = {
     cancelCallback: () => setIsOpen(false),
     modalTitle: 'Edit expense',
-    okCallback: () => formEl.current.requestSubmit(),
     cancelButtonLabel: 'Cancel',
     okButtonLabel: 'Save',
     okButtonColor: 'btn-primary',
+    form: 'edit-expense-form'
   };
 
   return (
