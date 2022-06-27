@@ -1,12 +1,14 @@
+import { useContext } from 'react';
+
+import { GlobalContext } from '../GlobalState';
 import { getUKFormattedDate, getUKFormattedEuros } from '../utils/helpers';
 
 const Expense = ({
   expense,
-  setConfirmDeleteModalIsOpen,
   setEditExpenseModalIsOpen,
-  setLastDeleted,
   setExpenseToEdit,
 }) => {
+  const { openConfirmDeleteModal } = useContext(GlobalContext);
   const { title, amount, date } = expense;
 
   return (
@@ -39,8 +41,7 @@ const Expense = ({
             className="btn btn-danger flex-fill"
             data-cy="deleteButton"
             onClick={() => {
-              setConfirmDeleteModalIsOpen(true);
-              setLastDeleted(expense);
+              openConfirmDeleteModal(expense);
             }}
           >
             Delete

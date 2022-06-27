@@ -1,22 +1,26 @@
+import { useContext } from 'react';
+
 import { Modal } from './components/Modal';
 import { getUKFormattedDate, getUKFormattedEuros } from '../../utils/helpers';
+import { GlobalContext } from '../../GlobalState';
 
-const ConfirmDeleteModal = ({ expense, setIsOpen, okCallback }) => {
-  const { title, amount, date, id } = expense;
+const ConfirmDeleteModal = () => {
+  const { expenseToDelete, deleteExpense, closeConfirmDeleteModal } = useContext(GlobalContext);
+  const { title, amount, date, id } = expenseToDelete;
 
   const modalProps = {
-    cancelCallback: () => setIsOpen(false),
-    okCallback: () => okCallback(id),
+    cancelCallback: () => closeConfirmDeleteModal(),
+    okCallback: () => deleteExpense(id),
     modalTitle: 'Confirm expense deletion',
-    cancelButtonLabel: "I'm not sure",
-    okButtonLabel: 'Yes delete!!',
+    cancelButtonLabel: 'Cancel',
+    okButtonLabel: 'Delete',
     okButtonColor: 'btn-danger',
   };
 
   return (
     <Modal {...modalProps}>
       <h6 className="mb-3">Please confirm you want to delete this expense:</h6>
-      {expense && (
+      {expenseToDelete && (
         <dl className="row">
           <dt className="col-3">Date:</dt>
           <dd className="col-9">{getUKFormattedDate(date)}</dd>

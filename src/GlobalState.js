@@ -1,5 +1,5 @@
 import { createContext, useReducer } from 'react';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, doc, addDoc, deleteDoc } from 'firebase/firestore';
 
 import db from './firebase';
 import appReducer from './appReducer';
@@ -12,7 +12,9 @@ const initialState = {
   currentMonth: currentMonth,
   selectedMonth: currentMonth,
   lastAddedExpense: {},
+  expenseToDelete: {},
   isConfirmMonthModalOpen: false,
+  isConfirmDeleteModalOpen: false,
   didErrorOccur: false,
   isAlertOpen: false,
   userAction: '',
@@ -38,8 +40,14 @@ export const GlobalProvider = ({ children }) => {
     dispatch({ type: 'EDIT_EXPENSE', payload: { ...newExpenseData, id } });
   }
 
-  function deleteExpense(id) {
-    dispatch({ type: 'DELETE_EXPENSE', payload: id });
+  async function deleteExpense(id) {
+    try {
+      const expenseRef = doc(db, 'expenses', id);
+      await deleteDoc(expenseRef);
+      dispatch({ type: 'DELETE_EXPENSE_SUCCESS' });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function restoreExpenses(expenses) {
@@ -48,6 +56,14 @@ export const GlobalProvider = ({ children }) => {
 
   function changeMonthView(month) {
     dispatch({ type: 'CHANGE_MONTH_VIEW', payload: month });
+  }
+
+  function openConfirmDeleteModal(expense) {
+    dispatch({ type: 'OPEN_CONFIRM_DELETE_MODAL', payload: expense });
+  }
+
+  function closeConfirmDeleteModal() {
+    dispatch({ type: 'CLOSE_CONFIRM_DELETE_MODAL' });
   }
 
   function closeConfirmMonthModal() {
@@ -67,6 +83,8 @@ export const GlobalProvider = ({ children }) => {
         deleteExpense,
         restoreExpenses,
         changeMonthView,
+        openConfirmDeleteModal,
+        closeConfirmDeleteModal,
         closeConfirmMonthModal,
         closeAlert,
       }}

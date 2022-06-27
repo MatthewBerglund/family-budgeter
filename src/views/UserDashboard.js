@@ -1,18 +1,20 @@
 import { useEffect, useState, useContext } from 'react';
 import { collection, query, onSnapshot } from 'firebase/firestore';
-import db from '../firebase';
 
 import Summary from './Summary';
 import AddExpenses from './AddExpenses';
 import MonthSelector from '../components/MonthSelector';
 import ExpenseHistory from './ExpenseHistory';
 import ConfirmMonthModal from '../components/Modals/ConfirmMonthModal'
-import { GlobalContext } from '../GlobalState';
-import { getUKFormattedDate } from '../utils/helpers';
+import ConfirmDeleteModal from '../components/Modals/ConfirmDeleteModal';
 import UserActionAlert from '../components/Alerts/UserActionAlert';
 
+import db from '../firebase';
+import { GlobalContext } from '../GlobalState';
+import { getUKFormattedDate } from '../utils/helpers';
+
 const UserDashboard = () => {
-  const { expenses, lastAddedExpense, selectedMonth, isConfirmMonthModalOpen, isAlertOpen, restoreExpenses } = useContext(GlobalContext);
+  const { expenses, selectedMonth, isConfirmMonthModalOpen, isConfirmDeleteModalOpen, isAlertOpen, restoreExpenses } = useContext(GlobalContext);
 
   const [selectedMonthExpenses, setSelectedMonthExpenses] = useState([]);
 
@@ -75,7 +77,8 @@ const UserDashboard = () => {
             <ExpenseHistory expenses={selectedMonthExpenses} />
           </section>
         </div>
-        {isConfirmMonthModalOpen && <ConfirmMonthModal expense={lastAddedExpense} />}
+        {isConfirmMonthModalOpen && <ConfirmMonthModal />}
+        {isConfirmDeleteModalOpen && <ConfirmDeleteModal />}
         {isAlertOpen && <UserActionAlert />}
       </main>
     </>

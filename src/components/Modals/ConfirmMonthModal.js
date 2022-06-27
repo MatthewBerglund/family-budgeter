@@ -4,10 +4,10 @@ import { Modal } from './components/Modal';
 import { getUKFormattedDate } from '../../utils/helpers';
 import { GlobalContext } from '../../GlobalState';
 
-const ConfirmMonthModal = ({ expense }) => {
-  const { closeConfirmMonthModal, changeMonthView } = useContext(GlobalContext);
+const ConfirmMonthModal = () => {
+  const { lastAddedExpense, closeConfirmMonthModal, changeMonthView } = useContext(GlobalContext);
 
-  const expenseMonth = getUKFormattedDate(expense.date, { year: 'numeric', month: 'long' });
+  const expenseMonth = getUKFormattedDate(lastAddedExpense.date, { year: 'numeric', month: 'long' });
 
   const modalProps = {
     cancelCallback: () => closeConfirmMonthModal(),

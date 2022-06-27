@@ -31,7 +31,14 @@ const appReducer = (state, action) => {
 
     // case 'EDIT_EXPENSE':
 
-    // case 'DELETE_EXPENSE':
+    case 'DELETE_EXPENSE_SUCCESS':
+      return {
+        ...state,
+        didErrorOccur: false,
+        isAlertOpen: true,
+        userAction: 'delete_expense',
+        isConfirmDeleteModalOpen: false,
+      };
 
     case 'CHANGE_MONTH_VIEW':
       return {
@@ -42,6 +49,16 @@ const appReducer = (state, action) => {
 
     case 'CLOSE_CONFIRM_MONTH_MODAL':
       return { ...state, isConfirmMonthModalOpen: false };
+
+    case 'OPEN_CONFIRM_DELETE_MODAL':
+      return {
+        ...state,
+        isConfirmDeleteModalOpen: true,
+        expenseToDelete: action.payload
+      };
+
+    case 'CLOSE_CONFIRM_DELETE_MODAL':
+      return { ...state, isConfirmDeleteModalOpen: false };
 
     case 'CLOSE_ALERT':
       return { ...state, isAlertOpen: false };
