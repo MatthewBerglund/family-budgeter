@@ -22,14 +22,7 @@ const UserDashboard = () => {
     try {
       // Listen for changes to any doc in "expenses" collection and update expenses locally
       const q = query(collection(db, 'expenses'));
-      onSnapshot(q, querySnapshot => {
-        const expensesArray = [];
-        querySnapshot.forEach(doc => {
-          let expense = { ...doc.data(), id: doc.id };
-          expensesArray.push(expense);
-        });
-        restoreExpenses(expensesArray);
-      });
+      onSnapshot(q, restoreExpenses);
     } catch (err) {
       console.log(err);
       alert('Error loading expenses. Please try again later.');

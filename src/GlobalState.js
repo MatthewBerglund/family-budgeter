@@ -47,10 +47,16 @@ export const GlobalProvider = ({ children }) => {
       dispatch({ type: 'DELETE_EXPENSE_SUCCESS' });
     } catch (err) {
       console.log(err);
+      dispatch({ type: 'DELETE_EXPENSE_FAIL' });
     }
   }
 
-  function restoreExpenses(expenses) {
+  function restoreExpenses(expensesQuerySnapshot) {
+    const expenses = [];
+    expensesQuerySnapshot.forEach(doc => {
+      let expense = { ...doc.data(), id: doc.id };
+      expenses.push(expense);
+    });
     dispatch({ type: 'RESTORE_EXPENSES', payload: expenses });
   }
 

@@ -40,6 +40,14 @@ const appReducer = (state, action) => {
         isConfirmDeleteModalOpen: false,
       };
 
+    case 'DELETE_EXPENSE_FAIL':
+      return {
+        ...state,
+        didErrorOccur: true,
+        userAction: 'delete_expense',
+        isAlertOpen: true,
+      };
+
     case 'CHANGE_MONTH_VIEW':
       return {
         ...state,
