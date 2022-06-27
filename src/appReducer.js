@@ -1,74 +1,52 @@
-import { collection, addDoc } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import db from './firebase';
+
+import { getUKFormattedDate } from './utils/helpers';
 
 const appReducer = (state, action) => {
   switch (action.type) {
-    case "RESTORE_EXPENSES":
+    case 'RESTORE_EXPENSES':
       return {
         ...state,
         expenses: action.payload,
       };
-    case "ADD_EXPENSE":
-      (async () => {
-        const expense = action.payload;
 
-        try {
-          const expensesRef = collection(db, 'expenses');
-          await addDoc(expensesRef, expense);
-        } catch (err) {
-          console.log(err);
-        }
+    case 'ADD_EXPENSE_SUCCESS':
+      const expense = action.payload;
+      const expenseDate = new Date(expense.date);
+      const expenseMonth = getUKFormattedDate(expenseDate, {
+        year: 'numeric',
+        month: 'long',
+      });
+      return {
+        ...state,
+        lastAddedExpense: { ...expense },
+        isConfirmMonthModalOpen: expenseMonth !== state.selectedMonth,
+        didErrorOccur: false,
+        isAlertOpen: true,
+        userAction: 'add_expense',
+      };
 
-        return state;
-      })();
-    // case "EDIT_EXPENSE":
-    //   (async () => {
-    //     try {
-    //       const expense = action.payload;
-    //       const expenseRef = doc(db, 'expenses', expense.id);
-    //       await updateDoc(expenseRef, expense);
+    case 'ADD_EXPENSE_FAIL':
+      return { ...state, didErrorOccur: true, isAlertOpen: true, userAction: 'add_expense' };
 
-    //       const updatedExpenseMonth = getUKFormattedDate(expense.date, { year: 'numeric', month: 'long' });
+    // case 'EDIT_EXPENSE':
 
-    //       if (updatedExpenseMonth !== selectedMonth && filteredExpenses.length === 1) {
-    //         selectedMonth = currentMonth;
-    //       }
-    //     } catch (err) {
-    //       console.log(err);
-    //       didErrorOccur = true;
-    //     }
+    // case 'DELETE_EXPENSE':
 
-    //     return {
-    //       ...state,
-    //       didErrorOccur,
-    //       selectedMonth,
-    //       userAction: 'edit_expense',
-    //       isAlertOpen: true,
-    //     };
-    //   })();
-    // case "DELETE_EXPENSE":
-    //   (async () => {
-    //     try {
-    //       const expenseRef = doc(db, 'expenses', action.payload);
-    //       await deleteDoc(expenseRef);
+    case 'CHANGE_MONTH_VIEW':
+      return {
+        ...state,
+        selectedMonth: action.payload,
+        isConfirmMonthModalOpen: false,
+      };
 
-    //       if (filteredExpenses.length === 1) {
-    //         selectedMonth = currentMonth;
-    //       }
-    //     } catch (err) {
-    //       console.log(err);
-    //       didErrorOccur = true;
-    //     }
+    case 'CLOSE_CONFIRM_MONTH_MODAL':
+      return { ...state, isConfirmMonthModalOpen: false };
 
-    //     return {
-    //       ...state,
-    //       didErrorOccur,
-    //       selectedMonth,
-    //       isConfirmDeleteModalOpen,
-    //       userAction: 'delete_expense',
-    //       isAlertOpen: true,
-    //     };
-    //   })();
+    case 'CLOSE_ALERT':
+      return { ...state, isAlertOpen: false };
+
     default:
       return state;
   }

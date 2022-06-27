@@ -1,25 +1,20 @@
 import { useEffect, useState, useContext } from 'react';
 import { collection, query, onSnapshot } from 'firebase/firestore';
-import { getCurrentMonth } from '../utils/helpers';
 import db from '../firebase';
 
 import Summary from './Summary';
 import AddExpenses from './AddExpenses';
 import MonthSelector from '../components/MonthSelector';
 import ExpenseHistory from './ExpenseHistory';
+import ConfirmMonthModal from '../components/Modals/ConfirmMonthModal'
 import { GlobalContext } from '../GlobalState';
 import { getUKFormattedDate } from '../utils/helpers';
+import UserActionAlert from '../components/Alerts/UserActionAlert';
 
 const UserDashboard = () => {
-  const { restoreExpenses, expenses, currentMonth } = useContext(GlobalContext);
+  const { expenses, lastAddedExpense, selectedMonth, isConfirmMonthModalOpen, isAlertOpen, restoreExpenses } = useContext(GlobalContext);
 
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth)
   const [selectedMonthExpenses, setSelectedMonthExpenses] = useState([]);
-
-  // const changeMonthView = (month) => {
-  //   setSelectedMonth(month);
-  //   setConfirmMonthModalIsOpen(false);
-  // };
 
   useEffect(() => {
     try {
@@ -40,6 +35,7 @@ const UserDashboard = () => {
   }, []);
 
   useEffect(() => {
+    // Filter for expenses that belong in the selected month
     const filteredExpenses = expenses
       .filter(expense => {
         const expenseMonth = getUKFormattedDate(new Date(expense.date), { year: 'numeric', month: 'long' });
@@ -58,10 +54,7 @@ const UserDashboard = () => {
             <h1 className="display-1 text-dark">Matt's budget</h1>
           </div>
           <div className="col-md-3">
-            <MonthSelector
-              selectedMonth={selectedMonth}
-              setSelectedMonth={setSelectedMonth}
-            />
+            <MonthSelector />
           </div>
         </div>
       </header>
@@ -82,6 +75,8 @@ const UserDashboard = () => {
             <ExpenseHistory expenses={selectedMonthExpenses} />
           </section>
         </div>
+        {isConfirmMonthModalOpen && <ConfirmMonthModal expense={lastAddedExpense} />}
+        {isAlertOpen && <UserActionAlert />}
       </main>
     </>
   );

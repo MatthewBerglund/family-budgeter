@@ -1,12 +1,20 @@
-import { Modal } from './components/Modal';
+import { useContext } from 'react';
 
-const ConfirmMonthModal = ({ newExpenseMonth, setIsOpen, okCallback }) => {
+import { Modal } from './components/Modal';
+import { getUKFormattedDate } from '../../utils/helpers';
+import { GlobalContext } from '../../GlobalState';
+
+const ConfirmMonthModal = ({ expense }) => {
+  const { closeConfirmMonthModal, changeMonthView } = useContext(GlobalContext);
+
+  const expenseMonth = getUKFormattedDate(expense.date, { year: 'numeric', month: 'long' });
+
   const modalProps = {
-    cancelCallback: () => setIsOpen(false),
-    okCallback: () => okCallback(newExpenseMonth),
-    modalTitle: `New expense added to ${newExpenseMonth}`,
+    cancelCallback: () => closeConfirmMonthModal(),
+    okCallback: () => changeMonthView(expenseMonth),
+    modalTitle: `New expense added to ${expenseMonth}`,
     cancelButtonLabel: 'Stay here',
-    okButtonLabel: `Open ${newExpenseMonth}`,
+    okButtonLabel: `Open ${expenseMonth}`,
     okButtonColor: 'btn-primary',
   };
 
