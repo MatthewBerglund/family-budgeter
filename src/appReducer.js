@@ -1,6 +1,3 @@
-import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import db from './firebase';
-
 import { getUKFormattedDate } from './utils/helpers';
 
 const appReducer = (state, action) => {
@@ -14,10 +11,7 @@ const appReducer = (state, action) => {
     case 'ADD_EXPENSE_SUCCESS':
       const expense = action.payload;
       const expenseDate = new Date(expense.date);
-      const expenseMonth = getUKFormattedDate(expenseDate, {
-        year: 'numeric',
-        month: 'long',
-      });
+      const expenseMonth = getUKFormattedDate(expenseDate, { year: 'numeric', month: 'long' });
       return {
         ...state,
         lastAddedExpense: { ...expense },
@@ -28,7 +22,12 @@ const appReducer = (state, action) => {
       };
 
     case 'ADD_EXPENSE_FAIL':
-      return { ...state, didErrorOccur: true, isAlertOpen: true, userAction: 'add_expense' };
+      return {
+        ...state,
+        didErrorOccur: true,
+        isAlertOpen: true,
+        userAction: 'add_expense'
+      };
 
     // case 'EDIT_EXPENSE':
 

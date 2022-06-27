@@ -1,6 +1,11 @@
+import { useContext } from 'react';
+
+import { GlobalContext } from '../../GlobalState';
 import Alert from './components/Alert';
 
-const ExpenseAddedAlert = (didErrorOccur, closeAlert) => {
+const ExpenseAddedAlert = () => {
+  const { didErrorOccur, closeAlert } = useContext(GlobalContext);
+
   return (
     <Alert
       color={didErrorOccur ? 'danger' : 'success'}

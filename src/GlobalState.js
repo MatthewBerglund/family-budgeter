@@ -5,10 +5,12 @@ import db from './firebase';
 import appReducer from './appReducer';
 import { getCurrentMonth } from './utils/helpers';
 
+const currentMonth = getCurrentMonth();
+
 const initialState = {
   expenses: [],
-  currentMonth: getCurrentMonth(),
-  selectedMonth: getCurrentMonth(),
+  currentMonth: currentMonth,
+  selectedMonth: currentMonth,
   lastAddedExpense: {},
   isConfirmMonthModalOpen: false,
   didErrorOccur: false,
@@ -49,7 +51,7 @@ export const GlobalProvider = ({ children }) => {
   }
 
   function closeConfirmMonthModal() {
-    dispatch({ type: 'CANCEL_MONTH_CHANGE' });
+    dispatch({ type: 'CLOSE_CONFIRM_MONTH_MODAL' });
   }
 
   function closeAlert() {
