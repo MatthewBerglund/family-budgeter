@@ -1,13 +1,18 @@
+import { useContext } from 'react';
+
+import { GlobalContext } from '../../GlobalState';
 import Alert from './components/Alert';
 
-const ExpenseEditedAlert = ({ errorOccurred, closeCallback }) => {
+const ExpenseEditedAlert = () => {
+  const { didErrorOccur, closeAlert } = useContext(GlobalContext);
+
   return (
     <Alert
-      color={errorOccurred ? 'danger' : 'success'}
-      heading={errorOccurred ? 'Error editing expense' : 'Expense edited'}
-      closeCallback={closeCallback}
+      color={didErrorOccur ? 'danger' : 'success'}
+      heading={didErrorOccur ? 'Error editing expense' : 'Expense edited'}
+      closeCallback={closeAlert}
     >
-      {errorOccurred
+      {didErrorOccur
         ? 'The new expense information could not be saved. Please try again.'
         : 'The new expense information has been successfully saved.'}
     </Alert>

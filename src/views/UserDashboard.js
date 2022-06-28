@@ -7,6 +7,7 @@ import MonthSelector from '../components/MonthSelector';
 import ExpenseHistory from './ExpenseHistory';
 import ConfirmMonthModal from '../components/Modals/ConfirmMonthModal'
 import ConfirmDeleteModal from '../components/Modals/ConfirmDeleteModal';
+import EditExpenseModal from '../components/Modals/EditExpenseModal';
 import UserActionAlert from '../components/Alerts/UserActionAlert';
 
 import db from '../firebase';
@@ -14,7 +15,15 @@ import { GlobalContext } from '../GlobalState';
 import { getUKFormattedDate } from '../utils/helpers';
 
 const UserDashboard = () => {
-  const { expenses, selectedMonth, isConfirmMonthModalOpen, isConfirmDeleteModalOpen, isAlertOpen, restoreExpenses } = useContext(GlobalContext);
+  const {
+    expenses,
+    selectedMonth,
+    isConfirmMonthModalOpen,
+    isConfirmDeleteModalOpen,
+    isEditExpenseModalOpen,
+    isAlertOpen,
+    restoreExpenses,
+  } = useContext(GlobalContext);
 
   const [selectedMonthExpenses, setSelectedMonthExpenses] = useState([]);
 
@@ -72,6 +81,7 @@ const UserDashboard = () => {
         </div>
         {isConfirmMonthModalOpen && <ConfirmMonthModal />}
         {isConfirmDeleteModalOpen && <ConfirmDeleteModal />}
+        {isEditExpenseModalOpen && <EditExpenseModal />}
         {isAlertOpen && <UserActionAlert />}
       </main>
     </>

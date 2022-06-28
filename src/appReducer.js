@@ -1,6 +1,9 @@
 import { getUKFormattedDate } from './utils/helpers';
 
 const appReducer = (state, action) => {
+  let expense;
+  let expenseMonth;
+
   switch (action.type) {
     case 'RESTORE_EXPENSES':
       return {
@@ -9,9 +12,9 @@ const appReducer = (state, action) => {
       };
 
     case 'ADD_EXPENSE_SUCCESS':
-      const expense = action.payload;
-      const expenseDate = new Date(expense.date);
-      const expenseMonth = getUKFormattedDate(expenseDate, { year: 'numeric', month: 'long' });
+      expense = action.payload;
+      expenseMonth = getUKFormattedDate(expense.date, { year: 'numeric', month: 'long' });
+
       return {
         ...state,
         lastAddedExpense: { ...expense },
@@ -26,18 +29,48 @@ const appReducer = (state, action) => {
         ...state,
         didErrorOccur: true,
         isAlertOpen: true,
-        userAction: 'add_expense'
+        userAction: 'add_expense',
       };
 
-    // case 'EDIT_EXPENSE':
+    case 'EDIT_EXPENSE_SUCCESS':
+      // If the month of the last expense was changed, navigate to current month
+
+      return {
+        ...state,
+        didErrorOccur: false,
+        userAction: 'edit_expense',
+        isAlertOpen: true,
+        isEditExpenseModalOpen: false,
+      };
+
+    case 'EDIT_EXPENSE_FAIL':
+      return {
+        ...state,
+        didErrorOccur: true,
+        userAction: 'edit_expense',
+        isAlertOpen: true,
+        isEditExpenseModalOpen: false,
+      };
 
     case 'DELETE_EXPENSE_SUCCESS':
+      const expensesInSelectedMonth = state.expenses.filter(expense => {
+        let month = getUKFormattedDate(expense.date, { year: 'numeric', month: 'long' });
+        return month === state.selectedMonth;
+      });
+
+      let newSelectedMonth = state.selectedMonth;
+
+      if (expensesInSelectedMonth.length === 0) {
+        newSelectedMonth = state.currentMonth;
+      }
+
       return {
         ...state,
         didErrorOccur: false,
         isAlertOpen: true,
         userAction: 'delete_expense',
         isConfirmDeleteModalOpen: false,
+        selectedMonth: newSelectedMonth,
       };
 
     case 'DELETE_EXPENSE_FAIL':
@@ -46,6 +79,7 @@ const appReducer = (state, action) => {
         didErrorOccur: true,
         userAction: 'delete_expense',
         isAlertOpen: true,
+        isConfirmDeleteModalOpen: false,
       };
 
     case 'CHANGE_MONTH_VIEW':
@@ -62,11 +96,21 @@ const appReducer = (state, action) => {
       return {
         ...state,
         isConfirmDeleteModalOpen: true,
-        expenseToDelete: action.payload
+        expenseToDelete: action.payload,
       };
 
     case 'CLOSE_CONFIRM_DELETE_MODAL':
       return { ...state, isConfirmDeleteModalOpen: false };
+
+    case 'OPEN_EDIT_EXPENSE_MODAL':
+      return {
+        ...state,
+        isEditExpenseModalOpen: true,
+        expenseToEdit: action.payload,
+      };
+
+    case 'CLOSE_EDIT_EXPENSE_MODAL':
+      return { ...state, isEditExpenseModalOpen: false };
 
     case 'CLOSE_ALERT':
       return { ...state, isAlertOpen: false };

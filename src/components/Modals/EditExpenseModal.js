@@ -1,12 +1,16 @@
+import { useState, useRef, useContext } from 'react';
 import DatePicker from 'react-datepicker';
+
+import { GlobalContext } from '../../GlobalState';
 import { Modal } from './components/Modal';
-import { useState, useRef } from 'react';
 import { convertCentsToEuros, convertEurosToCents } from '../../utils/helpers';
 
-const EditExpenseModal = ({ setIsOpen, expense, editExpense }) => {
-  const [title, setTitle] = useState(expense.title);
-  const [date, setDate] = useState(new Date(expense.date));
-  const [amount, setAmount] = useState(convertCentsToEuros(expense.amount));
+const EditExpenseModal = () => {
+  const { expenseToEdit, editExpense, closeEditExpenseModal } = useContext(GlobalContext);
+
+  const [title, setTitle] = useState(expenseToEdit.title);
+  const [date, setDate] = useState(new Date(expenseToEdit.date));
+  const [amount, setAmount] = useState(convertCentsToEuros(expenseToEdit.amount));
   const formEl = useRef(null);
 
   const handleSubmit = e => {
@@ -16,17 +20,16 @@ const EditExpenseModal = ({ setIsOpen, expense, editExpense }) => {
       date: date.toString(),
       amount: convertEurosToCents(amount),
     };
-    editExpense(expense.id, newExpenseData);
-    setIsOpen(false);
+    editExpense(expenseToEdit.id, newExpenseData);
   };
 
   const modalProps = {
-    cancelCallback: () => setIsOpen(false),
+    cancelCallback: () => closeEditExpenseModal(),
     modalTitle: 'Edit expense',
-    okCallback: () => formEl.current.requestSubmit(),
     cancelButtonLabel: 'Cancel',
     okButtonLabel: 'Save',
     okButtonColor: 'btn-primary',
+    form: 'edit-expense-form',
   };
 
   return (

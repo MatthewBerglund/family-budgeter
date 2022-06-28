@@ -3,12 +3,8 @@ import { useContext } from 'react';
 import { GlobalContext } from '../GlobalState';
 import { getUKFormattedDate, getUKFormattedEuros } from '../utils/helpers';
 
-const Expense = ({
-  expense,
-  setEditExpenseModalIsOpen,
-  setExpenseToEdit,
-}) => {
-  const { openConfirmDeleteModal } = useContext(GlobalContext);
+const Expense = ({ expense }) => {
+  const { openConfirmDeleteModal, openEditExpenseModal } = useContext(GlobalContext);
   const { title, amount, date } = expense;
 
   return (
@@ -28,10 +24,7 @@ const Expense = ({
         <div className="col-2 col-lg-1 d-flex ps-lg-3">
           <button
             className="btn btn-outline-secondary flex-fill"
-            onClick={() => {
-              setEditExpenseModalIsOpen(true);
-              setExpenseToEdit(expense);
-            }}
+            onClick={() => openEditExpenseModal(expense)}
           >
             Edit
           </button>
@@ -40,9 +33,7 @@ const Expense = ({
           <button
             className="btn btn-danger flex-fill"
             data-cy="deleteButton"
-            onClick={() => {
-              openConfirmDeleteModal(expense);
-            }}
+            onClick={() => openConfirmDeleteModal(expense)}
           >
             Delete
           </button>
