@@ -3,8 +3,8 @@ import { getUKFormattedDate } from '../../utils/helpers';
 import { useGlobalFunctions, useGlobalState } from '../../utils/hooks';
 
 const ConfirmMonthModal = () => {
-  const { lastAddedExpense } = useGlobalState;
-  const { closeConfirmMonthModal, changeMonthView } = useGlobalFunctions;
+  const { lastAddedExpense } = useGlobalState();
+  const { closeConfirmMonthModal, changeMonthView } = useGlobalFunctions();
 
   const expenseMonth = getUKFormattedDate(lastAddedExpense.date, { year: 'numeric', month: 'long' });
 
