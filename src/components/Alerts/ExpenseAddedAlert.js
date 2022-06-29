@@ -1,10 +1,9 @@
-import { useContext } from 'react';
-
-import { GlobalContext } from '../../GlobalState';
 import Alert from './components/Alert';
+import { useGlobalState, useGlobalFunctions } from '../../utils/hooks';
 
 const ExpenseAddedAlert = () => {
-  const { didErrorOccur, closeAlert } = useContext(GlobalContext);
+  const { didErrorOccur } = useGlobalState();
+  const { closeAlert } = useGlobalFunctions();
 
   return (
     <Alert

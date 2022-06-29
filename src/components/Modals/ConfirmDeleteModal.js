@@ -1,11 +1,11 @@
-import { useContext } from 'react';
-
 import { Modal } from './components/Modal';
 import { getUKFormattedDate, getUKFormattedEuros } from '../../utils/helpers';
-import { GlobalContext } from '../../GlobalState';
+import { useGlobalFunctions, useGlobalState } from '../../utils/hooks';
 
 const ConfirmDeleteModal = () => {
-  const { expenseToDelete, deleteExpense, closeConfirmDeleteModal } = useContext(GlobalContext);
+  const { expenseToDelete } = useGlobalState();
+  const { deleteExpense, closeConfirmDeleteModal } = useGlobalFunctions();
+
   const { title, amount, date, id } = expenseToDelete;
 
   const modalProps = {

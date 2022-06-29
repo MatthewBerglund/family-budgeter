@@ -1,11 +1,10 @@
-import { useContext } from 'react';
-
 import { Modal } from './components/Modal';
 import { getUKFormattedDate } from '../../utils/helpers';
-import { GlobalContext } from '../../GlobalState';
+import { useGlobalFunctions, useGlobalState } from '../../utils/hooks';
 
 const ConfirmMonthModal = () => {
-  const { lastAddedExpense, closeConfirmMonthModal, changeMonthView } = useContext(GlobalContext);
+  const { lastAddedExpense } = useGlobalState;
+  const { closeConfirmMonthModal, changeMonthView } = useGlobalFunctions;
 
   const expenseMonth = getUKFormattedDate(lastAddedExpense.date, { year: 'numeric', month: 'long' });
 

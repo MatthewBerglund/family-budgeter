@@ -1,6 +1,3 @@
-import { useEffect, useState, useContext } from 'react';
-import { collection, query, onSnapshot } from 'firebase/firestore';
-
 import Summary from './Summary';
 import AddExpenses from './AddExpenses';
 import MonthSelector from '../components/MonthSelector';
@@ -10,53 +7,10 @@ import ConfirmDeleteModal from '../components/Modals/ConfirmDeleteModal';
 import EditExpenseModal from '../components/Modals/EditExpenseModal';
 import UserActionAlert from '../components/Alerts/UserActionAlert';
 
-import db from '../firebase';
-import { GlobalContext } from '../GlobalState';
-import { getUKFormattedDate } from '../utils/helpers';
+import { useGlobalState } from '../utils/hooks';
 
 const UserDashboard = () => {
-  const {
-    expenses,
-    selectedMonth,
-    isConfirmMonthModalOpen,
-    isConfirmDeleteModalOpen,
-    isEditExpenseModalOpen,
-    isAlertOpen,
-    restoreExpenses,
-    changeMonthView,
-    currentMonth,
-  } = useContext(GlobalContext);
-
-  const [selectedMonthExpenses, setSelectedMonthExpenses] = useState([]);
-
-  useEffect(() => {
-    try {
-      // Listen for changes to any doc in "expenses" collection and update expenses locally
-      const q = query(collection(db, 'expenses'));
-      onSnapshot(q, restoreExpenses);
-    } catch (err) {
-      console.log(err);
-      alert('Error loading expenses. Please try again later.');
-    }
-  }, []);
-
-  useEffect(() => {
-    // Filter for expenses that belong in the selected month
-    const filteredExpenses = expenses
-      .filter(expense => {
-        const expenseMonth = getUKFormattedDate(new Date(expense.date), { year: 'numeric', month: 'long' });
-        return selectedMonth === expenseMonth;
-      })
-      .sort((expenseA, expenseB) => new Date(expenseB.date) - new Date(expenseA.date));
-
-    setSelectedMonthExpenses(filteredExpenses);
-  }, [expenses, selectedMonth]);
-
-  useEffect(() => {
-    if (selectedMonthExpenses.length === 0) {
-      changeMonthView(currentMonth);
-    }
-  }, [selectedMonthExpenses, changeMonthView, currentMonth]);
+  const { isConfirmMonthModalOpen, isConfirmDeleteModalOpen, isEditExpenseModalOpen, isAlertOpen } = useGlobalState();
 
   return (
     <>
@@ -73,10 +27,7 @@ const UserDashboard = () => {
       <main className="container py-5">
         <div className="row g-5">
           <section className="col-lg-6">
-            <Summary
-              selectedMonth={selectedMonth}
-              expenses={selectedMonthExpenses}
-            />
+            <Summary />
           </section>
           <section className="col-lg-6">
             <AddExpenses />
@@ -84,7 +35,7 @@ const UserDashboard = () => {
         </div>
         <div className="row g-5 mt-1">
           <section className="col">
-            <ExpenseHistory expenses={selectedMonthExpenses} />
+            <ExpenseHistory />
           </section>
         </div>
         {isConfirmMonthModalOpen && <ConfirmMonthModal />}

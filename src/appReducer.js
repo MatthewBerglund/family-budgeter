@@ -101,6 +101,9 @@ const appReducer = (state, action) => {
     case 'CLOSE_ALERT':
       return { ...state, isAlertOpen: false };
 
+    case 'UPDATE_SELECTED_MONTH_EXPENSES':
+      return { ...state, selectedMonthExpenses: action.payload };
+
     default:
       return state;
   }

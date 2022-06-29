@@ -1,11 +1,11 @@
-import { useContext } from 'react';
-
-import { GlobalContext } from '../../GlobalState';
 import { getUKFormattedEuros, getUKFormattedDate } from '../../utils/helpers';
+import { useGlobalFunctions, useGlobalState } from '../../utils/hooks';
 import Alert from './components/Alert';
 
 const ExpenseDeletedAlert = () => {
-  const { expenseToDelete, didErrorOccur, closeAlert } = useContext(GlobalContext);
+  const { didErrorOccur, expenseToDelete } = useGlobalState();
+  const { closeAlert } = useGlobalFunctions();
+
   const { title, date, amount } = expenseToDelete;
 
   return (

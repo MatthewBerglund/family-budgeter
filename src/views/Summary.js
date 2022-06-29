@@ -1,9 +1,10 @@
-import { useEffect, useState, useContext } from 'react';
-import { GlobalContext } from '../GlobalState';
-import { getUKFormattedEuros } from '../utils/helpers';
+import { useEffect, useState } from 'react';
 
-const Summary = ({ selectedMonth, expenses }) => {
-  const { currentMonth } = useContext(GlobalContext);
+import { getUKFormattedEuros } from '../utils/helpers';
+import { useGlobalState } from '../utils/hooks';
+
+const Summary = () => {
+  const { currentMonth, selectedMonth, selectedMonthExpenses } = useGlobalState();
 
   const [totalBudget, setTotalBudget] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
@@ -16,11 +17,9 @@ const Summary = ({ selectedMonth, expenses }) => {
   }, []);
 
   const updateTotalExpenses = () => {
-    const expenseSum = expenses
+    const expenseSum = selectedMonthExpenses
       .map(expense => expense.amount)
-      .reduce((sum, curr) => {
-        return sum + curr;
-      }, 0);
+      .reduce((sum, curr) => sum + curr, 0);
     setTotalExpenses(expenseSum);
   };
 
