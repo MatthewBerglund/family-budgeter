@@ -23,6 +23,8 @@ const UserDashboard = () => {
     isEditExpenseModalOpen,
     isAlertOpen,
     restoreExpenses,
+    changeMonthView,
+    currentMonth,
   } = useContext(GlobalContext);
 
   const [selectedMonthExpenses, setSelectedMonthExpenses] = useState([]);
@@ -49,6 +51,12 @@ const UserDashboard = () => {
 
     setSelectedMonthExpenses(filteredExpenses);
   }, [expenses, selectedMonth]);
+
+  useEffect(() => {
+    if (selectedMonthExpenses.length === 0) {
+      changeMonthView(currentMonth);
+    }
+  }, [selectedMonthExpenses, changeMonthView, currentMonth]);
 
   return (
     <>

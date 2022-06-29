@@ -33,8 +33,6 @@ const appReducer = (state, action) => {
       };
 
     case 'EDIT_EXPENSE_SUCCESS':
-      // If the month of the last expense was changed, navigate to current month
-
       return {
         ...state,
         didErrorOccur: false,
@@ -53,24 +51,12 @@ const appReducer = (state, action) => {
       };
 
     case 'DELETE_EXPENSE_SUCCESS':
-      const expensesInSelectedMonth = state.expenses.filter(expense => {
-        let month = getUKFormattedDate(expense.date, { year: 'numeric', month: 'long' });
-        return month === state.selectedMonth;
-      });
-
-      let newSelectedMonth = state.selectedMonth;
-
-      if (expensesInSelectedMonth.length === 0) {
-        newSelectedMonth = state.currentMonth;
-      }
-
       return {
         ...state,
         didErrorOccur: false,
         isAlertOpen: true,
         userAction: 'delete_expense',
         isConfirmDeleteModalOpen: false,
-        selectedMonth: newSelectedMonth,
       };
 
     case 'DELETE_EXPENSE_FAIL':
