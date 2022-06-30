@@ -12,15 +12,9 @@ const MonthSelector = () => {
       className="form-select"
       aria-label="Select a month"
       value={selectedMonth}
-      onChange={e => {
-        changeMonthView(e.target.value);
-      }}
+      onChange={e => changeMonthView(e.target.value)}
     >
-      {months.map((month, i) => (
-        <option key={i} value={month}>
-          {month}
-        </option>
-      ))}
+      {months.map((month, i) => <option key={i} value={month}>{month}</option>)}
     </select>
   );
 };

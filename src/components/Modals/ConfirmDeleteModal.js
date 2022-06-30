@@ -1,4 +1,5 @@
 import { Modal } from './components/Modal';
+
 import { getUKFormattedDate, getUKFormattedEuros } from '../../utils/helpers';
 import { useGlobalFunctions, useGlobalState } from '../../utils/hooks';
 
