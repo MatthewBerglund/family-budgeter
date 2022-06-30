@@ -8,9 +8,9 @@ const Alert = ({ color, heading, closeCallback, children }) => {
   return (
     <div
       role="alert"
-      className={`alert alert-${color} alert-dismissible fade show position-fixed top-0 end-0`}
+      className={`alert alert-${color} alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x`}
     >
-      <h4 className="alert-heading">{heading}</h4>
+      <h5 className="alert-heading">{heading}</h5>
       <p>{children}</p>
       <button
         type="button"
