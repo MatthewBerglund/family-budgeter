@@ -32,48 +32,26 @@ const appReducer = (state, action) => {
         userAction: 'add_expense',
       };
 
-    case 'EDIT_EXPENSE_SUCCESS':
+    case 'EDIT_EXPENSE':
       return {
         ...state,
-        didErrorOccur: false,
+        didErrorOccur: action.payload,
         userAction: 'edit_expense',
         isAlertOpen: true,
         isEditExpenseModalOpen: false,
       };
 
-    case 'EDIT_EXPENSE_FAIL':
+    case 'DELETE_EXPENSE':
       return {
         ...state,
-        didErrorOccur: true,
-        userAction: 'edit_expense',
-        isAlertOpen: true,
-        isEditExpenseModalOpen: false,
-      };
-
-    case 'DELETE_EXPENSE_SUCCESS':
-      return {
-        ...state,
-        didErrorOccur: false,
+        didErrorOccur: action.payload,
         isAlertOpen: true,
         userAction: 'delete_expense',
-        isConfirmDeleteModalOpen: false,
-      };
-
-    case 'DELETE_EXPENSE_FAIL':
-      return {
-        ...state,
-        didErrorOccur: true,
-        userAction: 'delete_expense',
-        isAlertOpen: true,
         isConfirmDeleteModalOpen: false,
       };
 
     case 'CHANGE_MONTH_VIEW':
-      return {
-        ...state,
-        selectedMonth: action.payload,
-        isConfirmMonthModalOpen: false,
-      };
+      return { ...state, selectedMonth: action.payload };
 
     case 'CLOSE_CONFIRM_MONTH_MODAL':
       return { ...state, isConfirmMonthModalOpen: false };

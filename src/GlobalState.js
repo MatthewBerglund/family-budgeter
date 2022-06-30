@@ -92,25 +92,31 @@ export const GlobalProvider = ({ children }) => {
   }
 
   async function editExpense(id, newExpenseData) {
+    let didErrorOccur = false;
+
     try {
       const expenseRef = doc(db, 'expenses', id);
       await updateDoc(expenseRef, newExpenseData);
-      dispatch({ type: 'EDIT_EXPENSE_SUCCESS', payload: newExpenseData });
     } catch (err) {
       console.log(err);
-      dispatch({ type: 'EDIT_EXPENSE_FAIL' });
+      didErrorOccur = true;
     }
+
+    dispatch({ type: 'EDIT_EXPENSE', payload: didErrorOccur });
   }
 
   async function deleteExpense(id) {
+    let didErrorOccur = false;
+
     try {
       const expenseRef = doc(db, 'expenses', id);
       await deleteDoc(expenseRef);
-      dispatch({ type: 'DELETE_EXPENSE_SUCCESS' });
     } catch (err) {
       console.log(err);
-      dispatch({ type: 'DELETE_EXPENSE_FAIL' });
+      didErrorOccur = true;
     }
+
+    dispatch({ type: 'DELETE_EXPENSE', payload: didErrorOccur });
   }
 
   function changeMonthView(month) {

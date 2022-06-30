@@ -10,7 +10,10 @@ const ConfirmMonthModal = () => {
 
   const modalProps = {
     cancelCallback: () => closeConfirmMonthModal(),
-    okCallback: () => changeMonthView(expenseMonth),
+    okCallback: () => {
+      changeMonthView(expenseMonth);
+      closeConfirmMonthModal();
+    },
     modalTitle: `New expense added to ${expenseMonth}`,
     cancelButtonLabel: 'Stay here',
     okButtonLabel: `Open ${expenseMonth}`,
