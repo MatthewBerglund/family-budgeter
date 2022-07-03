@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { convertEurosToCents } from '../utils/helpers';
 import DatePicker from 'react-datepicker';
 
-import { useGlobalFunctions } from '../utils/hooks';
+import { useGlobalFunctions } from '../store/hooks';
 
 const AddExpenses = () => {
   const { addExpense } = useGlobalFunctions();

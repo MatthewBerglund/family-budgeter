@@ -1,5 +1,5 @@
 import { getUniqueMonthsFromExpenses } from '../utils/helpers';
-import { useGlobalFunctions, useGlobalState } from '../utils/hooks';
+import { useGlobalFunctions, useGlobalState } from '../store/hooks';
 
 const MonthSelector = () => {
   const { expenses, selectedMonth } = useGlobalState();

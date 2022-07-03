@@ -1,7 +1,7 @@
 import { Modal } from './components/Modal';
 
 import { getUKFormattedDate } from '../../utils/helpers';
-import { useGlobalFunctions, useGlobalState } from '../../utils/hooks';
+import { useGlobalFunctions, useGlobalState } from '../../store/hooks';
 
 const ConfirmMonthModal = () => {
   const { lastAddedExpense } = useGlobalState();

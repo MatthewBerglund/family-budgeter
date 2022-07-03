@@ -7,7 +7,7 @@ import ConfirmDeleteModal from '../components/Modals/ConfirmDeleteModal';
 import EditExpenseModal from '../components/Modals/EditExpenseModal';
 import UserActionAlert from '../components/Alerts/UserActionAlert';
 
-import { useGlobalState } from '../utils/hooks';
+import { useGlobalState } from '../store/hooks';
 
 const UserDashboard = () => {
   const { isConfirmMonthModalOpen, isConfirmDeleteModalOpen, isEditExpenseModalOpen, isAlertOpen } = useGlobalState();

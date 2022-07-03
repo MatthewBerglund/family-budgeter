@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import { Modal } from './components/Modal';
 
 import { convertCentsToEuros, convertEurosToCents } from '../../utils/helpers';
-import { useGlobalFunctions, useGlobalState } from '../../utils/hooks';
+import { useGlobalFunctions, useGlobalState } from '../../store/hooks';
 
 const EditExpenseModal = () => {
   const { expenseToEdit } = useGlobalState();

@@ -1,5 +1,6 @@
-import { useGlobalFunctions, useGlobalState } from '../../utils/hooks';
 import Alert from './components/Alert';
+
+import { useGlobalFunctions, useGlobalState } from '../../store/hooks';
 
 const ExpenseEditedAlert = () => {
   const { didErrorOccur } = useGlobalState();

@@ -1,5 +1,5 @@
 import Expense from '../components/Expense';
-import { useGlobalState } from '../utils/hooks';
+import { useGlobalState } from '../store/hooks';
 
 const ExpensesHistory = () => {
   const { selectedMonthExpenses } = useGlobalState();

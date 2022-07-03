@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { getUKFormattedEuros } from '../utils/helpers';
-import { useGlobalState } from '../utils/hooks';
+import { useGlobalState } from '../store/hooks';
 
 const Summary = () => {
   const { currentMonth, selectedMonth, selectedMonthExpenses } = useGlobalState();

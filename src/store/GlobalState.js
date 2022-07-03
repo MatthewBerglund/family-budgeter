@@ -1,9 +1,9 @@
 import { createContext, useEffect, useReducer } from 'react';
 import { collection, doc, addDoc, deleteDoc, updateDoc, query, onSnapshot } from 'firebase/firestore';
 
-import db from './firebase';
+import db from '../firebase';
 import appReducer from './appReducer';
-import { getCurrentMonth, getUKFormattedDate } from './utils/helpers';
+import { getCurrentMonth, getUKFormattedDate } from '../utils/helpers';
 
 const currentMonth = getCurrentMonth();
 

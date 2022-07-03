@@ -1,5 +1,5 @@
 import { getUKFormattedEuros, getUKFormattedDate } from '../../utils/helpers';
-import { useGlobalFunctions, useGlobalState } from '../../utils/hooks';
+import { useGlobalFunctions, useGlobalState } from '../../store/hooks';
 import Alert from './components/Alert';
 
 const ExpenseDeletedAlert = () => {

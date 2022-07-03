@@ -1,5 +1,5 @@
 import { getUKFormattedDate, getUKFormattedEuros } from '../utils/helpers';
-import { useGlobalFunctions } from '../utils/hooks';
+import { useGlobalFunctions } from '../store/hooks';
 
 const Expense = ({ expense }) => {
   const { openConfirmDeleteModal, openEditExpenseModal } = useGlobalFunctions();

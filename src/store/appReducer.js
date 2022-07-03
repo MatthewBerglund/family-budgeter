@@ -1,4 +1,4 @@
-import { getUKFormattedDate } from './utils/helpers';
+import { getUKFormattedDate } from '../utils/helpers';
 
 const appReducer = (state, action) => {
   switch (action.type) {

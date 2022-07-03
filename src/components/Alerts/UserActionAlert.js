@@ -2,7 +2,7 @@ import ExpenseAddedAlert from './ExpenseAddedAlert';
 import ExpenseDeletedAlert from './ExpenseDeletedAlert';
 import ExpenseEditedAlert from './ExpenseEditedAlert';
 
-import { useGlobalState } from '../../utils/hooks';
+import { useGlobalState } from '../../store/hooks';
 
 // A dynamic alert component that displays feedback information based on a `userAction`
 const UserActionAlert = () => {
