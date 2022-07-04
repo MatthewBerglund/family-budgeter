@@ -5,8 +5,8 @@ import Modal from './components/Modal';
 import { getUKFormattedDate } from '../../utils/helpers';
 import { GlobalContext } from '../../store/GlobalState';
 
-const ConfirmMonthModal = () => {
-  const { lastAddedExpense, closeConfirmMonthModal, changeMonthView } = useContext(GlobalContext);
+const ConfirmMonthModal = ({ changeMonthView }) => {
+  const { lastAddedExpense, closeConfirmMonthModal } = useContext(GlobalContext);
 
   const expenseMonth = getUKFormattedDate(lastAddedExpense.date, { year: 'numeric', month: 'long' });
 

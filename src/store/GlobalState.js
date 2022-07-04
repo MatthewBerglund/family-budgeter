@@ -3,15 +3,9 @@ import { collection, doc, addDoc, deleteDoc, updateDoc, query, onSnapshot } from
 
 import db from '../firebase';
 import appReducer from './appReducer';
-import { getCurrentMonth, getUKFormattedDate } from '../utils/helpers';
-
-const currentMonth = getCurrentMonth();
 
 const initialState = {
   expenses: [],
-  selectedMonthExpenses: [],
-  currentMonth: currentMonth,
-  selectedMonth: currentMonth,
   lastAddedExpense: {},
   expenseToDelete: {},
   expenseToEdit: {},
@@ -27,8 +21,6 @@ export const GlobalContext = createContext(initialState);
 
 export const GlobalProvider = ({ children }) => {
   const [globalState, dispatch] = useReducer(appReducer, initialState);
-
-  const { expenses, selectedMonth, currentMonth, selectedMonthExpenses } = globalState;
 
   // Listen for changes to any doc in "expenses" collection and update expenses in app
   useEffect(() => {
@@ -49,29 +41,10 @@ export const GlobalProvider = ({ children }) => {
     }
   }, []);
 
-  // Filter for expenses that belong in the selected month
-  useEffect(() => {
-    const filteredExpenses = expenses
-      .filter(expense => {
-        const expenseMonth = getUKFormattedDate(new Date(expense.date), { year: 'numeric', month: 'long' });
-        return selectedMonth === expenseMonth;
-      })
-      .sort((expenseA, expenseB) => new Date(expenseB.date) - new Date(expenseA.date));
-
-    dispatch({ type: 'UPDATE_SELECTED_MONTH_EXPENSES', payload: filteredExpenses });
-  }, [expenses, selectedMonth]);
-
-  useEffect(() => {
-    if (selectedMonthExpenses.length === 0) {
-      changeMonthView(currentMonth);
-    }
-  }, [selectedMonthExpenses, currentMonth]);
-
   const globalFunctions = {
     addExpense,
     editExpense,
     deleteExpense,
-    changeMonthView,
     openConfirmDeleteModal,
     closeConfirmDeleteModal,
     openEditExpenseModal,
@@ -117,10 +90,6 @@ export const GlobalProvider = ({ children }) => {
     }
 
     dispatch({ type: 'DELETE_EXPENSE', payload: didErrorOccur });
-  }
-
-  function changeMonthView(month) {
-    dispatch({ type: 'CHANGE_MONTH_VIEW', payload: month });
   }
 
   function openConfirmDeleteModal(expense) {
