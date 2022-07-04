@@ -1,8 +1,11 @@
+import { useContext } from 'react';
+
 import Expense from '../components/Expense';
-import { useGlobalState } from '../store/hooks';
+
+import { GlobalContext } from '../store/GlobalState';
 
 const ExpensesHistory = () => {
-  const { selectedMonthExpenses } = useGlobalState();
+  const { selectedMonthExpenses } = useContext(GlobalContext);
 
   return (
     <div className="card">

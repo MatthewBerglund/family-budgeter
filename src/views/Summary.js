@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { getUKFormattedEuros } from '../utils/helpers';
-import { useGlobalState } from '../store/hooks';
+import { GlobalContext } from '../store/GlobalState';
 
 const Summary = () => {
-  const { currentMonth, selectedMonth, selectedMonthExpenses } = useGlobalState();
+  const { currentMonth, selectedMonth, selectedMonthExpenses } = useContext(GlobalContext);
 
   const [totalBudget, setTotalBudget] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);

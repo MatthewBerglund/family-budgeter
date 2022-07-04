@@ -148,7 +148,7 @@ export const GlobalProvider = ({ children }) => {
   }
 
   return (
-    <GlobalContext.Provider value={{ globalState, globalFunctions }}>
+    <GlobalContext.Provider value={{ ...globalState, ...globalFunctions }}>
       {children}
     </GlobalContext.Provider>
   );

@@ -1,8 +1,10 @@
+import { useContext } from 'react';
+
 import { getUKFormattedDate, getUKFormattedEuros } from '../utils/helpers';
-import { useGlobalFunctions } from '../store/hooks';
+import { GlobalContext } from '../store/GlobalState';
 
 const Expense = ({ expense }) => {
-  const { openConfirmDeleteModal, openEditExpenseModal } = useGlobalFunctions();
+  const { openConfirmDeleteModal, openEditExpenseModal } = useContext(GlobalContext);
 
   const { title, amount, date } = expense;
 

@@ -1,14 +1,13 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import DatePicker from 'react-datepicker';
 
-import { Modal } from './components/Modal';
+import Modal from './components/Modal';
 
 import { convertCentsToEuros, convertEurosToCents } from '../../utils/helpers';
-import { useGlobalFunctions, useGlobalState } from '../../store/hooks';
+import { GlobalContext } from '../../store/GlobalState';
 
 const EditExpenseModal = () => {
-  const { expenseToEdit } = useGlobalState();
-  const { editExpense, closeEditExpenseModal } = useGlobalFunctions();
+  const { expenseToEdit, editExpense, closeEditExpenseModal } = useContext(GlobalContext);
 
   const [title, setTitle] = useState(expenseToEdit.title);
   const [date, setDate] = useState(new Date(expenseToEdit.date));

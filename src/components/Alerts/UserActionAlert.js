@@ -1,12 +1,14 @@
+import { useContext } from 'react';
+
 import ExpenseAddedAlert from './ExpenseAddedAlert';
 import ExpenseDeletedAlert from './ExpenseDeletedAlert';
 import ExpenseEditedAlert from './ExpenseEditedAlert';
 
-import { useGlobalState } from '../../store/hooks';
+import { GlobalContext } from '../../store/GlobalState';
 
 // A dynamic alert component that displays feedback information based on a `userAction`
 const UserActionAlert = () => {
-  const { userAction } = useGlobalState();
+  const { userAction } = useContext(GlobalContext);
 
   switch (userAction) {
     case 'add_expense':

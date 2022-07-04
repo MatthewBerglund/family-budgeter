@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { convertEurosToCents } from '../utils/helpers';
 import DatePicker from 'react-datepicker';
 
-import { useGlobalFunctions } from '../store/hooks';
+import { GlobalContext } from '../store/GlobalState';
 
 const AddExpenses = () => {
-  const { addExpense } = useGlobalFunctions();
+  const { addExpense } = useContext(GlobalContext);
 
   const [title, setTitle] = useState('');
   const [wasTitleValidated, setWasTitleValidated] = useState(false);

@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+
 import Summary from './Summary';
 import AddExpenses from './AddExpenses';
 import MonthSelector from '../components/MonthSelector';
@@ -7,10 +9,10 @@ import ConfirmDeleteModal from '../components/Modals/ConfirmDeleteModal';
 import EditExpenseModal from '../components/Modals/EditExpenseModal';
 import UserActionAlert from '../components/Alerts/UserActionAlert';
 
-import { useGlobalState } from '../store/hooks';
+import { GlobalContext } from '../store/GlobalState';
 
 const UserDashboard = () => {
-  const { isConfirmMonthModalOpen, isConfirmDeleteModalOpen, isEditExpenseModalOpen, isAlertOpen } = useGlobalState();
+  const { isConfirmMonthModalOpen, isConfirmDeleteModalOpen, isEditExpenseModalOpen, isAlertOpen } = useContext(GlobalContext);
 
   return (
     <>
