@@ -2,19 +2,19 @@ import { useContext } from 'react';
 
 import Modal from './components/Modal';
 
-import { getUKFormattedDate } from '../../utils/helpers';
+import { getExpenseMonth } from '../../utils/helpers';
 import { GlobalContext } from '../../store/GlobalState';
 
-const ConfirmMonthModal = ({ changeMonthView }) => {
-  const { lastAddedExpense, closeConfirmMonthModal } = useContext(GlobalContext);
+const ConfirmMonthModal = ({ changeMonthView, closeConfirmMonthModal }) => {
+  const { lastAddedExpense } = useContext(GlobalContext);
 
-  const expenseMonth = getUKFormattedDate(lastAddedExpense.date, { year: 'numeric', month: 'long' });
+  const expenseMonth = getExpenseMonth(lastAddedExpense);
 
   const modalProps = {
     cancelCallback: () => closeConfirmMonthModal(),
     okCallback: () => {
-      changeMonthView(expenseMonth);
       closeConfirmMonthModal();
+      changeMonthView(expenseMonth);
     },
     modalTitle: `New expense added to ${expenseMonth}`,
     cancelButtonLabel: 'Stay here',

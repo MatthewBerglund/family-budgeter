@@ -10,19 +10,19 @@ import EditExpenseModal from '../components/Modals/EditExpenseModal';
 import UserActionAlert from '../components/Alerts/UserActionAlert';
 
 import { GlobalContext } from '../store/GlobalState';
-import { getCurrentMonth } from '../utils/helpers';
-import { getUKFormattedDate } from '../utils/helpers';
+import { getCurrentMonth, getExpenseMonth } from '../utils/helpers';
 
 const UserDashboard = () => {
   const currentMonth = getCurrentMonth();
 
-  const { expenses, isConfirmMonthModalOpen, isConfirmDeleteModalOpen, isEditExpenseModalOpen, isAlertOpen } = useContext(GlobalContext);
+  const { expenses, isConfirmDeleteModalOpen, isEditExpenseModalOpen, isAlertOpen } = useContext(GlobalContext);
 
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+  const [isConfirmMonthModalOpen, setIsConfirmMonthModalOpen] = useState(false);
 
   const selectedMonthExpenses = expenses
     .filter(expense => {
-      const expenseMonth = getUKFormattedDate(expense.date, { year: 'numeric', month: 'long' });
+      const expenseMonth = getExpenseMonth(expense);
       return selectedMonth === expenseMonth;
     })
     .sort((expenseA, expenseB) => new Date(expenseB.date) - new Date(expenseA.date));;
@@ -31,11 +31,19 @@ const UserDashboard = () => {
     if (selectedMonthExpenses.length === 0) {
       changeMonthView(currentMonth);
     }
-  });
+  }, [selectedMonthExpenses, currentMonth]);
 
   const changeMonthView = (month) => {
     setSelectedMonth(month);
   };
+
+  const openConfirmMonthModal = () => {
+    setIsConfirmMonthModalOpen(true);
+  };
+
+  const closeConfirmMonthModal = () => {
+    setIsConfirmMonthModalOpen(false);
+  }
 
   return (
     <>
@@ -45,7 +53,10 @@ const UserDashboard = () => {
             <h1 className="display-1 text-dark">Matt's budget</h1>
           </div>
           <div className="col-md-3">
-            <MonthSelector changeMonthView={changeMonthView} />
+            <MonthSelector
+              selectedMonth={selectedMonth}
+              changeMonthView={changeMonthView}
+            />
           </div>
         </div>
       </header>
@@ -55,7 +66,7 @@ const UserDashboard = () => {
             <Summary month={selectedMonth} expenses={selectedMonthExpenses} />
           </section>
           <section className="col-lg-6">
-            <AddExpenses />
+            <AddExpenses selectedMonth={selectedMonth} openConfirmMonthModal={openConfirmMonthModal} />
           </section>
         </div>
         <div className="row g-5 mt-1">
@@ -63,7 +74,12 @@ const UserDashboard = () => {
             <ExpenseHistory expenses={selectedMonthExpenses} />
           </section>
         </div>
-        {isConfirmMonthModalOpen && <ConfirmMonthModal changeMonthView={changeMonthView} />}
+        {isConfirmMonthModalOpen && (
+          <ConfirmMonthModal
+            changeMonthView={changeMonthView}
+            closeConfirmMonthModal={closeConfirmMonthModal}
+          />
+        )}
         {isConfirmDeleteModalOpen && <ConfirmDeleteModal />}
         {isEditExpenseModalOpen && <EditExpenseModal />}
         {isAlertOpen && <UserActionAlert />}

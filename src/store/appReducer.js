@@ -1,5 +1,3 @@
-import { getUKFormattedDate } from '../utils/helpers';
-
 const appReducer = (state, action) => {
   switch (action.type) {
     case 'RESTORE_EXPENSES':
@@ -7,12 +5,10 @@ const appReducer = (state, action) => {
 
     case 'ADD_EXPENSE_SUCCESS':
       const expense = action.payload;
-      const expenseMonth = getUKFormattedDate(expense.date, { year: 'numeric', month: 'long' });
 
       return {
         ...state,
         lastAddedExpense: expense,
-        isConfirmMonthModalOpen: expenseMonth !== state.selectedMonth,
         didErrorOccur: false,
         isAlertOpen: true,
         userAction: 'add_expense',

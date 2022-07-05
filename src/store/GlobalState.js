@@ -49,7 +49,6 @@ export const GlobalProvider = ({ children }) => {
     closeConfirmDeleteModal,
     openEditExpenseModal,
     closeEditExpenseModal,
-    closeConfirmMonthModal,
     closeAlert,
   };
 
@@ -59,7 +58,6 @@ export const GlobalProvider = ({ children }) => {
       await addDoc(expensesRef, expense);
       dispatch({ type: 'ADD_EXPENSE_SUCCESS', payload: expense });
     } catch (err) {
-      console.log(err);
       dispatch({ type: 'ADD_EXPENSE_FAIL' });
     }
   }
@@ -106,10 +104,6 @@ export const GlobalProvider = ({ children }) => {
 
   function closeEditExpenseModal() {
     dispatch({ type: 'CLOSE_EDIT_EXPENSE_MODAL' });
-  }
-
-  function closeConfirmMonthModal() {
-    dispatch({ type: 'CLOSE_CONFIRM_MONTH_MODAL' });
   }
 
   function closeAlert() {

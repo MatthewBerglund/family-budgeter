@@ -1,10 +1,11 @@
 import { useState, useContext } from 'react';
-import { convertEurosToCents } from '../utils/helpers';
 import DatePicker from 'react-datepicker';
 
+
+import { convertEurosToCents, getExpenseMonth } from '../utils/helpers';
 import { GlobalContext } from '../store/GlobalState';
 
-const AddExpenses = () => {
+const AddExpenses = ({ selectedMonth, openConfirmMonthModal }) => {
   const { addExpense } = useContext(GlobalContext);
 
   const [title, setTitle] = useState('');
@@ -14,7 +15,7 @@ const AddExpenses = () => {
   const [amount, setAmount] = useState('');
   const [wasAmountValidated, setWasAmountValidated] = useState(false);
 
-  const handleSubmit = evt => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
 
     const expense = {
@@ -23,7 +24,17 @@ const AddExpenses = () => {
       amount: convertEurosToCents(amount),
     };
 
-    addExpense(expense);
+    try {
+      await addExpense(expense);
+      const expenseMonth = getExpenseMonth(expense);
+
+      if (expenseMonth !== selectedMonth) {
+        openConfirmMonthModal();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
     setTitle('');
     setDate('');
     setAmount('');
