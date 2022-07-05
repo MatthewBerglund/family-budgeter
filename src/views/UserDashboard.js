@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useMemo } from 'react';
 
 import Summary from './Summary';
 import AddExpenses from './AddExpenses';
@@ -20,12 +20,11 @@ const UserDashboard = () => {
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [isConfirmMonthModalOpen, setIsConfirmMonthModalOpen] = useState(false);
 
-  const selectedMonthExpenses = expenses
-    .filter(expense => {
-      const expenseMonth = getExpenseMonth(expense);
-      return selectedMonth === expenseMonth;
-    })
-    .sort((expenseA, expenseB) => new Date(expenseB.date) - new Date(expenseA.date));;
+  const selectedMonthExpenses = useMemo(() => {
+    return expenses
+      .filter(expense => getExpenseMonth(expense) === selectedMonth)
+      .sort((expenseA, expenseB) => new Date(expenseB.date) - new Date(expenseA.date));
+  }, [expenses, selectedMonth]);
 
   useEffect(() => {
     if (selectedMonthExpenses.length === 0) {
