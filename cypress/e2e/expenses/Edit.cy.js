@@ -28,12 +28,6 @@ describe('Edit an expense', () => {
     });
   });
 
-  it('closes the alert', () => {
-    cy.findByRole('alert').within(() => {
-      cy.get('[class="btn-close"]').click();
-    });
-  });
-
   it('edits the expense', () => {
     cy.findByRole('button', { name: /edit/i }).click();
     cy.fixture('expense-display').then(expense => {
@@ -46,12 +40,6 @@ describe('Edit an expense', () => {
       cy.findByDisplayValue(amount).clear().type('9999');
       cy.findByRole('button', { name: /save/i }).click();
       cy.wait(100);
-    });
-  });
-
-  it('closes the alert', () => {
-    cy.findByRole('alert').within(() => {
-      cy.get('[class="btn-close"]').click();
     });
   });
 

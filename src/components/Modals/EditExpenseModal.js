@@ -1,4 +1,4 @@
-import { useState, useRef, useContext } from 'react';
+import { useState, useRef, useContext, forwardRef, useImperativeHandle } from 'react';
 import DatePicker from 'react-datepicker';
 
 import Modal from './components/Modal';
@@ -6,26 +6,49 @@ import Modal from './components/Modal';
 import { convertCentsToEuros, convertEurosToCents } from '../../utils/helpers';
 import { GlobalContext } from '../../store/GlobalState';
 
-const EditExpenseModal = () => {
-  const { expenseToEdit, editExpense, closeEditExpenseModal } = useContext(GlobalContext);
+const EditExpenseModal = forwardRef((props, ref) => {
+  const [title, setTitle] = useState('');
+  const [date, setDate] = useState('');
+  const [amount, setAmount] = useState('');
+  const [id, setId] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
-  const [title, setTitle] = useState(expenseToEdit.title);
-  const [date, setDate] = useState(new Date(expenseToEdit.date));
-  const [amount, setAmount] = useState(convertCentsToEuros(expenseToEdit.amount));
   const formEl = useRef(null);
 
-  const handleSubmit = e => {
+  const { editExpense } = useContext(GlobalContext);
+  const { showAlert } = props;
+
+  useImperativeHandle(ref, () => ({
+    show: expense => {
+      setTitle(expense.title);
+      setDate(new Date(expense.date));
+      setAmount(convertCentsToEuros(expense.amount));
+      setId(expense.id);
+      setShowModal(true);
+    },
+  }));
+
+  const handleSubmit = async e => {
     e.preventDefault();
+    setShowModal(false);
+
     const newExpenseData = {
       title,
       date: date.toString(),
       amount: convertEurosToCents(amount),
     };
-    editExpense(expenseToEdit.id, newExpenseData);
+
+    try {
+      await editExpense(id, newExpenseData);
+      showAlert('success', 'Expense edited', 'The new expense information has been successfully saved.');
+    } catch (err) {
+      console.log(err);
+      showAlert('danger', 'Error editing expense', 'The new expense information could not be saved. Please try again.');
+    }
   };
 
   const modalProps = {
-    cancelCallback: () => closeEditExpenseModal(),
+    cancelCallback: () => setShowModal(false),
     modalTitle: 'Edit expense',
     cancelButtonLabel: 'Cancel',
     okButtonLabel: 'Save',
@@ -34,10 +57,10 @@ const EditExpenseModal = () => {
   };
 
   return (
-    <Modal {...modalProps}>
+    showModal && <Modal {...modalProps}>
       <form
         ref={formEl}
-        className="container d-grid gap-3 mb-3"
+        className="container d-grid gap-3 mb-3 px-0"
         id="edit-expense-form"
         onSubmit={handleSubmit}
       >
@@ -89,6 +112,6 @@ const EditExpenseModal = () => {
       </form>
     </Modal>
   );
-};
+});
 
 export default EditExpenseModal;

@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker';
 import { convertEurosToCents, getExpenseMonth } from '../utils/helpers';
 import { GlobalContext } from '../store/GlobalState';
 
-const AddExpenses = ({ selectedMonth, openConfirmMonthModal }) => {
+const AddExpenses = ({ selectedMonth, showAlert, openChangeMonthModal }) => {
   const { addExpense } = useContext(GlobalContext);
 
   const [title, setTitle] = useState('');
@@ -27,12 +27,13 @@ const AddExpenses = ({ selectedMonth, openConfirmMonthModal }) => {
     try {
       await addExpense(expense);
       const expenseMonth = getExpenseMonth(expense);
-
       if (expenseMonth !== selectedMonth) {
-        openConfirmMonthModal();
+        openChangeMonthModal(expenseMonth);
       }
+      showAlert('success', 'Expense added', 'Your expense has been successfully added.');
     } catch (err) {
       console.log(err);
+      showAlert('danger', 'Error adding expense', 'The expense could not be added. Please try again.');
     }
 
     setTitle('');

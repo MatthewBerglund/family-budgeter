@@ -1,13 +1,13 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 
 import Summary from './Summary';
 import AddExpenses from './AddExpenses';
 import MonthSelector from '../components/MonthSelector';
 import ExpenseHistory from './ExpenseHistory';
-import ConfirmMonthModal from '../components/Modals/ConfirmMonthModal'
-import ConfirmDeleteModal from '../components/Modals/ConfirmDeleteModal';
+import ChangeMonthModal from '../components/Modals/ChangeMonthModal'
+import DeleteExpenseModal from '../components/Modals/DeleteExpenseModal';
 import EditExpenseModal from '../components/Modals/EditExpenseModal';
-import UserActionAlert from '../components/Alerts/UserActionAlert';
+import Alert from '../components/Alerts/Alert';
 
 import { GlobalContext } from '../store/GlobalState';
 import { getCurrentMonth, getExpenseMonth } from '../utils/helpers';
@@ -15,10 +15,9 @@ import { getCurrentMonth, getExpenseMonth } from '../utils/helpers';
 const UserDashboard = () => {
   const currentMonth = getCurrentMonth();
 
-  const { expenses, isConfirmDeleteModalOpen, isEditExpenseModalOpen, isAlertOpen } = useContext(GlobalContext);
+  const { expenses } = useContext(GlobalContext);
 
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-  const [isConfirmMonthModalOpen, setIsConfirmMonthModalOpen] = useState(false);
 
   const selectedMonthExpenses = expenses
     .filter(expense => getExpenseMonth(expense) === selectedMonth)
@@ -30,17 +29,31 @@ const UserDashboard = () => {
     }
   });
 
+  // Modals and alert refs and functions
+  const changeMonthModalRef = useRef(null);
+  const deleteExpenseModalRef = useRef(null);
+  const editExpenseModalRef = useRef(null);
+  const alertRef = useRef(null);
+
   const changeMonthView = (month) => {
     setSelectedMonth(month);
   };
 
-  const openConfirmMonthModal = () => {
-    setIsConfirmMonthModalOpen(true);
+  const openChangeMonthModal = (month) => {
+    changeMonthModalRef.current.show(month);
+  }
+
+  const openDeleteExpenseModal = (expense) => {
+    deleteExpenseModalRef.current.show(expense);
   };
 
-  const closeConfirmMonthModal = () => {
-    setIsConfirmMonthModalOpen(false);
-  }
+  const openEditExpenseModal = (expense) => {
+    editExpenseModalRef.current.show(expense);
+  };
+
+  const showAlert = (type, title, message) => {
+    alertRef.current.show(type, title, message);
+  };
 
   return (
     <>
@@ -63,23 +76,26 @@ const UserDashboard = () => {
             <Summary month={selectedMonth} expenses={selectedMonthExpenses} />
           </section>
           <section className="col-lg-6">
-            <AddExpenses selectedMonth={selectedMonth} openConfirmMonthModal={openConfirmMonthModal} />
+            <AddExpenses
+              selectedMonth={selectedMonth}
+              showAlert={showAlert}
+              openChangeMonthModal={openChangeMonthModal}
+            />
           </section>
         </div>
         <div className="row g-5 mt-1">
           <section className="col">
-            <ExpenseHistory expenses={selectedMonthExpenses} />
+            <ExpenseHistory
+              expenses={selectedMonthExpenses}
+              openDeleteExpenseModal={openDeleteExpenseModal}
+              openEditExpenseModal={openEditExpenseModal}
+            />
           </section>
         </div>
-        {isConfirmMonthModalOpen && (
-          <ConfirmMonthModal
-            changeMonthView={changeMonthView}
-            closeConfirmMonthModal={closeConfirmMonthModal}
-          />
-        )}
-        {isConfirmDeleteModalOpen && <ConfirmDeleteModal />}
-        {isEditExpenseModalOpen && <EditExpenseModal />}
-        {isAlertOpen && <UserActionAlert />}
+        <ChangeMonthModal ref={changeMonthModalRef} changeMonthView={changeMonthView} />
+        <DeleteExpenseModal ref={deleteExpenseModalRef} showAlert={showAlert} />
+        <EditExpenseModal ref={editExpenseModalRef} showAlert={showAlert} />
+        <Alert ref={alertRef} />
       </main>
     </>
   );

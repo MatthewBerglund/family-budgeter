@@ -53,11 +53,11 @@ describe('Add expense - not within current month', () => {
       .should('have.length', 1)
       .and('not.contain', 'You have no prior expenses');
 
-    cy.fixture('expense-post').then(expense => {
+    cy.fixture('expense-display').then(expense => {
       cy.get('[data-cy="expenses"] > li')
-        .should('contain', '01/03/2022')
-        .and('contain', 'Test Expense - Cypress')
-        .and('contain', '- €4.99');
+        .should('contain', expense.date)
+        .and('contain', expense.title)
+        .and('contain', `- €${expense.amount}`);
     });
   });
 

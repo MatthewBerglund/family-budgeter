@@ -24,10 +24,6 @@ describe('Delete expense - not within current month', () => {
     cy.get(`[id="New expense added to ${EXPENSE_MONTH}"]`).within(() => {
       cy.get('[data-cy="okButton"]').click();
     });
-    cy.findByRole('combobox', { name: /select a month/i }).should(
-      'have.value',
-      EXPENSE_MONTH
-    );
   });
 
   it('adds additional expenses', () => {
