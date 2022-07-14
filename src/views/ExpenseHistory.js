@@ -1,6 +1,6 @@
 import Expense from '../components/Expense';
 
-const ExpensesHistory = ({ expenses, openDeleteExpenseModal, openEditExpenseModal }) => {
+const ExpensesHistory = ({ expenses, showAlert }) => {
   return (
     <div className="card">
       <h3 className="card-header text-start">History</h3>
@@ -11,8 +11,7 @@ const ExpensesHistory = ({ expenses, openDeleteExpenseModal, openEditExpenseModa
               <Expense
                 key={expense.id}
                 expense={expense}
-                openDeleteExpenseModal={openDeleteExpenseModal}
-                openEditExpenseModal={openEditExpenseModal}
+                showAlert={showAlert}
               />
             ))
           ) : (

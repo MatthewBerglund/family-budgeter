@@ -1,7 +1,15 @@
+import { useRef } from 'react';
+
+import DeleteExpenseModal from './Modals/DeleteExpenseModal';
+import EditExpenseModal from './Modals/EditExpenseModal';
+
 import { getUKFormattedDate, getUKFormattedEuros } from '../utils/helpers';
 
-const Expense = ({ expense, openDeleteExpenseModal, openEditExpenseModal }) => {
+const Expense = ({ expense, showAlert }) => {
   const { title, amount, date } = expense;
+
+  const deleteExpenseModalRef = useRef(null);
+  const editExpenseModalRef = useRef(null);
 
   return (
     <li className="container gy-5 px-0 list-group-item">
@@ -18,18 +26,20 @@ const Expense = ({ expense, openDeleteExpenseModal, openEditExpenseModal }) => {
           </div>
         </div>
         <div className="col-2 col-lg-1 d-flex ps-lg-3">
+          <EditExpenseModal ref={editExpenseModalRef} showAlert={showAlert} />
           <button
             className="btn btn-outline-secondary flex-fill"
-            onClick={() => openEditExpenseModal(expense)}
+            onClick={() => editExpenseModalRef.current.show(expense)}
           >
             Edit
           </button>
         </div>
         <div className="col-2 col-lg-1 d-flex justify-content-center">
+          <DeleteExpenseModal ref={deleteExpenseModalRef} showAlert={showAlert} />
           <button
             className="btn btn-danger flex-fill"
             data-cy="deleteButton"
-            onClick={() => openDeleteExpenseModal(expense)}
+            onClick={() => deleteExpenseModalRef.current.show(expense)}
           >
             Delete
           </button>

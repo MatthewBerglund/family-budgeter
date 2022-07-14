@@ -4,8 +4,6 @@ import Summary from './Summary';
 import AddExpenses from './AddExpenses';
 import MonthSelector from '../components/MonthSelector';
 import ExpenseHistory from './ExpenseHistory';
-import DeleteExpenseModal from '../components/Modals/DeleteExpenseModal';
-import EditExpenseModal from '../components/Modals/EditExpenseModal';
 import Alert from '../components/Alerts/Alert';
 
 import { GlobalContext } from '../store/GlobalState';
@@ -28,25 +26,14 @@ const UserDashboard = () => {
     }
   });
 
-  // Modals and alert refs and functions
-  const deleteExpenseModalRef = useRef(null);
-  const editExpenseModalRef = useRef(null);
   const alertRef = useRef(null);
-
-  const changeMonthView = (month) => {
-    setSelectedMonth(month);
-  };
-
-  const openDeleteExpenseModal = (expense) => {
-    deleteExpenseModalRef.current.show(expense);
-  };
-
-  const openEditExpenseModal = (expense) => {
-    editExpenseModalRef.current.show(expense);
-  };
 
   const showAlert = (type, title, message) => {
     alertRef.current.show(type, title, message);
+  };
+
+  const changeMonthView = (month) => {
+    setSelectedMonth(month);
   };
 
   return (
@@ -79,15 +66,9 @@ const UserDashboard = () => {
         </div>
         <div className="row g-5 mt-1">
           <section className="col">
-            <ExpenseHistory
-              expenses={selectedMonthExpenses}
-              openDeleteExpenseModal={openDeleteExpenseModal}
-              openEditExpenseModal={openEditExpenseModal}
-            />
+            <ExpenseHistory expenses={selectedMonthExpenses} showAlert={showAlert} />
           </section>
         </div>
-        <DeleteExpenseModal ref={deleteExpenseModalRef} showAlert={showAlert} />
-        <EditExpenseModal ref={editExpenseModalRef} showAlert={showAlert} />
         <Alert ref={alertRef} />
       </main>
     </>
