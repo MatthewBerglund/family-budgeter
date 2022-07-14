@@ -1,30 +1,17 @@
 import Expense from '../components/Expense';
 
-const ExpensesHistory = ({
-  filteredExpenses,
-  setConfirmDeleteModalIsOpen,
-  setEditExpenseModalIsOpen,
-  setLastDeleted,
-  setExpenseToEdit,
-}) => {
-  const sortedExpenses = filteredExpenses.sort((expenseA, expenseB) => {
-    return new Date(expenseB.date) - new Date(expenseA.date);
-  });
-
+const ExpensesHistory = ({ expenses, showAlert }) => {
   return (
     <div className="card">
       <h3 className="card-header text-start">History</h3>
       <div className="card-body">
         <ul className="list-group list-group-flush" data-cy="expenses">
-          {filteredExpenses.length > 0 ? (
-            sortedExpenses.map(expense => (
+          {expenses.length > 0 ? (
+            expenses.map(expense => (
               <Expense
                 key={expense.id}
                 expense={expense}
-                setConfirmDeleteModalIsOpen={setConfirmDeleteModalIsOpen}
-                setEditExpenseModalIsOpen={setEditExpenseModalIsOpen}
-                setLastDeleted={setLastDeleted}
-                setExpenseToEdit={setExpenseToEdit}
+                showAlert={showAlert}
               />
             ))
           ) : (

@@ -18,7 +18,7 @@
  * @param form optional string representing the id of the form to associate `okButton` with
  */
 
-export const Modal = ({
+const Modal = ({
   children,
   cancelCallback,
   okCallback,
@@ -26,7 +26,7 @@ export const Modal = ({
   cancelButtonLabel,
   okButtonLabel,
   okButtonColor,
-  form
+  form,
 }) => {
   return (
     <div
@@ -78,3 +78,5 @@ export const Modal = ({
     </div>
   );
 };
+
+export default Modal;

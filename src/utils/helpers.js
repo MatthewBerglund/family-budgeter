@@ -27,6 +27,10 @@ export function getCurrentMonth() {
   return getUKFormattedDate(Date.now(), { year: 'numeric', month: 'long' });
 }
 
+export function getExpenseMonth(expense) {
+  return getUKFormattedDate(new Date(expense.date), { year: 'numeric', month: 'long' });
+}
+
 export function getUniqueMonthsFromExpenses(expenseArray) {
   if (!Array.isArray(expenseArray)) {
     throw new TypeError(`${expenseArray} is not an array`);

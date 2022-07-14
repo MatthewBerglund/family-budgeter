@@ -28,22 +28,12 @@ describe('Edit an expense', () => {
     });
   });
 
-  it('closes the alert', () => {
-    cy.findByRole('alert').within(() => {
-      cy.get('[class="btn-close"]').click();
-    });
-  });
-
   it('edits the expense', () => {
     cy.findByRole('button', { name: /edit/i }).click();
     cy.fixture('expense-display').then(expense => {
-      const title = new RegExp(expense.title, 'i');
-      const date = new RegExp(expense.date, 'i');
-      const amount = new RegExp(expense.amount, 'i');
-
-      cy.findByDisplayValue(title).type(' Edited');
-      cy.findByDisplayValue(date).clear().type('1999-12-31{enter}');
-      cy.findByDisplayValue(amount).clear().type('9999');
+      cy.findByDisplayValue(expense.title).type(' Edited');
+      cy.findByDisplayValue(expense.date).clear().type('1999-12-31{enter}');
+      cy.findByDisplayValue(expense.amount).clear().type('9999');
       cy.findByRole('button', { name: /save/i }).click();
       cy.wait(100);
     });
@@ -54,7 +44,7 @@ describe('Edit an expense', () => {
       cy.get('[class="btn-close"]').click();
     });
   });
-
+  
   it('navigates to the updated expense month', () => {
     cy.findByRole('combobox', { name: /select a month/i }).select(UPDATED_MONTH);
   });

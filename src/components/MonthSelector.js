@@ -1,6 +1,11 @@
-import { getUniqueMonthsFromExpenses } from '../utils/helpers';
+import { useContext } from 'react';
 
-const MonthSelector = ({ expenses, selectedMonth, setSelectedMonth }) => {
+import { getUniqueMonthsFromExpenses } from '../utils/helpers';
+import { GlobalContext } from '../store/GlobalState';
+
+const MonthSelector = ({ selectedMonth, changeMonthView }) => {
+  const { expenses } = useContext(GlobalContext);
+
   const months = getUniqueMonthsFromExpenses(expenses);
 
   return (
@@ -8,15 +13,9 @@ const MonthSelector = ({ expenses, selectedMonth, setSelectedMonth }) => {
       className="form-select"
       aria-label="Select a month"
       value={selectedMonth}
-      onChange={evt => {
-        setSelectedMonth(evt.target.value);
-      }}
+      onChange={e => changeMonthView(e.target.value)}
     >
-      {months.map((month, i) => (
-        <option key={i} value={month}>
-          {month}
-        </option>
-      ))}
+      {months.map((month, i) => <option key={i} value={month}>{month}</option>)}
     </select>
   );
 };

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { getUKFormattedEuros } from '../utils/helpers';
 
-const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
+import { getCurrentMonth, getUKFormattedEuros } from '../utils/helpers';
+
+const Summary = ({ expenses, month }) => {
   const [totalBudget, setTotalBudget] = useState(0);
-  const [totalExpenses, setTotalExpenses] = useState(0);
+  const [expenseTotal, setExpenseTotal] = useState(0);
   const [spendingRateDeviation, setSpendingRateDeviation] = useState(0);
 
   // Set total budget on initial render
@@ -12,44 +13,38 @@ const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
     setTotalBudget(7777 * 100);
   }, []);
 
-  const updateTotalExpenses = () => {
-    const expenseSum = filteredExpenses
+  useEffect(() => {
+    updateExpenseTotal();
+    updateSpendingRateDeviation();
+  });
+
+  const updateExpenseTotal = () => {
+    const total = expenses
       .map(expense => expense.amount)
-      .reduce((sum, curr) => {
-        return sum + curr;
-      }, 0);
-    setTotalExpenses(expenseSum);
+      .reduce((sum, curr) => sum + curr, 0);
+    setExpenseTotal(total);
   };
 
   const updateSpendingRateDeviation = () => {
-    const date = new Date(selectedMonth);
+    const date = new Date(month);
 
     // Get last day of selected month
-    const daysInMonth = new Date(
-      date.getFullYear(),
-      date.getMonth() + 1,
-      0
-    ).getDate();
+    const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 
-    // Set day equal to today's date or last day of the month
-    const dayOfMonth =
-      selectedMonth === currentMonth ? new Date().getDate() : daysInMonth;
+    // If the summary month is the current month, set day equal to today's date
+    // otherwise set it to the last day of the month
+    const dayOfMonth = (month === getCurrentMonth()) ? new Date().getDate() : daysInMonth;
 
     const targetRate = totalBudget / daysInMonth;
-    const actualRate = totalExpenses / dayOfMonth;
+    const actualRate = expenseTotal / dayOfMonth;
     const deviation = (actualRate - targetRate) / targetRate;
     setSpendingRateDeviation(deviation);
   };
 
-  useEffect(() => {
-    updateTotalExpenses();
-    updateSpendingRateDeviation();
-  });
-
   return (
     <div className="card h-100">
       <h3 className="card-header">
-        Summary for <span className="fw-bold">{selectedMonth}</span>
+        Summary for <span className="fw-bold">{month}</span>
       </h3>
       <div className="card-body container d-flex flex-column justify-content-around">
         <h4 className="fw-light row">
@@ -67,7 +62,7 @@ const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
           <span
             className="col-4 fw-bold text-end"
             data-cy="total-expenses"
-          >{`${getUKFormattedEuros(totalExpenses)}`}</span>
+          >{`${getUKFormattedEuros(expenseTotal)}`}</span>
           <div className="col-3"></div>
         </h4>
         <h4 className="fw-light row">
@@ -82,7 +77,7 @@ const Summary = ({ currentMonth, selectedMonth, filteredExpenses }) => {
                 : 'text-success'
               }`}
             data-cy="remaining-budget"
-          >{`${getUKFormattedEuros(totalBudget - totalExpenses)}`}</span>
+          >{`${getUKFormattedEuros(totalBudget - expenseTotal)}`}</span>
           <div className="col-3"></div>
         </h4>
       </div>
