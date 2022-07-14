@@ -39,6 +39,12 @@ describe('Edit an expense', () => {
     });
   });
 
+  it('closes the alert', () => {
+    cy.findByRole('alert').within(() => {
+      cy.get('[class="btn-close"]').click();
+    });
+  });
+  
   it('navigates to the updated expense month', () => {
     cy.findByRole('combobox', { name: /select a month/i }).select(UPDATED_MONTH);
   });
