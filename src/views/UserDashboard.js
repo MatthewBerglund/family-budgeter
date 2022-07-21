@@ -7,7 +7,7 @@ import ExpenseHistory from './ExpenseHistory';
 import Alert from '../components/Alerts/Alert';
 
 import { GlobalContext } from '../store/GlobalState';
-import { getCurrentMonth, getExpenseMonth } from '../utils/helpers';
+import { getCurrentMonth } from '../utils/helpers';
 
 const UserDashboard = () => {
   const currentMonth = getCurrentMonth();
@@ -17,7 +17,7 @@ const UserDashboard = () => {
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
 
   const selectedMonthExpenses = expenses
-    .filter(expense => getExpenseMonth(expense) === selectedMonth)
+    .filter(expense => expense.getMonth() === selectedMonth)
     .sort((expenseA, expenseB) => new Date(expenseB.date) - new Date(expenseA.date));
 
   useEffect(() => {
