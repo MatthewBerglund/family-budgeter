@@ -1,15 +1,13 @@
-import { useState, useContext, useRef } from 'react';
+import { useState, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 
 import ChangeMonthModal from '../components/Modals/ChangeMonthModal';
 
-import { convertEurosToCents, getExpenseMonth } from '../utils/helpers';
-import { GlobalContext } from '../store/GlobalState';
+import { convertEurosToCents, getUKFormattedDate } from '../utils/helpers';
+import Expense from '../expense';
 
 
 const AddExpenses = ({ selectedMonth, showAlert, changeMonthView }) => {
-  const { addExpense } = useContext(GlobalContext);
-
   const [title, setTitle] = useState('');
   const [wasTitleValidated, setWasTitleValidated] = useState(false);
   const [date, setDate] = useState('');
@@ -22,15 +20,9 @@ const AddExpenses = ({ selectedMonth, showAlert, changeMonthView }) => {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const expense = {
-      title,
-      date: date.toString(),
-      amount: convertEurosToCents(amount),
-    };
-
     try {
-      await addExpense(expense);
-      const expenseMonth = getExpenseMonth(expense);
+      await Expense.add(title, date.toString(), convertEurosToCents(amount));
+      const expenseMonth = getUKFormattedDate(date, { year: 'numeric', month: 'long' });
       if (expenseMonth !== selectedMonth) {
         openChangeMonthModal(expenseMonth);
       }

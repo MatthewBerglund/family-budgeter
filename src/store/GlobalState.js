@@ -1,7 +1,9 @@
 import { createContext, useEffect, useState } from 'react';
-import { collection, doc, addDoc, deleteDoc, updateDoc, query, onSnapshot } from 'firebase/firestore';
+import { collection, query, onSnapshot } from 'firebase/firestore';
 
 import db from '../firebase';
+
+import Expense from '../expense';
 
 const initialState = { expenses: [] };
 
@@ -18,8 +20,8 @@ export const GlobalProvider = ({ children }) => {
       onSnapshot(q, (querySnapshot) => {
         const expenses = [];
         querySnapshot.forEach(doc => {
-          let expense = { ...doc.data(), id: doc.id };
-          expenses.push(expense);
+          const { title, date, amount } = doc.data();
+          expenses.push(new Expense(title, date, amount, doc.id));
         });
         setState(prevState => ({ ...prevState, expenses }));
       });
@@ -29,35 +31,8 @@ export const GlobalProvider = ({ children }) => {
     }
   }, []);
 
-  const addExpense = async expense => {
-    try {
-      const expensesRef = collection(db, 'expenses');
-      await addDoc(expensesRef, expense);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const editExpense = async (id, newExpenseData) => {
-    try {
-      const expenseRef = doc(db, 'expenses', id);
-      await updateDoc(expenseRef, newExpenseData);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const deleteExpense = async id => {
-    try {
-      const expenseRef = doc(db, 'expenses', id);
-      await deleteDoc(expenseRef);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
-    <GlobalContext.Provider value={{ ...state, addExpense, editExpense, deleteExpense }}>
+    <GlobalContext.Provider value={{ ...state }}>
       {children}
     </GlobalContext.Provider>
   );
