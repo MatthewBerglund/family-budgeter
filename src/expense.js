@@ -35,6 +35,10 @@ class Expense {
   getMonth() {
     return getUKFormattedDate(new Date(this.date), { year: 'numeric', month: 'long' });
   }
+
+  getFormattedAmount() {
+    return Number.parseFloat(this.amount / 100).toFixed(2);
+  }
 };
 
 export default Expense;

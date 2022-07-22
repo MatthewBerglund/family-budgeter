@@ -22,7 +22,7 @@ const EditExpenseModal = forwardRef((props, ref) => {
     show: expense => {
       setTitle(expense.title);
       setDate(new Date(expense.date));
-      setAmount(convertCentsToEuros(expense.amount));
+      setAmount(expense.getFormattedAmount());
       setId(expense.id);
       setShowModal(true);
     },
