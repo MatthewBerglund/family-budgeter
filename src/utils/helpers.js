@@ -38,15 +38,10 @@ export function getUniqueMonthsFromExpenses(expenseArray) {
 
   const expenseDates = expenseArray.map(expense => expense.date);
   expenseDates.push(Date.now());
-  expenseDates.sort((dateA, dateB) => {
-    return dateA - dateB;
-  });
+  expenseDates.sort((dateA, dateB) => dateA - dateB);
 
   return expenseDates.reduce((uniqueMonths, date) => {
-    let formattedDate = getUKFormattedDate(date, {
-      year: 'numeric',
-      month: 'long',
-    });
+    let formattedDate = getUKFormattedDate(date, { month: 'long', year: 'numeric' });
 
     if (formattedDate && !uniqueMonths.includes(formattedDate)) {
       uniqueMonths.push(formattedDate);

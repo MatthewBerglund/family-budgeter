@@ -13,7 +13,7 @@ const Expense = ({ expense, showAlert }) => {
         <div className="col-8 col-lg-10">
           <div className="row align-items-center">
             <div className="col-lg-2 fs-5 fw-bold text-nowrap">
-              {expense.formattedDate}
+              {expense.getFormattedDate('en-GB')}
             </div>
             <div className="col-lg-8 fs-5">{expense.title}</div>
             <div className="col-lg-2 fs-5 text-lg-end text-nowrap pe-5">

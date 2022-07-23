@@ -25,11 +25,11 @@ export class Expense {
     this._date = expense.date.toDate();
     this._amount = expense.amount;
     this._id = id;
-    }
+  }
 
   // Adds expense data to "expenses" collection on firestore
   static async add(expense: ExpenseDataForm) {
-    const data: ExpenseDataFirestore = { 
+    const data: ExpenseDataFirestore = {
       title: expense.title,
       date: Timestamp.fromDate(expense.date),
       amount: convertEurosToCents(expense.amount),
@@ -47,23 +47,10 @@ export class Expense {
     return this._title;
   }
 
-  // returns the expense date in DD/MM/YYYY format
   get date(): Date {
     return this._date;
   }
-  
-  get formattedDate() {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
-    return Intl.DateTimeFormat('en-GB', options).format(this._date);
-  }
 
-  // returns the expense month in MONTH YYYY format
-  get month(): string {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long' };
-    return Intl.DateTimeFormat('en-GB', options).format(this._date);
-  }
-
-  // returns the raw amount in cents
   get amount(): number {
     return this._amount;
   }
@@ -72,7 +59,10 @@ export class Expense {
     return this._id;
   }
 
-  // returns the formatted expense amount with two decimal places
+  getFormattedDate(locale: string, options?: Intl.DateTimeFormatOptions): string {
+    return Intl.DateTimeFormat(locale, options).format(this._date);
+  }
+
   getFormattedAmount(locale: string, currency?: string): string {
     const options = { minimumFractionDigits: 2 };
 
@@ -95,7 +85,7 @@ export class Expense {
   }
 
   async update(expense: ExpenseDataForm) {
-    const data: ExpenseDataFirestore = { 
+    const data: ExpenseDataFirestore = {
       title: expense.title,
       date: Timestamp.fromDate(expense.date),
       amount: convertEurosToCents(expense.amount),

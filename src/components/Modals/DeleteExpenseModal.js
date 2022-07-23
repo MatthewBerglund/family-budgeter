@@ -19,7 +19,7 @@ const DeleteExpenseModal = forwardRef(({ showAlert }, ref) => {
 
   if (expense) {
     title = expense.title;
-    date = expense.formattedDate;
+    date = expense.getFormattedDate('en-GB');
     amount = expense.getFormattedAmount('en-GB', 'EUR');
   }
 

@@ -11,13 +11,17 @@ import { getCurrentMonth } from '../utils/helpers';
 
 const UserDashboard = () => {
   const currentMonth = getCurrentMonth();
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
 
   const { expenses } = useContext(GlobalContext);
 
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+
 
   const selectedMonthExpenses = expenses
-    .filter(expense => expense.month === selectedMonth)
+    .filter(expense => {
+      const expenseMonth = expense.getFormattedDate('en-GB', { month: 'long', year: 'numeric' });
+      return expenseMonth === selectedMonth;
+    })
     .sort((expenseA, expenseB) => expenseB.date - expenseA.date);
 
   useEffect(() => {
