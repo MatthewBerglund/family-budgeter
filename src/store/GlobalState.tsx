@@ -3,9 +3,13 @@ import { collection, query, onSnapshot } from 'firebase/firestore';
 
 import db from '../firebase';
 
-import Expense from '../expense';
+import { Expense } from '../expense';
 
-const initialState = { expenses: [] };
+interface GlobalState {
+  expenses: Expense[];
+}
+
+const initialState: GlobalState = { expenses: [] };
 
 export const GlobalContext = createContext(initialState);
 
@@ -18,10 +22,11 @@ export const GlobalProvider = ({ children }) => {
       const q = query(collection(db, 'expenses'));
 
       onSnapshot(q, (querySnapshot) => {
-        const expenses = [];
+        const expenses: Expense[] = [];
         querySnapshot.forEach(doc => {
           const { title, date, amount } = doc.data();
-          expenses.push(new Expense(title, date, amount, doc.id));
+          const expense: Expense = new Expense({ title, date, amount }, doc.id);
+          expenses.push(expense);
         });
         setState(prevState => ({ ...prevState, expenses }));
       });

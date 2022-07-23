@@ -3,8 +3,8 @@ import DatePicker from 'react-datepicker';
 
 import ChangeMonthModal from '../components/Modals/ChangeMonthModal';
 
-import { convertEurosToCents, getUKFormattedDate } from '../utils/helpers';
-import Expense from '../expense';
+import { getUKFormattedDate } from '../utils/helpers';
+import { Expense } from '../expense';
 
 
 const AddExpenses = ({ selectedMonth, showAlert, changeMonthView }) => {
@@ -17,11 +17,13 @@ const AddExpenses = ({ selectedMonth, showAlert, changeMonthView }) => {
 
   const changeMonthModalRef = useRef(null);
 
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
 
+    const expense = { title, date, amount };
+
     try {
-      await Expense.add(title, date.toString(), convertEurosToCents(amount));
+      Expense.add(expense);
       const expenseMonth = getUKFormattedDate(date, { year: 'numeric', month: 'long' });
       if (expenseMonth !== selectedMonth) {
         openChangeMonthModal(expenseMonth);

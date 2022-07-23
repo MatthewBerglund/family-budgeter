@@ -2,13 +2,13 @@ import { useState, forwardRef, useImperativeHandle } from 'react';
 
 import Modal from './components/Modal';
 
-import { getUKFormattedDate, getUKFormattedEuros } from '../../utils/helpers';
-
-const DeleteExpenseModal = forwardRef((props, ref) => {
-  const [expense, setExpense] = useState({});
+const DeleteExpenseModal = forwardRef(({ showAlert }, ref) => {
+  const [expense, setExpense] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const { showAlert } = props;
+  let title = '';
+  let date = '';
+  let amount = '';
 
   useImperativeHandle(ref, () => ({
     show: expense => {
@@ -17,9 +17,11 @@ const DeleteExpenseModal = forwardRef((props, ref) => {
     },
   }));
 
-  const title = expense.title || '';
-  const date = expense.date ? getUKFormattedDate(expense.date) : '';
-  const amount = expense.amount ? getUKFormattedEuros(expense.amount) : '';
+  if (expense) {
+    title = expense.title;
+    date = expense.formattedDate;
+    amount = expense.getFormattedAmount('en-GB', 'EUR');
+  }
 
   const handleDelete = async () => {
     setShowModal(false);

@@ -17,8 +17,8 @@ const UserDashboard = () => {
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
 
   const selectedMonthExpenses = expenses
-    .filter(expense => expense.getMonth() === selectedMonth)
-    .sort((expenseA, expenseB) => new Date(expenseB.date) - new Date(expenseA.date));
+    .filter(expense => expense.month === selectedMonth)
+    .sort((expenseA, expenseB) => expenseB.date - expenseA.date);
 
   useEffect(() => {
     if (selectedMonthExpenses.length === 0) {

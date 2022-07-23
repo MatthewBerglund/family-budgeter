@@ -1,29 +1,23 @@
-import { useState, useRef, useContext, forwardRef, useImperativeHandle } from 'react';
+import { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import DatePicker from 'react-datepicker';
 
 import Modal from './components/Modal';
 
-import { convertCentsToEuros, convertEurosToCents } from '../../utils/helpers';
-import { GlobalContext } from '../../store/GlobalState';
-
-const EditExpenseModal = forwardRef((props, ref) => {
+const EditExpenseModal = forwardRef(({ showAlert }, ref) => {
+  const [expense, setExpense] = useState({});
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [amount, setAmount] = useState('');
-  const [id, setId] = useState('');
   const [showModal, setShowModal] = useState(false);
 
   const formEl = useRef(null);
 
-  const { editExpense } = useContext(GlobalContext);
-  const { showAlert } = props;
-
   useImperativeHandle(ref, () => ({
     show: expense => {
+      setExpense(expense);
       setTitle(expense.title);
-      setDate(new Date(expense.date));
-      setAmount(expense.getFormattedAmount());
-      setId(expense.id);
+      setDate(expense.date);
+      setAmount(expense.getFormattedAmount('en-GB'));
       setShowModal(true);
     },
   }));
@@ -32,14 +26,10 @@ const EditExpenseModal = forwardRef((props, ref) => {
     e.preventDefault();
     setShowModal(false);
 
-    const newExpenseData = {
-      title,
-      date: date.toString(),
-      amount: convertEurosToCents(amount),
-    };
+    const newExpenseData = { title, date, amount };
 
     try {
-      await editExpense(id, newExpenseData);
+      expense.update(newExpenseData);
       showAlert('success', 'Expense edited', 'The new expense information has been successfully saved.');
     } catch (err) {
       console.log(err);
