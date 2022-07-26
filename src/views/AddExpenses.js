@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 
 import ChangeMonthModal from '../components/Modals/ChangeMonthModal';
 
-import { getUKFormattedDate } from '../utils/helpers';
+import { getFormattedDate } from '../utils/helpers';
 import { Expense } from '../expense';
 
 
@@ -24,7 +24,7 @@ const AddExpenses = ({ selectedMonth, showAlert, changeMonthView }) => {
 
     try {
       Expense.add(expense);
-      const expenseMonth = getUKFormattedDate(date, { year: 'numeric', month: 'long' });
+      const expenseMonth = getFormattedDate(date, 'en-GB', { year: 'numeric', month: 'long' });
       if (expenseMonth !== selectedMonth) {
         openChangeMonthModal(expenseMonth);
       }

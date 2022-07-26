@@ -15,16 +15,16 @@ export interface ExpenseDataForm {
 }
 
 export class Expense {
-  _title: string;
-  _date: Date;
-  _amount: number;
-  _id: string;
+  title: string;
+  date: Date;
+  amount: number;
+  id: string;
 
   constructor(expense: ExpenseDataFirestore, id: string) {
-    this._title = expense.title;
-    this._date = expense.date.toDate();
-    this._amount = expense.amount;
-    this._id = id;
+    this.title = expense.title;
+    this.date = expense.date.toDate();
+    this.amount = expense.amount;
+    this.id = id;
   }
 
   // Adds expense data to "expenses" collection on firestore
@@ -43,24 +43,8 @@ export class Expense {
     }
   }
 
-  get title(): string {
-    return this._title;
-  }
-
-  get date(): Date {
-    return this._date;
-  }
-
-  get amount(): number {
-    return this._amount;
-  }
-
-  get id() {
-    return this._id;
-  }
-
   getFormattedDate(locale: string, options?: Intl.DateTimeFormatOptions): string {
-    return Intl.DateTimeFormat(locale, options).format(this._date);
+    return Intl.DateTimeFormat(locale, options).format(this.date);
   }
 
   getFormattedAmount(locale: string, currency?: string): string {
@@ -71,13 +55,13 @@ export class Expense {
       options['currency'] = currency;
     }
 
-    const amount = this._amount / 100;
+    const amount = this.amount / 100;
     return Intl.NumberFormat(locale, options).format(amount);
   }
 
   async delete() {
     try {
-      const expenseRef = doc(db, 'expenses', this._id);
+      const expenseRef = doc(db, 'expenses', this.id);
       await deleteDoc(expenseRef);
     } catch (err) {
       console.log(err);
@@ -92,7 +76,7 @@ export class Expense {
     };
 
     try {
-      const expenseRef = doc(db, 'expenses', this._id);
+      const expenseRef = doc(db, 'expenses', this.id);
       await updateDoc(expenseRef, { ...data });
     } catch (err) {
       console.log(err);
