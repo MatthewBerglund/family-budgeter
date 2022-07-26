@@ -10,7 +10,7 @@ import { GlobalContext } from '../store/GlobalState';
 import { getCurrentMonth } from '../utils/helpers';
 
 const UserDashboard = () => {
-  const currentMonth = getCurrentMonth();
+  const currentMonth = getCurrentMonth('en-GB');
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
 
   const { expenses } = useContext(GlobalContext);

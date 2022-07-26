@@ -2,7 +2,7 @@ import '@testing-library/cypress/add-commands';
 import { getCurrentMonth } from '../../../src/utils/helpers';
 
 const EXPENSE_MONTH = 'March 2022';
-const CURRENT_MONTH = getCurrentMonth();
+const CURRENT_MONTH = getCurrentMonth('en-GB');
 
 describe('Add expense - not within current month', () => {
   before(() => {

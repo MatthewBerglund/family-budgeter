@@ -33,7 +33,7 @@ const Summary = ({ expenses, month }) => {
 
     // If the summary month is the current month, set day equal to today's date
     // otherwise set it to the last day of the month
-    const dayOfMonth = (month === getCurrentMonth()) ? new Date().getDate() : daysInMonth;
+    const dayOfMonth = (month === getCurrentMonth('en-GB')) ? new Date().getDate() : daysInMonth;
 
     const targetRate = totalBudget / daysInMonth;
     const actualRate = expenseTotal / dayOfMonth;
