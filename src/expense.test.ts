@@ -6,8 +6,14 @@ const axios = require('axios').default;
 
 const expenseDataRaw: ExpenseDataForm = {
   title: 'Test Expense',
-  date: new Date('1985-03-18'),
+  date: new Date('1985-12-31'),
   amount: '123.45',
+};
+
+const newExpenseDataRaw: ExpenseDataForm = {
+  title: 'Test Expense Updated',
+  date: new Date('2022-01-01'),
+  amount: '456.78',
 };
 
 const expenseDataFirestore: ExpenseDataFirestore = {
@@ -28,11 +34,50 @@ describe('Expense', () => {
 
     test('Expense.add', async () => {
       try {
-        await Expense.add(expenseDataRaw);
+        await Expense.add({
+          title: 'Test Expense',
+          date: new Date('1985-12-31'),
+          amount: '123.45',
+        });
+
+        // retrieve expense data from firestore to verify it was properly added
+        const expensesOnFirestore: DocumentData[] = [];
         const querySnapshot = await getDocs(collection(db, 'expenses'));
-        const expenses: DocumentData[] = [];
-        querySnapshot.forEach(doc => expenses.push(doc.data()));
-        expect(expenses[0]).toStrictEqual(expenseDataFirestore);
+        querySnapshot.forEach(doc => expensesOnFirestore.push(doc.data()));
+        expect(expensesOnFirestore[0]).toStrictEqual({
+          title: 'Test Expense',
+          date: Timestamp.fromDate(new Date('1985-12-31')),
+          amount: 12345,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    });
+
+    test('Expense.prototype.update', async () => {
+      try {
+        // retrieve previously added expense data from firestore and create
+        // new Expense instance
+        const expenseInstances: Expense[] = [];
+        let querySnapshot = await getDocs(collection(db, 'expenses'));
+        querySnapshot.forEach(doc => {
+          const { title, date, amount } = doc.data();
+          expenseInstances.push(new Expense({ title, date, amount }, doc.id));
+        });
+
+        // update expense
+        const expense = expenseInstances[0];
+        expense.update(newExpenseDataRaw);
+
+        // retrieve expense data from firestore again to verify it was updated
+        const expensesOnFirestore: DocumentData[] = [];
+        querySnapshot = await getDocs(collection(db, 'expenses'));
+        querySnapshot.forEach(doc => expensesOnFirestore.push(doc.data()));
+        expect(expensesOnFirestore[0]).toStrictEqual({
+          title: 'Test Expense Updated',
+          date: Timestamp.fromDate(new Date('2022-01-01')),
+          amount: 45678,
+        });
       } catch (err) {
         console.log(err);
       }
