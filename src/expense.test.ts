@@ -1,4 +1,4 @@
-import { Timestamp, collection, DocumentData, query, onSnapshot, connectFirestoreEmulator, initializeFirestore } from "firebase/firestore";
+import { Timestamp, collection, DocumentData, query, onSnapshot } from "firebase/firestore";
 import { Expense } from "./expense";
 import db from "./firebase";
 
@@ -103,17 +103,11 @@ describe('Expense', () => {
 
     test('Expense.prototype.getFormattedDate', () => {
       expect(expense.getFormattedDate('en-GB')).toBe('18/03/1985');
-      expect(
-        expense.getFormattedDate('en-GB', { month: 'long', year: 'numeric' })
-      ).toBe('March 1985');
+      expect(expense.getFormattedDate('en-GB', { month: 'long', year: 'numeric' })).toBe('March 1985');
       expect(expense.getFormattedDate('en-US')).toBe('3/18/1985');
-      expect(
-        expense.getFormattedDate('en-US', { month: 'long', year: 'numeric' })
-      ).toBe('March 1985');
+      expect(expense.getFormattedDate('en-US', { month: 'long', year: 'numeric' })).toBe('March 1985');
       expect(expense.getFormattedDate('de-DE')).toBe('18.3.1985');
-      expect(
-        expense.getFormattedDate('de-DE', { month: 'long', year: 'numeric' })
-      ).toBe('März 1985');
+      expect(expense.getFormattedDate('de-DE', { month: 'long', year: 'numeric' })).toBe('März 1985');
     });
 
     test('Expense.prototype.getFormattedAmount', () => {
