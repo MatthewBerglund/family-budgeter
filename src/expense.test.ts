@@ -1,88 +1,91 @@
-import { getDocs, Timestamp, collection, DocumentData } from "firebase/firestore";
-import { Expense, ExpenseDataFirestore, ExpenseDataForm } from "./expense";
+import { Timestamp, collection, DocumentData, query, onSnapshot, connectFirestoreEmulator, initializeFirestore } from "firebase/firestore";
+import { Expense } from "./expense";
 import db from "./firebase";
 
 const axios = require('axios').default;
 
-const expenseDataRaw: ExpenseDataForm = {
-  title: 'Test Expense',
-  date: new Date('1985-12-31'),
-  amount: '123.45',
-};
-
-const newExpenseDataRaw: ExpenseDataForm = {
-  title: 'Test Expense Updated',
-  date: new Date('2022-01-01'),
-  amount: '456.78',
-};
-
-const expenseDataFirestore: ExpenseDataFirestore = {
-  title: 'Test Expense',
-  date: Timestamp.fromDate(new Date('1985-03-18')),
-  amount: 12345,
-};
+async function clearDatabase() {
+  const url = 'http://localhost:8080/emulator/v1/projects/family-budgeter-1/databases/(default)/documents';
+  try {
+    await axios.delete(url);
+  } catch (err) {
+    console.log('Unable to flush database: ' + err);
+  }
+}
 
 describe('Expense', () => {
-  // Firestore emulator must be started with `firebase emulators:exec "npm start"`
-  // before these tests can be run
-  describe('static and instance methods that interact with firestore', () => {
-    beforeAll(async () => {
-      // flush db
-      const url = 'http://localhost:8080/emulator/v1/projects/family-budgeter-1/databases/(default)/documents';
-      axios.delete(url).catch(err => console.log('Unable to flush database: ' + err));
+  // Important: Firestore emulator must be started
+  // before running these tests, otherwise they will be skipped.
+  if (process.env.FIRESTORE_EMULATOR_HOST === 'localhost:8080') {
+    let expensesOnFirestore: DocumentData[] = [];
+
+    // create listener to retrieve expenses from db on change
+    onSnapshot(query(collection(db, 'expenses')), (querySnapshot) => {
+      const docs: DocumentData[] = [];
+      querySnapshot.forEach(doc => {
+        docs.push(doc);
+      });
+      expensesOnFirestore = [...docs];
     });
 
-    test('Expense.add', async () => {
-      try {
-        await Expense.add({
-          title: 'Test Expense',
-          date: new Date('1985-12-31'),
-          amount: '123.45',
-        });
+    describe('static and instance methods that interact with firestore', () => {
+      beforeAll(async () => {
+        await clearDatabase();
+      });
 
-        // retrieve expense data from firestore to verify it was properly added
-        const expensesOnFirestore: DocumentData[] = [];
-        const querySnapshot = await getDocs(collection(db, 'expenses'));
-        querySnapshot.forEach(doc => expensesOnFirestore.push(doc.data()));
-        expect(expensesOnFirestore[0]).toStrictEqual({
-          title: 'Test Expense',
-          date: Timestamp.fromDate(new Date('1985-12-31')),
-          amount: 12345,
-        });
-      } catch (err) {
-        console.log(err);
-      }
+      test('Expense.add', async () => {
+        try {
+          await Expense.add({
+            title: 'Test Expense',
+            date: new Date('1985-12-31'),
+            amount: '123.45',
+          });
+
+          expect(expensesOnFirestore[0].data()).toStrictEqual({
+            title: 'Test Expense',
+            date: Timestamp.fromDate(new Date('1985-12-31')),
+            amount: 12345,
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      });
+
+      test('Expense.prototype.update', async () => {
+        try {
+          const expenseDoc = expensesOnFirestore[0];
+          const expense = new Expense(expenseDoc.data(), expenseDoc.id);
+
+          await expense.update({
+            title: 'Test Expense Updated',
+            date: new Date('2022-01-01'),
+            amount: '456.78',
+          });
+
+          expect(expensesOnFirestore[0].data()).toStrictEqual({
+            title: 'Test Expense Updated',
+            date: Timestamp.fromDate(new Date('2022-01-01')),
+            amount: 45678,
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      });
+
+      test('Expense.prototype.delete', async () => {
+        try {
+          const expenseDoc = expensesOnFirestore[0];
+          const expense = new Expense(expenseDoc.data(), expenseDoc.id);
+          await expense.delete();
+          expect(expensesOnFirestore.length).toBe(0);
+        } catch (err) {
+          console.log(err);
+        }
+      });
     });
-
-    test('Expense.prototype.update', async () => {
-      try {
-        // retrieve previously added expense data from firestore and create
-        // new Expense instance
-        const expenseInstances: Expense[] = [];
-        let querySnapshot = await getDocs(collection(db, 'expenses'));
-        querySnapshot.forEach(doc => {
-          const { title, date, amount } = doc.data();
-          expenseInstances.push(new Expense({ title, date, amount }, doc.id));
-        });
-
-        // update expense
-        const expense = expenseInstances[0];
-        expense.update(newExpenseDataRaw);
-
-        // retrieve expense data from firestore again to verify it was updated
-        const expensesOnFirestore: DocumentData[] = [];
-        querySnapshot = await getDocs(collection(db, 'expenses'));
-        querySnapshot.forEach(doc => expensesOnFirestore.push(doc.data()));
-        expect(expensesOnFirestore[0]).toStrictEqual({
-          title: 'Test Expense Updated',
-          date: Timestamp.fromDate(new Date('2022-01-01')),
-          amount: 45678,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    });
-  });
+  } else {
+    console.debug('Note: Tests that rely on the firestore emulator were skipped because the emulator is not running. To run these tests, run `firebase emulators:exec "npm test"`.');
+  }
 
   describe('instance properties and methods', () => {
     const expense = new Expense({
