@@ -3,11 +3,7 @@ import { useRef } from 'react';
 import DeleteExpenseModal from './Modals/DeleteExpenseModal';
 import EditExpenseModal from './Modals/EditExpenseModal';
 
-import { getUKFormattedDate, getUKFormattedEuros } from '../utils/helpers';
-
 const Expense = ({ expense, showAlert }) => {
-  const { title, amount, date } = expense;
-
   const deleteExpenseModalRef = useRef(null);
   const editExpenseModalRef = useRef(null);
 
@@ -17,11 +13,11 @@ const Expense = ({ expense, showAlert }) => {
         <div className="col-8 col-lg-10">
           <div className="row align-items-center">
             <div className="col-lg-2 fs-5 fw-bold text-nowrap">
-              {getUKFormattedDate(date)}
+              {expense.getFormattedDate('en-GB')}
             </div>
-            <div className="col-lg-8 fs-5">{title}</div>
+            <div className="col-lg-8 fs-5">{expense.title}</div>
             <div className="col-lg-2 fs-5 text-lg-end text-nowrap pe-5">
-              - {getUKFormattedEuros(amount)}
+              - {expense.getFormattedAmount('en-GB', 'EUR')}
             </div>
           </div>
         </div>

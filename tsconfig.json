@@ -1,0 +1,10 @@
+{
+  "extends": "@tsconfig/create-react-app/tsconfig.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "types": ["jest", "node", "@types/testing-library__jest-dom"]
+  },
+  "exclude": ["cypress", "./cypress.config.ts"]
+}

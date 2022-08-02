@@ -1,16 +1,14 @@
-import { useContext, useState, forwardRef, useImperativeHandle } from 'react';
+import { useState, forwardRef, useImperativeHandle } from 'react';
 
 import Modal from './components/Modal';
 
-import { getUKFormattedDate, getUKFormattedEuros } from '../../utils/helpers';
-import { GlobalContext } from '../../store/GlobalState';
-
-const DeleteExpenseModal = forwardRef((props, ref) => {
-  const [expense, setExpense] = useState({});
+const DeleteExpenseModal = forwardRef(({ showAlert }, ref) => {
+  const [expense, setExpense] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const { deleteExpense } = useContext(GlobalContext);
-  const { showAlert } = props;
+  let title = '';
+  let date = '';
+  let amount = '';
 
   useImperativeHandle(ref, () => ({
     show: expense => {
@@ -19,14 +17,16 @@ const DeleteExpenseModal = forwardRef((props, ref) => {
     },
   }));
 
-  const title = expense.title || '';
-  const date = expense.date ? getUKFormattedDate(expense.date) : '';
-  const amount = expense.amount ? getUKFormattedEuros(expense.amount) : '';
+  if (expense) {
+    title = expense.title;
+    date = expense.getFormattedDate('en-GB');
+    amount = expense.getFormattedAmount('en-GB', 'EUR');
+  }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     setShowModal(false);
     try {
-      await deleteExpense(id);
+      await expense.delete();
       showAlert('success', 'Expense deleted', `The expense "${title}" totaling ${amount} from ${date} has been deleted.`);
     } catch (err) {
       console.log(err);

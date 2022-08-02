@@ -23,6 +23,6 @@ describe('Alert add expense - fail', () => {
   });
 
   it('checks that alert is automatically closed', () => {
-    cy.findByRole('alert').wait(5000).should('not.exist');
+    cy.findByRole('alert').wait(5000).should('not.be.visible');
   });
 });

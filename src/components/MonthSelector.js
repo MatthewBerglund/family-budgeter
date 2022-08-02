@@ -15,7 +15,11 @@ const MonthSelector = ({ selectedMonth, changeMonthView }) => {
       value={selectedMonth}
       onChange={e => changeMonthView(e.target.value)}
     >
-      {months.map((month, i) => <option key={i} value={month}>{month}</option>)}
+      {months.map((month, i) => (
+        <option key={i} value={month}>
+          {month}
+        </option>
+      ))}
     </select>
   );
 };

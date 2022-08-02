@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { getCurrentMonth, getUKFormattedEuros } from '../utils/helpers';
+import { getCurrentMonth, getFormattedAmount } from '../utils/helpers';
 
 const Summary = ({ expenses, month }) => {
   const [totalBudget, setTotalBudget] = useState(0);
@@ -33,7 +33,7 @@ const Summary = ({ expenses, month }) => {
 
     // If the summary month is the current month, set day equal to today's date
     // otherwise set it to the last day of the month
-    const dayOfMonth = (month === getCurrentMonth()) ? new Date().getDate() : daysInMonth;
+    const dayOfMonth = (month === getCurrentMonth('en-GB')) ? new Date().getDate() : daysInMonth;
 
     const targetRate = totalBudget / daysInMonth;
     const actualRate = expenseTotal / dayOfMonth;
@@ -54,7 +54,7 @@ const Summary = ({ expenses, month }) => {
           <span
             className="col-4 fw-bold text-end"
             data-cy="total-budget"
-          >{`${getUKFormattedEuros(totalBudget)}`}</span>
+          >{`${getFormattedAmount(totalBudget, 'en-GB', 'EUR')}`}</span>
           <div className="col-3"></div>
         </h4>
         <h4 className="fw-light row">
@@ -62,7 +62,7 @@ const Summary = ({ expenses, month }) => {
           <span
             className="col-4 fw-bold text-end"
             data-cy="total-expenses"
-          >{`${getUKFormattedEuros(expenseTotal)}`}</span>
+          >{`${getFormattedAmount(expenseTotal, 'en-GB', 'EUR')}`}</span>
           <div className="col-3"></div>
         </h4>
         <h4 className="fw-light row">
@@ -77,7 +77,7 @@ const Summary = ({ expenses, month }) => {
                 : 'text-success'
               }`}
             data-cy="remaining-budget"
-          >{`${getUKFormattedEuros(totalBudget - expenseTotal)}`}</span>
+          >{`${getFormattedAmount(totalBudget - expenseTotal, 'en-GB', 'EUR')}`}</span>
           <div className="col-3"></div>
         </h4>
       </div>

@@ -59,6 +59,6 @@ describe('Alert delete expense - success', () => {
   });
 
   it('checks that alert is automatically closed', () => {
-    cy.findByRole('alert').should('be.visible').wait(5000).should('not.exist');
+    cy.findByRole('alert').should('be.visible').wait(5000).should('not.be.visible');
   });
 });
