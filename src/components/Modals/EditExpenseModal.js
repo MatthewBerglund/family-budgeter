@@ -29,7 +29,7 @@ const EditExpenseModal = forwardRef(({ showAlert }, ref) => {
     const newExpenseData = { title, date, amount };
 
     try {
-      expense.update(newExpenseData);
+      await expense.update(newExpenseData);
       showAlert('success', 'Expense edited', 'The new expense information has been successfully saved.');
     } catch (err) {
       console.log(err);
