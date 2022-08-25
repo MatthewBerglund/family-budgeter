@@ -1,32 +1,35 @@
-import { useContext, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 
 import Modal from './components/Modal';
+import { Expense } from '../../expense';
 
-import { getUKFormattedDate, getUKFormattedEuros } from '../../utils/helpers';
-import { GlobalContext } from '../../store/GlobalState';
+interface Props {
+  showAlert: (type: string, title: string, message: string) => void
+}
 
-const DeleteExpenseModal = forwardRef((props, ref) => {
-  const [expense, setExpense] = useState({});
+interface Handle {
+  show: (expense: Expense) => void,
+}
+
+const DeleteExpenseModal: React.ForwardRefRenderFunction<Handle, Props> = ({ showAlert }, ref) => {
+  const [expense, setExpense] = useState<Expense | null>(null);
   const [showModal, setShowModal] = useState(false);
 
-  const { deleteExpense } = useContext(GlobalContext);
-  const { showAlert } = props;
+  const title = expense?.title;
+  const date = expense?.getFormattedDate('en-GB');
+  const amount = expense?.getFormattedAmount('en-GB', 'EUR');
 
   useImperativeHandle(ref, () => ({
     show: expense => {
       setExpense(expense);
       setShowModal(true);
-    },
+    }
   }));
 
-  const title = expense.title || '';
-  const date = expense.date ? getUKFormattedDate(expense.date) : '';
-  const amount = expense.amount ? getUKFormattedEuros(expense.amount) : '';
-
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     setShowModal(false);
     try {
-      await deleteExpense(id);
+      await expense?.delete();
       showAlert('success', 'Expense deleted', `The expense "${title}" totaling ${amount} from ${date} has been deleted.`);
     } catch (err) {
       console.log(err);
@@ -36,7 +39,7 @@ const DeleteExpenseModal = forwardRef((props, ref) => {
 
   const modalProps = {
     cancelCallback: () => setShowModal(false),
-    okCallback: () => handleDelete(expense.id),
+    okCallback: () => handleDelete(),
     modalTitle: 'Confirm expense deletion',
     cancelButtonLabel: 'Cancel',
     okButtonLabel: 'Delete',
@@ -44,7 +47,7 @@ const DeleteExpenseModal = forwardRef((props, ref) => {
   };
 
   return (
-    showModal && (
+    showModal ? (
       <Modal {...modalProps}>
         <h6 className="mb-3">
           Please confirm you want to delete this expense:
@@ -52,16 +55,16 @@ const DeleteExpenseModal = forwardRef((props, ref) => {
         {expense && (
           <dl className="row">
             <dt className="col-3">Date:</dt>
-            <dd className="col-9">{date}</dd>
+            <dd className="col-9">{expense?.getFormattedDate('en-GB')}</dd>
             <dt className="col-3">Title:</dt>
-            <dd className="col-9">{title}</dd>
+            <dd className="col-9">{expense?.title}</dd>
             <dt className="col-3">Amount:</dt>
-            <dd className="col-9">{amount}</dd>
+            <dd className="col-9">{expense?.getFormattedAmount('en-GB', 'EUR')}</dd>
           </dl>
         )}
       </Modal>
-    )
+    ) : null
   );
-});
+};
 
-export default DeleteExpenseModal;
+export default forwardRef(DeleteExpenseModal);

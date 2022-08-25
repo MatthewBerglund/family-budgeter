@@ -10,15 +10,17 @@ let firebaseConfig = {
   appId: '1:314882244523:web:262b12470ec58b441f1cee',
 };
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 let db;
 
-if (window.location.hostname === 'localhost') {
-  // Emulator settings
-  // Needed for Firestore support in Cypress (see https://github.com/cypress-io/cypress/issues/6350)
+if (process.env.NODE_ENV !== 'production') {
+  // Connect emulator for Cypress testing
+  // Settings needed for Firestore support in Cypress
   // `experimentalForceLongPolling` may be removed in the future
-  db = initializeFirestore(app, { experimentalForceLongPolling: true, merge: true });
+  // (see https://github.com/cypress-io/cypress/issues/6350)
+  db = initializeFirestore(app, { experimentalForceLongPolling: true });
   connectFirestoreEmulator(db, 'localhost', 8080);
+  process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
 } else {
   // Live settings
   db = getFirestore(app);

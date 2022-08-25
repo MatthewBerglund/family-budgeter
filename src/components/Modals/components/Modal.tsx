@@ -1,3 +1,5 @@
+import React from 'react';
+
 /**
  *
  * Dynamic custom Modal
@@ -18,8 +20,18 @@
  * @param form optional string representing the id of the form to associate `okButton` with
  */
 
+interface Props {
+  cancelCallback: () => void,
+  okCallback: () => void,
+  modalTitle: string,
+  cancelButtonLabel: string,
+  okButtonLabel: string,
+  okButtonColor: string,
+  form?: string,
+  children: React.ReactNode,
+}
+
 const Modal = ({
-  children,
   cancelCallback,
   okCallback,
   modalTitle,
@@ -27,7 +39,8 @@ const Modal = ({
   okButtonLabel,
   okButtonColor,
   form,
-}) => {
+  children,
+}: Props) => {
   return (
     <div
       className="modal fade show"
@@ -37,7 +50,7 @@ const Modal = ({
       }}
       id={modalTitle}
       aria-labelledby={modalTitle}
-      tabIndex="-1"
+      tabIndex={-1}
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
