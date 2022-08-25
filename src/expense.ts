@@ -14,12 +14,19 @@ export interface ExpenseDataForm {
   amount: string;
 }
 
+/** Class representing an expense */
 export class Expense {
   title: string;
   date: Date;
   amount: number;
   id: string;
 
+  /**
+   * Create an expense
+   * @constructor
+   * @param {ExpenseDataFirestore} expense An expense object stored on firestore
+   * @param {string} id The unique alphanumeric key assigned to the expense on firestore
+   */
   constructor(expense: ExpenseDataFirestore, id: string) {
     this.title = expense.title;
     this.date = expense.date.toDate();
@@ -27,7 +34,11 @@ export class Expense {
     this.id = id;
   }
 
-  // Adds expense data to "expenses" collection on firestore
+  /**
+   * Convert expense data for storage on firestore (ExpenseDataFirestore) and add to "expenses" collection
+   * @static
+   * @param {ExpenseDataForm} expense An object containing expense data
+   */
   static async add(expense: ExpenseDataForm) {
     const data: ExpenseDataFirestore = {
       title: expense.title,
@@ -43,11 +54,25 @@ export class Expense {
     }
   }
 
-  getFormattedDate(locale: string, options?: Intl.DateTimeFormatOptions): string {
+  /**
+   * Get the expense date in the specified format
+   * @param {string} locale A string containing a BCP 47 language tag
+   * @param {Intl.DateTimeFormatOptions} options Formatting options
+   * @returns {string} The expense date in the specified format
+   * @link See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat for more information
+   */
+  getFormattedDate(locale?: string, options?: Intl.DateTimeFormatOptions): string {
     return Intl.DateTimeFormat(locale, options).format(this.date);
   }
 
-  getFormattedAmount(locale: string, currency?: string): string {
+  /**
+   * Get the expense amount in the specified format
+   * @param {string} locale A string containing a BCP 47 language tag
+   * @param {string} currency The currency to use for currency formatting
+   * @returns {string} The expense amount in the specified format
+   * @link See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat for more information
+   */
+  getFormattedAmount(locale?: string, currency?: string): string {
     const options = { minimumFractionDigits: 2 };
 
     if (currency) {
@@ -59,6 +84,9 @@ export class Expense {
     return Intl.NumberFormat(locale, options).format(amount);
   }
 
+  /**
+   * Delete the expense from the "expenses" collection on firestore
+   */
   async delete() {
     try {
       const expenseRef = doc(db, 'expenses', this.id);
@@ -68,6 +96,10 @@ export class Expense {
     }
   }
 
+  /**
+   * Update the expense on firestore with new expense data
+   * @param {ExpenseDataForm} expense - an object containing expense data
+   */
   async update(expense: ExpenseDataForm) {
     const data: ExpenseDataFirestore = {
       title: expense.title,
@@ -86,7 +118,7 @@ export class Expense {
 
 function convertEurosToCents(amount: number | string): number {
   let str = typeof amount === 'number' ? amount.toString() : amount;
-  
+
   if (str.includes('.')) {
     if (str.indexOf('.') === str.length - 2) {
       str = str + '0';
